@@ -4,7 +4,7 @@
 
 package frc.robot.commands;
 
-import com.chaos131.LogitechF310;
+import com.chaos131.gamepads.Gamepad;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDrive;
@@ -13,9 +13,9 @@ public class FieldRelativeDrive extends CommandBase {
   /** Creates a new FieldRelativeDrive. */
 
   SwerveDrive m_drive;
-  LogitechF310 m_controller;
+  Gamepad m_controller;
 
-  public FieldRelativeDrive(SwerveDrive drive, LogitechF310 controller) {
+  public FieldRelativeDrive(SwerveDrive drive, Gamepad controller) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
     m_controller = controller;

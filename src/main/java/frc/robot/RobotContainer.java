@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import com.chaos131.LogitechF310;
+import com.chaos131.gamepads.Gamepad;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -21,7 +21,7 @@ import frc.robot.subsystems.SwerveDrive;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  private LogitechF310 m_driver = new LogitechF310(0);
+  private Gamepad m_driver = new Gamepad(0, "Driver");
   //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
   private SwerveDrive m_swerveDrive = new SwerveDrive();
