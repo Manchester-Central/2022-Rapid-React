@@ -9,6 +9,7 @@ import com.chaos131.LogitechF310;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.SwerveDrive;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -21,6 +22,8 @@ public class RobotContainer {
 
   private LogitechF310 m_driver = new LogitechF310(0);
   //private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+
+  private SwerveDrive m_swerveDrive = new SwerveDrive();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
