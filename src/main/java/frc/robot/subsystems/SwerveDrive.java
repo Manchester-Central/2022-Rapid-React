@@ -19,9 +19,16 @@ public class SwerveDrive extends SubsystemBase {
     SmartDashboard.putData("Field", m_field);
   }
 
+  public void moveFieldRelative(double x, double y) {
+
+    m_x = m_x + x;
+    m_y = m_y + y;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     m_field.setRobotPose(m_x, m_y, m_rotation);
   }
 }
+
