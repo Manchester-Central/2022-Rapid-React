@@ -9,6 +9,7 @@ import com.chaos131.gamepads.Gamepad;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.DriverRelativeDrive;
 import frc.robot.commands.FieldRelativeDrive;
 import frc.robot.subsystems.SwerveDrive;
 
@@ -39,8 +40,10 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    m_swerveDrive.setDefaultCommand(new FieldRelativeDrive(m_swerveDrive, m_driver));
+  //  m_swerveDrive.setDefaultCommand(new FieldRelativeDrive(m_swerveDrive, m_driver));
+    m_swerveDrive.setDefaultCommand(new DriverRelativeDrive(m_swerveDrive, m_driver));
   }
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

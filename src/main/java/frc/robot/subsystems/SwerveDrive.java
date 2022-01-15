@@ -28,6 +28,7 @@ public class SwerveDrive extends SubsystemBase {
   SwerveDriveModule m_module4;
   SwerveDriveKinematics m_kinematics;
   SwerveDriveOdometry m_odometry;
+
   /** Creates a new SwerveDrive. */
   public SwerveDrive() {
     SmartDashboard.putData("Field", m_field);
@@ -35,38 +36,52 @@ public class SwerveDrive extends SubsystemBase {
     m_module2 = new SwerveDriveModule(0.5, 0.5, "F_R");
     m_module3 = new SwerveDriveModule(0.5, -0.5, "B_R");
     m_module4 = new SwerveDriveModule(-0.5, -0.5, "B_L");
-    m_kinematics = new SwerveDriveKinematics(m_module1.getLocation(), m_module2.getLocation(), m_module3.getLocation(), m_module4.getLocation());
+    m_kinematics = new SwerveDriveKinematics(m_module1.getLocation(), m_module2.getLocation(), m_module3.getLocation(),
+        m_module4.getLocation());
     m_odometry = new SwerveDriveOdometry(m_kinematics, m_rotation);
   }
 
+  private void move(ChassisSpeeds speeds) {
+    SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(speeds);
+    m_module1.setTargetState(states[0]);
+    m_module2.setTargetState(states[1]);
+    m_module3.setTargetState(states[2]);
+    m_module4.setTargetState(states[3]);
+  }
 
   public void moveFieldRelative(double x, double y, double theta) {
-   ChassisSpeeds speeds =  ChassisSpeeds.fromFieldRelativeSpeeds(x, y, theta, m_rotation);
-SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(speeds);
-m_module1.setTargetState(states[0]);
-m_module2.setTargetState(states[1]);
-m_module3.setTargetState(states[2]);
-m_module4.setTargetState(states[3]);
+    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(x, y, theta, m_rotation);
+    move(speeds);
   }
-private Pose2d getPosition(){
-return new Pose2d(m_x, m_y, m_rotation);
-}
 
+  public void moveDriverRelative(double x, double y, double theta) {
+    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(y, x * -1, theta, m_rotation);
+    move(speeds);
+  }
+
+  private Pose2d getPosition() {
+    return m_odometry.getPoseMeters();
+  }
+private SwerveModuleState[] getModuleStates(){
+  SwerveModuleState[] states = {
+    m_module1.getState(), m_module2.getState(), m_module3.getState(), m_module4.getState()
+  };
+  return states;
+}
   @Override
   public void periodic() {
-ChassisSpeeds speeds = m_kinematics.toChassisSpeeds(m_module1.getState(), m_module2.getState(), m_module3.getState(), m_module4.getState());
-m_rotation = m_rotation.plus(new Rotation2d(speeds.omegaRadiansPerSecond/Constants.RobotUpdate_hz));
+    ChassisSpeeds speeds = m_kinematics.toChassisSpeeds(getModuleStates());
+    m_rotation = m_rotation.plus(new Rotation2d(speeds.omegaRadiansPerSecond / Constants.RobotUpdate_hz));
     // This method will be called once per scheduler run
-    m_odometry.update(m_rotation, m_module1.getState(), m_module2.getState(), m_module3.getState(), m_module4.getState());
-    Pose2d Position = m_odometry.getPoseMeters();
-    
+    m_odometry.update(m_rotation, getModuleStates());
+    Pose2d Position = getPosition();
+
     m_module1.updatePosition(Position);
     m_module2.updatePosition(Position);
     m_module3.updatePosition(Position);
     m_module4.updatePosition(Position);
     Position = Position.transformBy(new Transform2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     m_field.setRobotPose(Position);
-    
+
   }
 }
-
