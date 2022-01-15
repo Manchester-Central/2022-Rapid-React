@@ -14,13 +14,21 @@ public class SwerveDrive extends SubsystemBase {
   double m_x = 5;
   double m_y = 5;
   Rotation2d m_rotation = new Rotation2d();
+  SwerveDriveModule m_module1;
+  SwerveDriveModule m_module2;
+  SwerveDriveModule m_module3;
+  SwerveDriveModule m_module4;
   /** Creates a new SwerveDrive. */
   public SwerveDrive() {
     SmartDashboard.putData("Field", m_field);
+    m_module1 = new SwerveDriveModule(-0.5, 0.5, "F_R");
+    m_module2 = new SwerveDriveModule(0.5, 0.5, "F_L");
+    m_module3 = new SwerveDriveModule(0.5, -0.5, "B_R");
+    m_module4 = new SwerveDriveModule(-0.5, -0.5, "B_L");
   }
 
-  public void moveFieldRelative(double x, double y) {
-
+  public void moveFieldRelative(double x, double y, double theta) {
+    m_rotation = new Rotation2d(m_rotation.getRadians() + theta);
     m_x = m_x + x;
     m_y = m_y + y;
   }
