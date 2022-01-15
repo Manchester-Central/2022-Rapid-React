@@ -33,7 +33,7 @@ public class FieldRelativeDrive extends CommandBase {
   @Override
   public void execute() {
 
-    m_drive.moveFieldRelative(m_controller.getLeftX() * 0.25, m_controller.getLeftY() * 0.25, m_controller.getRightX() * -0.1);
+    m_drive.moveFieldRelative(m_controller.getLeftX() * 3, m_controller.getLeftY() * 3, m_controller.getRightX() * -3);
   }
 
   // Called once the command ends or is interrupted.
