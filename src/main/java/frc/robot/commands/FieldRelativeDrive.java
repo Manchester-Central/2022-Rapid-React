@@ -10,18 +10,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDrive;
 
 public class FieldRelativeDrive extends CommandBase {
-  /** Creates a new FieldRelativeDrive. */
-
-  SwerveDrive m_drive;
-  Gamepad m_controller;
+  private SwerveDrive m_drive;
+  private Gamepad m_controller;
 
   public FieldRelativeDrive(SwerveDrive drive, Gamepad controller) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
     m_controller = controller;
-
     addRequirements(drive);
-
   }
 
   // Called when the command is initially scheduled.
@@ -32,7 +28,6 @@ public class FieldRelativeDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
     m_drive.moveFieldRelative(m_controller.getLeftX() * 3, m_controller.getLeftY() * 3, m_controller.getRightX() * -3);
   }
 

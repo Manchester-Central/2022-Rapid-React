@@ -19,15 +19,13 @@ import frc.robot.Constants;
 
 public class SwerveDrive extends SubsystemBase {
   private Field2d m_field = new Field2d();
-  double m_x = 5;
-  double m_y = 5;
-  Rotation2d m_rotation = new Rotation2d();
-  SwerveDriveModule m_module1;
-  SwerveDriveModule m_module2;
-  SwerveDriveModule m_module3;
-  SwerveDriveModule m_module4;
-  SwerveDriveKinematics m_kinematics;
-  SwerveDriveOdometry m_odometry;
+  private Rotation2d m_rotation = new Rotation2d();
+  private SwerveDriveModule m_module1;
+  private SwerveDriveModule m_module2;
+  private SwerveDriveModule m_module3;
+  private SwerveDriveModule m_module4;
+  private SwerveDriveKinematics m_kinematics;
+  private SwerveDriveOdometry m_odometry;
 
   /** Creates a new SwerveDrive. */
   public SwerveDrive() {
@@ -59,29 +57,29 @@ public class SwerveDrive extends SubsystemBase {
     move(speeds);
   }
 
-  private Pose2d getPosition() {
+  private Pose2d getPose() {
     return m_odometry.getPoseMeters();
   }
-private SwerveModuleState[] getModuleStates(){
-  SwerveModuleState[] states = {
-    m_module1.getState(), m_module2.getState(), m_module3.getState(), m_module4.getState()
-  };
-  return states;
-}
+
+  private SwerveModuleState[] getModuleStates() {
+    SwerveModuleState[] states = {
+        m_module1.getState(), m_module2.getState(), m_module3.getState(), m_module4.getState()
+    };
+    return states;
+  }
+
   @Override
   public void periodic() {
+    // This method will be called once per scheduler run
     ChassisSpeeds speeds = m_kinematics.toChassisSpeeds(getModuleStates());
     m_rotation = m_rotation.plus(new Rotation2d(speeds.omegaRadiansPerSecond / Constants.RobotUpdate_hz));
-    // This method will be called once per scheduler run
     m_odometry.update(m_rotation, getModuleStates());
-    Pose2d Position = getPosition();
-
-    m_module1.updatePosition(Position);
-    m_module2.updatePosition(Position);
-    m_module3.updatePosition(Position);
-    m_module4.updatePosition(Position);
-    Position = Position.transformBy(new Transform2d(new Translation2d(), Rotation2d.fromDegrees(90)));
-    m_field.setRobotPose(Position);
-
+    Pose2d pose = getPose();
+    m_module1.updatePosition(pose);
+    m_module2.updatePosition(pose);
+    m_module3.updatePosition(pose);
+    m_module4.updatePosition(pose);
+    pose = pose.transformBy(new Transform2d(new Translation2d(), Rotation2d.fromDegrees(90)));
+    m_field.setRobotPose(pose);
   }
 }

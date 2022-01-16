@@ -10,22 +10,20 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDrive;
 
 public class DriverRelativeDrive extends CommandBase {
-  /** Creates a new DriverRelativeDrive. */
-  
-    SwerveDrive m_drive;
-    Gamepad m_controller;
-  
-    public DriverRelativeDrive(SwerveDrive drive, Gamepad controller) {
-      // Use addRequirements() here to declare subsystem dependencies.
-      m_drive = drive;
-      m_controller = controller;
-  
-      addRequirements(drive);
+  private SwerveDrive m_drive;
+  private Gamepad m_controller;
+
+  public DriverRelativeDrive(SwerveDrive drive, Gamepad controller) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    m_drive = drive;
+    m_controller = controller;
+    addRequirements(drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -35,7 +33,8 @@ public class DriverRelativeDrive extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override

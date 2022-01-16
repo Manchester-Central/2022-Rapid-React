@@ -14,28 +14,31 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** Add your docs here. */
 public class SwerveDriveModule {
-    Translation2d m_location;
+    private Translation2d m_location;
     private Field2d m_field = new Field2d();
-    double m_velocity = 0;
-    double m_angle = 0;
+    private double m_velocity = 0;
+    private double m_angle = 0;
+
     public SwerveDriveModule(double x, double y, String name) {
-        m_location = new Translation2d (x, y);
+        m_location = new Translation2d(x, y);
         SmartDashboard.putData(name, m_field);
     }
-    public void updatePosition(Pose2d robotpose){
-Pose2d modulePosition = robotpose.transformBy(new Transform2d(m_location, Rotation2d.fromDegrees(m_angle))); 
-        m_field.setRobotPose(modulePosition);
+
+    public void updatePosition(Pose2d robotPose) {
+        Pose2d modulePose = robotPose.transformBy(new Transform2d(m_location, Rotation2d.fromDegrees(m_angle)));
+        m_field.setRobotPose(modulePose);
     }
 
-public SwerveModuleState getState(){
-    return new SwerveModuleState(m_velocity, Rotation2d.fromDegrees(m_angle));
-}
-public void setTargetState(SwerveModuleState targetState){
-    m_velocity = targetState.speedMetersPerSecond;
-    m_angle = targetState.angle.getDegrees();
-}
-public Translation2d getLocation(){
-    return m_location;
-}
-}
+    public SwerveModuleState getState() {
+        return new SwerveModuleState(m_velocity, Rotation2d.fromDegrees(m_angle));
+    }
 
+    public void setTargetState(SwerveModuleState targetState) {
+        m_velocity = targetState.speedMetersPerSecond;
+        m_angle = targetState.angle.getDegrees();
+    }
+
+    public Translation2d getLocation() {
+        return m_location;
+    }
+}
