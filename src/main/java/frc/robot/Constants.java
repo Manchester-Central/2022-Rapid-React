@@ -14,4 +14,15 @@ package frc.robot;
  */
 public final class Constants {
     public final static int RobotUpdate_hz = 20;
+
+    // CAN device numbers
+    public final static int SwerveFrontLeftVelocity = 1;
+    public final static int SwerveFrontLeftAngle = 2;
+    public final static int SwerveFrontRightVelocity = 3;
+    public final static int SwerveFrontRightAngle = 4;
+    public final static int SwerveBackLeftVelocity = 5;
+    public final static int SwerveBackLeftAngle = 6;
+    public final static int SwerveBackRightVelocity = 7;
+    public final static int SwerveBackRightAngle = 8;
+
 }

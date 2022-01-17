@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -18,10 +21,14 @@ public class SwerveDriveModule {
     private Field2d m_field = new Field2d();
     private double m_velocity = 0;
     private double m_angle = 0;
+    private TalonFX m_velocityController;
+    private TalonFX m_angleController;
 
-    public SwerveDriveModule(double x, double y, String name) {
+    public SwerveDriveModule(double x, double y, String name, int velocityControllerPort, int angleControllerPort) {
         m_location = new Translation2d(x, y);
         SmartDashboard.putData(name, m_field);
+        m_velocityController = new TalonFX(velocityControllerPort);
+        m_angleController = new TalonFX(angleControllerPort);
     }
 
     public void updatePosition(Pose2d robotPose) {
@@ -36,6 +43,9 @@ public class SwerveDriveModule {
     public void setTargetState(SwerveModuleState targetState) {
         m_velocity = targetState.speedMetersPerSecond;
         m_angle = targetState.angle.getDegrees();
+        // TODO: figure out velocity and angle in terms of encoder ticks
+        m_velocityController.set(TalonFXControlMode.Velocity, m_velocity);
+        m_angleController.set(TalonFXControlMode.Position, m_angle);
     }
 
     public Translation2d getLocation() {
