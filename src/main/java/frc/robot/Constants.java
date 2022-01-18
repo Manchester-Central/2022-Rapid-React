@@ -25,4 +25,11 @@ public final class Constants {
     public final static int SwerveBackRightVelocity = 7;
     public final static int SwerveBackRightAngle = 8;
 
+    // Drivetrain Properties 
+    public final static double DriveWheelWidthMeters = 0.1016; //0.1016 meters = 4 inches, 1 rev of motor = 2048 tics
+    public final static double DriveWheelCircumferenceMeters = DriveWheelWidthMeters * Math.PI;
+    public final static double SwerveModuleVelocityGearRatio = 8.14; //Assuming the Standard Gear Ratio; Same link as below
+    public final static double SwerveModuleAngleGearRatio = 12.8; //https://www.swervedrivespecialties.com/products/mk4-swerve-module
+    public final static double TalonCountsPerRevolution = 2048;
+
 }
