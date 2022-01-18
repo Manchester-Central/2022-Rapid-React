@@ -85,5 +85,9 @@ public class SwerveDrive extends SubsystemBase {
     m_module4.updatePosition(pose);
     pose = pose.transformBy(new Transform2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     m_field.setRobotPose(pose);
+    m_module1.periodic();
+    m_module2.periodic();
+    m_module3.periodic();
+    m_module4.periodic();
   }
 }
