@@ -23,3 +23,7 @@ Open the downloaded project into the WPILib VSCode:
 * To build type: `Control + Shift + P` and then select `WPILib: Build Robot Code`
 * To simulate type: `Control + Shift + P` and then select `WPILib: Simulate Robot Code`
 * To deploy to the robot type: `Control + Shift + P` and then select `WPILib: Deploy Robot Code`
+
+
+## Documentation
+* [Controllers](Documentation\Controllers.md)
