@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DriverRelativeDrive;
 import frc.robot.commands.FieldRelativeDrive;
+import frc.robot.commands.RobotRelativeDrive;
 import frc.robot.commands.SwerveModuleTest;
 import frc.robot.subsystems.SwerveDrive;
 
@@ -44,8 +45,10 @@ public class RobotContainer {
     m_swerveDrive.setDefaultCommand(new FieldRelativeDrive(m_swerveDrive, m_driver));
     Command driverRelativeDrive = new DriverRelativeDrive(m_swerveDrive, m_driver);
     Command swerveModuleTest = new SwerveModuleTest(m_swerveDrive, m_driver);
-    m_driver.getButtonA().whenPressed(driverRelativeDrive);
-    m_driver.getButtonB().whenPressed(swerveModuleTest);
+    Command robotRelativeDrive = new RobotRelativeDrive(m_swerveDrive, m_driver);
+    m_driver.getButtonA().whileHeld(driverRelativeDrive);
+    m_driver.getButtonB().whileHeld(swerveModuleTest);
+    m_driver.getButtonX().whileHeld(robotRelativeDrive);
   }
 
 

@@ -57,6 +57,11 @@ public class SwerveDrive extends SubsystemBase {
     move(speeds);
   }
 
+  public void moveRobotRelative(double x, double y, double theta) {
+    ChassisSpeeds speeds = new ChassisSpeeds (x, y, theta);
+    move(speeds);
+  }
+ 
   public void setSwerveModuleState(SwerveModuleState module1State) {
     m_module1.setTargetState(module1State);
   }
