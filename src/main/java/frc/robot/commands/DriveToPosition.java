@@ -39,7 +39,6 @@ public class DriveToPosition extends CommandBase {
   @Override
   public void execute() {
     var difference = getDistanceFromTarget();
-    SmartDashboard.putString("difference", difference.toString());
     double diffX = difference.getX();
     double diffY = difference.getY();
     double distance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
@@ -51,7 +50,6 @@ public class DriveToPosition extends CommandBase {
       speedY *= slowDownRatio;
     }
     var rotationDifference = getRotationFromTarget();
-    SmartDashboard.putString("rotationDifference", rotationDifference.toString());
     var rotationDifferenceDegrees = rotationDifference.getDegrees();
     var rotationChangeSpeed = rotationDifferenceDegrees < 0 ? -k_maxRotationChange : k_maxRotationChange;
     if(rotationDifferenceDegrees < k_slowDownAngleDegrees) {
@@ -71,8 +69,6 @@ public class DriveToPosition extends CommandBase {
     var currentPose = m_drive.getPose();
     var currentRotation = currentPose.getRotation();
     var targetRotation = m_targetPose.getRotation();
-    SmartDashboard.putString("targetRotation", targetRotation.toString());
-    SmartDashboard.putString("currentRotation", currentRotation.toString());
     var difference = targetRotation.minus(currentRotation);
     return difference;
   }
