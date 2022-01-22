@@ -13,17 +13,21 @@ import frc.robot.subsystems.SwerveDrive;
 
 public class DriveToPosition extends CommandBase {
   private final double k_maxSpeedMps = 4;
+  private final double k_slowDownDistanceM = 1;
+  private final double k_maxRotationChange = 1;
+  private final double k_slowDownAngleDegrees = 10;
   SwerveDrive m_drive;
-  double m_x, m_y;
+  double m_x, m_y, m_thetaDegrees;
   Pose2d m_targetPose;
   /** Creates a new DriveToPosition. */
-  public DriveToPosition(SwerveDrive drive, double x, double y) {
+  public DriveToPosition(SwerveDrive drive, double x, double y, double thetaDegrees) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drive);
     m_drive = drive;
     m_x = x;
     m_y = y;
-    m_targetPose = new Pose2d(x, y, new Rotation2d(0));
+    m_thetaDegrees = thetaDegrees;
+    m_targetPose = new Pose2d(x, y, Rotation2d.fromDegrees(thetaDegrees));
   }
 
   // Called when the command is initially scheduled.
@@ -41,12 +45,35 @@ public class DriveToPosition extends CommandBase {
     double distance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
     double speedX = k_maxSpeedMps * diffX / distance;
     double speedY = k_maxSpeedMps * diffY / distance;
-    m_drive.moveFieldRelative(speedX, speedY, 0);
+    if(distance < k_slowDownDistanceM) {
+      double slowDownRatio = distance / k_slowDownDistanceM;
+      speedX *= slowDownRatio;
+      speedY *= slowDownRatio;
+    }
+    var rotationDifference = getRotationFromTarget();
+    SmartDashboard.putString("rotationDifference", rotationDifference.toString());
+    var rotationDifferenceDegrees = rotationDifference.getDegrees();
+    var rotationChangeSpeed = rotationDifferenceDegrees < 0 ? -k_maxRotationChange : k_maxRotationChange;
+    if(rotationDifferenceDegrees < k_slowDownAngleDegrees) {
+      double slowDownRatio = rotationDifferenceDegrees / k_slowDownAngleDegrees;
+      rotationChangeSpeed *= slowDownRatio;
+    }
+    m_drive.moveFieldRelative(speedX, speedY, rotationChangeSpeed);
   }
 
   private Translation2d getDistanceFromTarget() {
     var currentPose = m_drive.getPose();
     var difference = m_targetPose.getTranslation().minus(currentPose.getTranslation());
+    return difference;
+  }
+
+  private Rotation2d getRotationFromTarget() {
+    var currentPose = m_drive.getPose();
+    var currentRotation = currentPose.getRotation();
+    var targetRotation = m_targetPose.getRotation();
+    SmartDashboard.putString("targetRotation", targetRotation.toString());
+    SmartDashboard.putString("currentRotation", currentRotation.toString());
+    var difference = targetRotation.minus(currentRotation);
     return difference;
   }
 
@@ -58,6 +85,10 @@ public class DriveToPosition extends CommandBase {
   @Override
   public boolean isFinished() {
     var difference = getDistanceFromTarget();
-    return Math.abs(difference.getX()) < 0.01 && Math.abs(difference.getY()) < 0.01;
+    var rotationDifference = getRotationFromTarget();
+    var isXGood = Math.abs(difference.getX()) < 0.01;
+    var isYGood = Math.abs(difference.getY()) < 0.01;
+    var isRotationGood = Math.abs(rotationDifference.getDegrees()) < 0.1;
+    return isXGood && isYGood && isRotationGood;
   }
 }

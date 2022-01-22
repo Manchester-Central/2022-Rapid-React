@@ -60,8 +60,8 @@ public class RobotContainer {
       new DriveOverTime(m_swerveDrive, -2, 0, 0, 2000)
     ));
     m_driver.getButtonLB().whileActiveOnce(new DriveOverDistance(m_swerveDrive, 2, -2, 1, 2));
-    m_driver.getButtonRB().whileActiveOnce(new DriveToPosition(m_swerveDrive, 0, 0));
-    m_driver.getButtonLT().whileActiveOnce(new DriveOverTime(m_swerveDrive, -2, 2, 0, 1000));
+    m_driver.getButtonRB().whileActiveOnce(new DriveToPosition(m_swerveDrive, 0, 0, 0));
+    m_driver.getButtonLT().whileActiveOnce(new DriveToPosition(m_swerveDrive, 14.46, 6.60, -42.80));
     m_driver.getButtonRT().whileActiveOnce(new DriveOverTime(m_swerveDrive, 0, 2, 0, 2000));
   }
 
