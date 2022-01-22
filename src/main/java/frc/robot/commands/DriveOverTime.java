@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDrive;
 
@@ -26,7 +27,7 @@ public class DriveOverTime extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_startTimeMs = System.currentTimeMillis();
+    m_startTimeMs = RobotController.getFPGATime() / 1000;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -42,7 +43,7 @@ public class DriveOverTime extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    long currentTimeMs = System.currentTimeMillis();
+    long currentTimeMs = RobotController.getFPGATime() / 1000;
     return currentTimeMs > m_startTimeMs + m_timeMs;
   }
 }
