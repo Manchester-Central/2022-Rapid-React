@@ -11,8 +11,8 @@ import frc.robot.subsystems.SwerveDrive;
 
 public class RobotRelativeDrive extends CommandBase {
   /** Creates a new RobotRelativeDrive. */
-    private SwerveDrive m_drive;
-    private Gamepad m_controller;
+  private SwerveDrive m_drive;
+  private Gamepad m_controller;
 
   public RobotRelativeDrive(SwerveDrive drive, Gamepad controller) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -23,7 +23,8 @@ public class RobotRelativeDrive extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -33,7 +34,8 @@ public class RobotRelativeDrive extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override

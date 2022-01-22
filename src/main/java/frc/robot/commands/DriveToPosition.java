@@ -7,7 +7,6 @@ package frc.robot.commands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDrive;
 
@@ -19,6 +18,7 @@ public class DriveToPosition extends CommandBase {
   SwerveDrive m_drive;
   double m_x, m_y, m_thetaDegrees;
   Pose2d m_targetPose;
+
   /** Creates a new DriveToPosition. */
   public DriveToPosition(SwerveDrive drive, double x, double y, double thetaDegrees) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -44,7 +44,7 @@ public class DriveToPosition extends CommandBase {
     double distance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
     double speedX = k_maxSpeedMps * diffX / distance;
     double speedY = k_maxSpeedMps * diffY / distance;
-    if(distance < k_slowDownDistanceM) {
+    if (distance < k_slowDownDistanceM) {
       double slowDownRatio = distance / k_slowDownDistanceM;
       speedX *= slowDownRatio;
       speedY *= slowDownRatio;
@@ -52,7 +52,7 @@ public class DriveToPosition extends CommandBase {
     var rotationDifference = getRotationFromTarget();
     var rotationDifferenceDegrees = rotationDifference.getDegrees();
     var rotationChangeSpeed = rotationDifferenceDegrees < 0 ? -k_maxRotationChange : k_maxRotationChange;
-    if(rotationDifferenceDegrees < k_slowDownAngleDegrees) {
+    if (rotationDifferenceDegrees < k_slowDownAngleDegrees) {
       double slowDownRatio = rotationDifferenceDegrees / k_slowDownAngleDegrees;
       rotationChangeSpeed *= slowDownRatio;
     }
@@ -75,7 +75,8 @@ public class DriveToPosition extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override

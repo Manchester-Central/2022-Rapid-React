@@ -14,7 +14,7 @@ import frc.robot.subsystems.SwerveDrive;
 public class SwerveModuleTest extends CommandBase {
   private SwerveDrive m_drive;
   private Gamepad m_controller;
-  
+
   public SwerveModuleTest(SwerveDrive drive, Gamepad controller) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
@@ -24,7 +24,8 @@ public class SwerveModuleTest extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -36,7 +37,8 @@ public class SwerveModuleTest extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
