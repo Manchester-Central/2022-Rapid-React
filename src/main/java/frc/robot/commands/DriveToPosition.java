@@ -5,33 +5,37 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDrive;
 
 public class DriveToPosition extends CommandBase {
-  Pose2d m_startingPosition;
   SwerveDrive m_drive;
-  float m_x, m_y, m_theta;
+  double m_x, m_y;
+  Pose2d m_targetPose;
   /** Creates a new DriveToPosition. */
-  public DriveToPosition(SwerveDrive drive, float x, float y, float theta) {
+  public DriveToPosition(SwerveDrive drive, double x, double y) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drive);
     m_drive = drive;
     m_x = x;
     m_y = y;
-    m_theta = theta;
+    m_targetPose = new Pose2d(x, y, new Rotation2d(0));
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_startingPosition = m_drive.getPose();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drive.moveFieldRelative(m_x, m_y, m_theta);
+    var currentPose = m_drive.getPose();
+    var difference = m_targetPose.minus(currentPose);
+    SmartDashboard.putString("difference", difference.toString());
+    m_drive.moveFieldRelative(0, 0, 0);
   }
 
   // Called once the command ends or is interrupted.
