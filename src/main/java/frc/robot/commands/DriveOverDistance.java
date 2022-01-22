@@ -13,7 +13,7 @@ public class DriveOverDistance extends CommandBase {
   SwerveDrive m_drive;
   float m_x, m_y, m_theta;
   double m_distanceM;
-  /** Creates a new DriveOverTime. */
+  /** Creates a new DriveOverDistance. */
   public DriveOverDistance(SwerveDrive drive, float x, float y, float theta, double distanceM) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drive);
