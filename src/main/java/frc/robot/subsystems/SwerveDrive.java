@@ -66,7 +66,7 @@ public class SwerveDrive extends SubsystemBase {
     m_module1.setTargetState(module1State);
   }
 
-  private Pose2d getPose() {
+  public Pose2d getPose() {
     return m_odometry.getPoseMeters();
   }
 
