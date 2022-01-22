@@ -8,20 +8,18 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDrive;
 
-public class DriveOverDistance extends CommandBase {
+public class DriveToPosition extends CommandBase {
   Pose2d m_startingPosition;
   SwerveDrive m_drive;
   float m_x, m_y, m_theta;
-  double m_distanceM;
-  /** Creates a new DriveOverDistance. */
-  public DriveOverDistance(SwerveDrive drive, float x, float y, float theta, double distanceM) {
+  /** Creates a new DriveToPosition. */
+  public DriveToPosition(SwerveDrive drive, float x, float y, float theta) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drive);
     m_drive = drive;
     m_x = x;
     m_y = y;
     m_theta = theta;
-    m_distanceM = distanceM;
   }
 
   // Called when the command is initially scheduled.
@@ -43,7 +41,6 @@ public class DriveOverDistance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    double distanceTraveled = m_drive.getPose().getTranslation().getDistance(m_startingPosition.getTranslation());
-    return distanceTraveled > m_distanceM;
+    return false;
   }
 }
