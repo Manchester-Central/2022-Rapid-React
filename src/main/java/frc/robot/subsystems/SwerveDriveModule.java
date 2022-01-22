@@ -46,7 +46,6 @@ public class SwerveDriveModule {
     public void setTargetState(SwerveModuleState targetState) {
         m_velocity = targetState.speedMetersPerSecond;
         m_angle = targetState.angle.getDegrees();
-        // TODO: figure out velocity and angle in terms of encoder ticks
         m_velocityController.set(TalonFXControlMode.Velocity, MPSToFalconVelocity(m_velocity));
         m_angleController.set(TalonFXControlMode.Position, DegreesToFalconAngle(m_angle));
     }
@@ -57,7 +56,7 @@ public class SwerveDriveModule {
 
     private double MPSToFalconVelocity(double mps) {
         // Distance conversion from meters to encoder counts
-        
+
         var rps = mps / Constants.DriveWheelCircumferenceMeters;
         var countsPerSecond = rps * Constants.SwerveModuleVelocityGearRatio * Constants.TalonCountsPerRevolution;
 
@@ -75,15 +74,15 @@ public class SwerveDriveModule {
     }
 
     private double DegreesToFalconAngle(double degrees) {
-        //Calculate ratio of the full rotation of the wheel
+        // Calculate ratio of the full rotation of the wheel
 
         var wheelRotations = degrees / 360;
 
-        //Convert to rotations of the motor
+        // Convert to rotations of the motor
 
         var motorRotations = Constants.SwerveModuleAngleGearRatio * wheelRotations;
 
-        //Convert to # of counts
+        // Convert to # of counts
 
         return motorRotations * Constants.TalonCountsPerRevolution;
 
@@ -98,7 +97,9 @@ public class SwerveDriveModule {
     public void periodic() {
         SmartDashboard.putNumber(m_name + "/targetVelocityMPS", m_velocity);
         SmartDashboard.putNumber(m_name + "/targetAngleDegrees", m_angle);
-        SmartDashboard.putNumber(m_name + "/actualVelocityMPS", FalconVelocityToMPS(m_velocityController.getSelectedSensorVelocity()));
-        SmartDashboard.putNumber(m_name + "/actualAngleDegrees", FalconAngleToDegrees(m_angleController.getSelectedSensorPosition()));
+        SmartDashboard.putNumber(m_name + "/actualVelocityMPS",
+                FalconVelocityToMPS(m_velocityController.getSelectedSensorVelocity()));
+        SmartDashboard.putNumber(m_name + "/actualAngleDegrees",
+                FalconAngleToDegrees(m_angleController.getSelectedSensorPosition()));
     }
 }

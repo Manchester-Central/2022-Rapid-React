@@ -13,6 +13,7 @@ public class DriveOverTime extends CommandBase {
   SwerveDrive m_drive;
   float m_x, m_y, m_theta;
   int m_timeMs;
+
   /** Creates a new DriveOverTime. */
   public DriveOverTime(SwerveDrive drive, float x, float y, float theta, int timeMs) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -38,7 +39,8 @@ public class DriveOverTime extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override

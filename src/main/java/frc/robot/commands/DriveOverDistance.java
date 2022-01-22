@@ -13,6 +13,7 @@ public class DriveOverDistance extends CommandBase {
   SwerveDrive m_drive;
   float m_x, m_y, m_theta;
   double m_distanceM;
+
   /** Creates a new DriveOverDistance. */
   public DriveOverDistance(SwerveDrive drive, float x, float y, float theta, double distanceM) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -38,7 +39,8 @@ public class DriveOverDistance extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
