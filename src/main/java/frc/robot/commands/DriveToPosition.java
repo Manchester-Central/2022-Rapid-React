@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDrive;
 
 public class DriveToPosition extends CommandBase {
+  private final double k_maxSpeedMps = 2;
   SwerveDrive m_drive;
   double m_x, m_y;
   Pose2d m_targetPose;
@@ -35,7 +36,12 @@ public class DriveToPosition extends CommandBase {
     var currentPose = m_drive.getPose();
     var difference = m_targetPose.minus(currentPose);
     SmartDashboard.putString("difference", difference.toString());
-    m_drive.moveFieldRelative(0, 0, 0);
+    double diffX = difference.getX();
+    double diffY = difference.getY();
+    double distance = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
+    double speedX = k_maxSpeedMps * diffX / distance;
+    double speedY = k_maxSpeedMps * diffY / distance;
+    m_drive.moveFieldRelative(speedX, speedY, 0);
   }
 
   // Called once the command ends or is interrupted.
