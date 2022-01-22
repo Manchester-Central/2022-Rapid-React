@@ -6,12 +6,13 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDrive;
 
 public class DriveToPosition extends CommandBase {
-  private final double k_maxSpeedMps = 2;
+  private final double k_maxSpeedMps = 4;
   SwerveDrive m_drive;
   double m_x, m_y;
   Pose2d m_targetPose;
@@ -33,8 +34,7 @@ public class DriveToPosition extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    var currentPose = m_drive.getPose();
-    var difference = m_targetPose.minus(currentPose);
+    var difference = getDistanceFromTarget();
     SmartDashboard.putString("difference", difference.toString());
     double diffX = difference.getX();
     double diffY = difference.getY();
@@ -44,6 +44,12 @@ public class DriveToPosition extends CommandBase {
     m_drive.moveFieldRelative(speedX, speedY, 0);
   }
 
+  private Translation2d getDistanceFromTarget() {
+    var currentPose = m_drive.getPose();
+    var difference = m_targetPose.getTranslation().minus(currentPose.getTranslation());
+    return difference;
+  }
+
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
@@ -51,6 +57,7 @@ public class DriveToPosition extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    var difference = getDistanceFromTarget();
+    return Math.abs(difference.getX()) < 0.01 && Math.abs(difference.getY()) < 0.01;
   }
 }
