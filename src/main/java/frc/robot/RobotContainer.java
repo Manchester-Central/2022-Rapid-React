@@ -31,7 +31,7 @@ import frc.robot.subsystems.SwerveDrive;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  private Gamepad m_driver = new Gamepad(0, "Driver");
+  private Gamepad m_driver = new Gamepad(0, "Driver", false);
   // private final ExampleCommand m_autoCommand = new
   // ExampleCommand(m_exampleSubsystem);
 
