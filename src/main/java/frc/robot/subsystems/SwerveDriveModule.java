@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
@@ -15,6 +18,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.Robot;
 
 /** Add your docs here. */
 public class SwerveDriveModule {
@@ -32,6 +36,13 @@ public class SwerveDriveModule {
         m_velocityController = new TalonFX(velocityControllerPort);
         m_angleController = new TalonFX(angleControllerPort);
         m_name = name;
+        Robot.LogManager.addNumber(m_name + "/targetVelocityMPS", () -> m_velocity);
+        Robot.LogManager.addNumber(m_name + "/targetAngleDegrees", () -> m_angle);
+        Robot.LogManager.addNumber(m_name + "/actualVelocityMPS", () -> 
+                FalconVelocityToMPS(m_velocityController.getSelectedSensorVelocity()));
+        Robot.LogManager.addNumber(m_name + "/actualAngleDegrees", () ->
+                FalconAngleToDegrees(m_angleController.getSelectedSensorPosition()));
+
     }
 
     public void updatePosition(Pose2d robotPose) {
