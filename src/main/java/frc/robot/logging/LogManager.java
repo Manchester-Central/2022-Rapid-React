@@ -26,7 +26,7 @@ public class LogManager {
     private FileWriter m_fileWriter;
     private PrintWriter m_PrintWriter;
     private List<String> m_headers = new ArrayList<String>();
-    private Map<String,Supplier<String>> m_suppliers = new HashMap<String,Supplier<String>>();
+    private Map<String, Supplier<String>> m_suppliers = new HashMap<String, Supplier<String>>();
 
     public LogManager(boolean willLogShuffleBoard) {
         m_shuffleboardTab = Shuffleboard.getTab("Logging");
@@ -66,17 +66,32 @@ public class LogManager {
     }
 
     public void writeHeaders() {
-        for (String header : m_headers) {
-            m_PrintWriter.print(header + ",");
+        if (m_PrintWriter == null) {
+            return;
         }
-        m_PrintWriter.println();
+        try {
+            for (String header : m_headers) {
+                m_PrintWriter.print(header + ",");
+            }
+            m_PrintWriter.println();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void writeLine() {
-        for (String header : m_headers) {
-            m_PrintWriter.print(m_suppliers.get(header).get() + ",");
+        if (m_PrintWriter == null) {
+            return;
         }
-        m_PrintWriter.println();
-        m_PrintWriter.flush();
+        try {
+            for (String header : m_headers) {
+                m_PrintWriter.print(m_suppliers.get(header).get() + ",");
+            }
+            m_PrintWriter.println();
+            m_PrintWriter.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

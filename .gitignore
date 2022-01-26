@@ -162,3 +162,6 @@ bin/
 *-window.json
 simgui.json 
 simgui-ds.json
+
+# test files
+test.csv
