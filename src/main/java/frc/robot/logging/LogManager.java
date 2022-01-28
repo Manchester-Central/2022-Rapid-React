@@ -7,7 +7,9 @@ package frc.robot.logging;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,10 +31,14 @@ public class LogManager {
     private Map<String, Supplier<String>> m_suppliers = new HashMap<String, Supplier<String>>();
 
     public LogManager(boolean willLogShuffleBoard) {
+        
         m_shuffleboardTab = Shuffleboard.getTab("Logging");
         m_willLogShuffleBoard = willLogShuffleBoard;
         try {
-            m_fileWriter = new FileWriter("test.csv");
+            Calendar rightNow = Calendar.getInstance();
+            var simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ss.SSSZ");
+            var dateString = simpleDateFormat.format(rightNow.getTime()); 
+            m_fileWriter = new FileWriter("log-" +dateString+".csv");
             m_PrintWriter = new PrintWriter(m_fileWriter);
         } catch (IOException e) {
             System.err.println("failed to load log file");
