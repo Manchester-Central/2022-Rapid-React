@@ -7,6 +7,9 @@ package frc.robot.logging;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,7 +41,10 @@ public class LogManager {
             Calendar rightNow = Calendar.getInstance();
             var simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ss.SSSZ");
             var dateString = simpleDateFormat.format(rightNow.getTime()); 
-            m_fileWriter = new FileWriter("log-" +dateString+".csv");
+            var filePath = "logs/log-" +dateString+".csv";
+            Path pathToFile = Paths.get(filePath);
+            Files.createDirectories(pathToFile.getParent());
+            m_fileWriter = new FileWriter(filePath);
             m_PrintWriter = new PrintWriter(m_fileWriter);
         } catch (IOException e) {
             System.err.println("failed to load log file");

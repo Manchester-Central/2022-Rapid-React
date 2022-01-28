@@ -166,3 +166,4 @@ simgui-ds.json
 # test files
 test.csv
 log-*.csv
+logs
