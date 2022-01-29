@@ -20,9 +20,11 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import frc.robot.Robot;
 
 /** Add your docs here. */
 public class LogManager {
@@ -42,6 +44,10 @@ public class LogManager {
             var simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ss.SSSZ");
             var dateString = simpleDateFormat.format(rightNow.getTime()); 
             var filePath = "logs/log-" +dateString+".csv";
+            if (RobotBase.isReal()) {
+                // Save data to USB
+                filePath = "/U/" + filePath;
+            }
             Path pathToFile = Paths.get(filePath);
             Files.createDirectories(pathToFile.getParent());
             m_fileWriter = new FileWriter(filePath);
