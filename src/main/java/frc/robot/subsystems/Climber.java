@@ -16,23 +16,29 @@ import frc.robot.Constants;
 public class Climber extends SubsystemBase {
   private TalonFX m_extensionController;
   private DoubleSolenoid m_solenoid;
+
   /** Creates a new Climber. */
   public Climber() {
     m_extensionController = new TalonFX(Constants.ClimberExtension);
     m_solenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.SolenoidForward, Constants.SolenoidReverse);
   }
+
   public void ManualExtend(double power) {
-    m_extensionController.set(TalonFXControlMode.PercentOutput, power); 
+    m_extensionController.set(TalonFXControlMode.PercentOutput, power);
   }
-  public void MoveArmUp(){
+
+  public void MoveArmUp() {
     m_solenoid.set(Value.kForward);
   }
-  public void MoveArmDown(){
+
+  public void MoveArmDown() {
     m_solenoid.set(Value.kReverse);
   }
-  public void ReleaseArm(){
+
+  public void ReleaseArm() {
     m_solenoid.set(Value.kOff);
   }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
