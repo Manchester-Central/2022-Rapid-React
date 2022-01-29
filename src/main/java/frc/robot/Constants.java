@@ -28,6 +28,7 @@ public final class Constants {
     public final static int SwerveBackLeftAngle = 6;
     public final static int SwerveBackRightVelocity = 7;
     public final static int SwerveBackRightAngle = 8;
+    public final static int ClimberExtension = 9;
 
     // Drivetrain Properties
     public final static double DriveWheelWidthMeters = 0.1016; // 0.1016 meters = 4 inches, 1 rev of motor = 2048 tics
