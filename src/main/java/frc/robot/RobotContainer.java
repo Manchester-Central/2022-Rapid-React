@@ -79,6 +79,8 @@ public class RobotContainer {
     // Operator Commands
     m_operator.getButtonLB().whileHeld(new RunCommand(() -> m_climber.ManualExtend(-0.3), m_climber));
     m_operator.getButtonLT().whileHeld(new RunCommand(() -> m_climber.ManualExtend(0.3), m_climber));
+    m_operator.getButtonRB().whileHeld(new RunCommand(() -> m_climber.MoveArmDown(), m_climber));
+    m_operator.getButtonRT().whileHeld(new RunCommand(() -> m_climber.MoveArmUp(), m_climber));
   }
 
 

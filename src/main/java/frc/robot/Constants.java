@@ -38,4 +38,7 @@ public final class Constants {
     public final static double SwerveModuleAngleGearRatio = 12.8; // https://www.swervedrivespecialties.com/products/mk4-swerve-module
     public final static double TalonCountsPerRevolution = 2048;
 
+    // Pneumatic Connections
+    public final static int SolenoidForward = 1;
+    public final static int SolenoidReverse = 2;
 }
