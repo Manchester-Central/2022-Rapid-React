@@ -38,10 +38,10 @@ public class SwerveDriveModule {
         m_name = name;
         Robot.LogManager.addNumber(m_name + "/targetVelocityMPS", () -> m_velocity);
         Robot.LogManager.addNumber(m_name + "/targetAngleDegrees", () -> m_angle);
-        Robot.LogManager.addNumber(m_name + "/actualVelocityMPS", () -> 
-                FalconVelocityToMPS(m_velocityController.getSelectedSensorVelocity()));
-        Robot.LogManager.addNumber(m_name + "/actualAngleDegrees", () ->
-                FalconAngleToDegrees(m_angleController.getSelectedSensorPosition()));
+        Robot.LogManager.addNumber(m_name + "/actualVelocityMPS",
+                () -> FalconVelocityToMPS(m_velocityController.getSelectedSensorVelocity()));
+        Robot.LogManager.addNumber(m_name + "/actualAngleDegrees",
+                () -> FalconAngleToDegrees(m_angleController.getSelectedSensorPosition()));
 
     }
 
@@ -105,12 +105,4 @@ public class SwerveDriveModule {
         return wheelRotations * 360;
     }
 
-    public void periodic() {
-        SmartDashboard.putNumber(m_name + "/targetVelocityMPS", m_velocity);
-        SmartDashboard.putNumber(m_name + "/targetAngleDegrees", m_angle);
-        SmartDashboard.putNumber(m_name + "/actualVelocityMPS",
-                FalconVelocityToMPS(m_velocityController.getSelectedSensorVelocity()));
-        SmartDashboard.putNumber(m_name + "/actualAngleDegrees",
-                FalconAngleToDegrees(m_angleController.getSelectedSensorPosition()));
-    }
 }
