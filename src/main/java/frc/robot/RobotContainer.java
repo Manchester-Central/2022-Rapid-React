@@ -20,6 +20,7 @@ import frc.robot.commands.RobotRelativeDrive;
 import frc.robot.commands.SwerveModuleTest;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Loader;
 import frc.robot.subsystems.SwerveDrive;
@@ -46,6 +47,7 @@ public class RobotContainer {
   private Camera m_camera = new Camera();
   private Launcher m_launcher = new Launcher();
   private Loader m_loader = new Loader();
+  private Intake m_intake = new Intake();
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -88,7 +90,10 @@ public class RobotContainer {
     m_operator.getButtonRT().whileHeld(new RunCommand(() -> m_climber.MoveArmUp(), m_climber));
     m_operator.getButtonA().whileHeld(new RunCommand(() -> m_launcher.ManualLaunch(m_operator.getLeftY()), m_launcher));
     m_operator.getButtonB().whileHeld(new RunCommand(() -> m_loader.ManualLoad(0.5), m_loader));
+    m_operator.getButtonX().whileHeld(new RunCommand(() -> m_intake.ManualIntake(0.5), m_intake));
+    m_operator.getButtonY().whileHeld(new RunCommand(() -> m_intake.ManualIntake(-0.5), m_intake));
   }
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

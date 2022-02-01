@@ -33,6 +33,7 @@ public final class Constants {
     public final static int LauncherB = 11;
     public final static int LoaderA = 12;
     public final static int LoaderB = 13;
+    public final static int Intake = 14;
     
     // Drivetrain Properties
     public final static double DriveWheelWidthMeters = 0.1016; // 0.1016 meters = 4 inches, 1 rev of motor = 2048 tics
