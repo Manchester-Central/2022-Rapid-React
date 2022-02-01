@@ -20,6 +20,7 @@ import frc.robot.commands.RobotRelativeDrive;
 import frc.robot.commands.SwerveModuleTest;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.SwerveDrive;
 
 /**
@@ -42,7 +43,7 @@ public class RobotContainer {
   private SwerveDrive m_swerveDrive = new SwerveDrive();
   private Climber m_climber = new Climber();
   private Camera m_camera = new Camera();
-
+  private Launcher m_launcher = new Launcher();
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -83,6 +84,7 @@ public class RobotContainer {
     m_operator.getButtonLT().whileHeld(new RunCommand(() -> m_climber.ManualExtend(0.3), m_climber));
     m_operator.getButtonRB().whileHeld(new RunCommand(() -> m_climber.MoveArmDown(), m_climber));
     m_operator.getButtonRT().whileHeld(new RunCommand(() -> m_climber.MoveArmUp(), m_climber));
+    m_operator.getButtonA().whileHeld(new RunCommand(() -> m_launcher.ManualLaunch(m_operator.getLeftY()), m_launcher));
   }
 
   /**
