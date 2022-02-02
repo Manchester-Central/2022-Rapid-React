@@ -11,11 +11,15 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.ClimberDefault;
 import frc.robot.commands.DriveOverDistance;
 import frc.robot.commands.DriveOverTime;
 import frc.robot.commands.DriveToPosition;
 import frc.robot.commands.DriverRelativeDrive;
 import frc.robot.commands.FieldRelativeDrive;
+import frc.robot.commands.IntakeDefault;
+import frc.robot.commands.LauncherDefault;
+import frc.robot.commands.LoaderDefault;
 import frc.robot.commands.RobotRelativeDrive;
 import frc.robot.commands.SwerveModuleTest;
 import frc.robot.subsystems.Camera;
@@ -65,8 +69,14 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    // Drive Commands
+    // Default Commands
     m_swerveDrive.setDefaultCommand(new FieldRelativeDrive(m_swerveDrive, m_driver));
+    m_climber.setDefaultCommand(new ClimberDefault(m_climber));
+    m_intake.setDefaultCommand(new IntakeDefault(m_intake));
+    m_launcher.setDefaultCommand(new LauncherDefault(m_launcher));
+    m_loader.setDefaultCommand(new LoaderDefault(m_loader));
+    
+    // Drive Commands
     Command driverRelativeDrive = new DriverRelativeDrive(m_swerveDrive, m_driver);
     Command swerveModuleTest = new SwerveModuleTest(m_swerveDrive, m_driver);
     Command robotRelativeDrive = new RobotRelativeDrive(m_swerveDrive, m_driver);
