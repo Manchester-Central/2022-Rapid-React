@@ -4,6 +4,10 @@
 
 package frc.robot.subsystems;
 
+import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.hal.SimDouble;
+import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -16,16 +20,27 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import edu.wpi.first.wpilibj.SPI;
 
 public class SwerveDrive extends SubsystemBase {
   private Field2d m_field = new Field2d();
-  private Rotation2d m_rotation = new Rotation2d();
   private SwerveDriveModule m_module1;
   private SwerveDriveModule m_module2;
   private SwerveDriveModule m_module3;
   private SwerveDriveModule m_module4;
   private SwerveDriveKinematics m_kinematics;
   private SwerveDriveOdometry m_odometry;
+  private AHRS m_gyro;
+
+  public Rotation2d getRotation() {
+    return Rotation2d.fromDegrees(m_gyro.getYaw());
+  }
+
+  private void setSimulationAngle(double angle) {
+    int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
+    SimDouble SimAngle = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "Yaw"));
+    SimAngle.set(angle);
+  }
 
   /** Creates a new SwerveDrive. */
   public SwerveDrive() {
@@ -40,7 +55,8 @@ public class SwerveDrive extends SubsystemBase {
         Constants.SwerveBackLeftAngle);
     m_kinematics = new SwerveDriveKinematics(m_module1.getLocation(), m_module2.getLocation(), m_module3.getLocation(),
         m_module4.getLocation());
-    m_odometry = new SwerveDriveOdometry(m_kinematics, m_rotation);
+    m_gyro = new AHRS(SPI.Port.kMXP);
+    m_odometry = new SwerveDriveOdometry(m_kinematics, getRotation());
   }
 
   private void move(ChassisSpeeds speeds) {
@@ -52,12 +68,12 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public void moveFieldRelative(double x, double y, double theta) {
-    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(x, y, theta, m_rotation);
+    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(x, y, theta, getRotation());
     move(speeds);
   }
 
   public void moveDriverRelative(double x, double y, double theta) {
-    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(y, x * -1, theta, m_rotation);
+    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(y, x * -1, theta, getRotation());
     move(speeds);
   }
 
@@ -85,8 +101,8 @@ public class SwerveDrive extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     ChassisSpeeds speeds = m_kinematics.toChassisSpeeds(getModuleStates());
-    m_rotation = m_rotation.plus(new Rotation2d(speeds.omegaRadiansPerSecond / Constants.RobotUpdate_hz));
-    m_odometry.update(m_rotation, getModuleStates());
+    setSimulationAngle( getRotation().plus(new Rotation2d(speeds.omegaRadiansPerSecond / Constants.RobotUpdate_hz)).getDegrees());
+    m_odometry.update(getRotation(), getModuleStates());
     Pose2d pose = getPose();
     m_module1.updatePosition(pose);
     m_module2.updatePosition(pose);
@@ -94,5 +110,6 @@ public class SwerveDrive extends SubsystemBase {
     m_module4.updatePosition(pose);
     pose = pose.transformBy(new Transform2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     m_field.setRobotPose(pose);
+    SmartDashboard.putBoolean("calibrating", m_gyro.isCalibrating());
   }
 }
