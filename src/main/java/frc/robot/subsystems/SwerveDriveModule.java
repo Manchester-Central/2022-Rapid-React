@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
@@ -24,8 +25,8 @@ import frc.robot.Robot;
 public class SwerveDriveModule {
     private Translation2d m_location;
     private Field2d m_field = new Field2d();
-    private double m_velocity = 0;
-    private double m_angle = 0;
+    private double m_targetVelocity = 0;
+    private double m_targetAngle = 0;
     private TalonFX m_velocityController;
     private TalonFX m_angleController;
     private String m_name;
@@ -36,29 +37,41 @@ public class SwerveDriveModule {
         m_velocityController = new TalonFX(velocityControllerPort);
         m_angleController = new TalonFX(angleControllerPort);
         m_name = name;
-        Robot.LogManager.addNumber(m_name + "/targetVelocityMPS", () -> m_velocity);
-        Robot.LogManager.addNumber(m_name + "/targetAngleDegrees", () -> m_angle);
-        Robot.LogManager.addNumber(m_name + "/actualVelocityMPS",
-                () -> FalconVelocityToMPS(m_velocityController.getSelectedSensorVelocity()));
-        Robot.LogManager.addNumber(m_name + "/actualAngleDegrees",
-                () -> FalconAngleToDegrees(m_angleController.getSelectedSensorPosition()));
+        Robot.LogManager.addNumber(m_name + "/targetVelocityMPS", () -> m_targetVelocity);
+        Robot.LogManager.addNumber(m_name + "/targetAngleDegrees", () -> m_targetAngle);
+        Robot.LogManager.addNumber(m_name + "/actualVelocityMPS", () -> getCurrentVelocityMPS());
+        Robot.LogManager.addNumber(m_name + "/actualAngleDegrees", () -> getCurrentAngleDegrees());
 
     }
 
     public void updatePosition(Pose2d robotPose) {
-        Pose2d modulePose = robotPose.transformBy(new Transform2d(m_location, Rotation2d.fromDegrees(m_angle)));
+        Pose2d modulePose = robotPose.transformBy(new Transform2d(m_location, Rotation2d.fromDegrees(m_targetAngle)));
         m_field.setRobotPose(modulePose);
     }
 
+    public double getCurrentVelocityMPS() {
+        if (RobotBase.isReal()) {
+            return FalconVelocityToMPS(m_velocityController.getSelectedSensorVelocity());
+        }
+        return m_targetVelocity;
+    }
+
+    public double getCurrentAngleDegrees() {
+        if (RobotBase.isReal()) {
+            return FalconAngleToDegrees(m_angleController.getSelectedSensorPosition());
+        }
+        return m_targetAngle;
+    }
+
     public SwerveModuleState getState() {
-        return new SwerveModuleState(m_velocity, Rotation2d.fromDegrees(m_angle));
+        return new SwerveModuleState(getCurrentVelocityMPS(), Rotation2d.fromDegrees(getCurrentAngleDegrees()));
     }
 
     public void setTargetState(SwerveModuleState targetState) {
-        m_velocity = targetState.speedMetersPerSecond;
-        m_angle = targetState.angle.getDegrees();
-        m_velocityController.set(TalonFXControlMode.Velocity, MPSToFalconVelocity(m_velocity));
-        m_angleController.set(TalonFXControlMode.Position, DegreesToFalconAngle(m_angle));
+        m_targetVelocity = targetState.speedMetersPerSecond;
+        m_targetAngle = targetState.angle.getDegrees();
+        m_velocityController.set(TalonFXControlMode.Velocity, MPSToFalconVelocity(m_targetVelocity));
+        m_angleController.set(TalonFXControlMode.Position, DegreesToFalconAngle(m_targetAngle));
     }
 
     public Translation2d getLocation() {

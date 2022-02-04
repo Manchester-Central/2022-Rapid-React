@@ -100,8 +100,6 @@ public class SwerveDrive extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    ChassisSpeeds speeds = m_kinematics.toChassisSpeeds(getModuleStates());
-    setSimulationAngle( getRotation().plus(new Rotation2d(speeds.omegaRadiansPerSecond / Constants.RobotUpdate_hz)).getDegrees());
     m_odometry.update(getRotation(), getModuleStates());
     Pose2d pose = getPose();
     m_module1.updatePosition(pose);
@@ -111,5 +109,12 @@ public class SwerveDrive extends SubsystemBase {
     pose = pose.transformBy(new Transform2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     m_field.setRobotPose(pose);
     SmartDashboard.putBoolean("calibrating", m_gyro.isCalibrating());
+  }
+
+  @Override
+  public void simulationPeriodic() {
+      super.simulationPeriodic();
+      ChassisSpeeds speeds = m_kinematics.toChassisSpeeds(getModuleStates());
+      setSimulationAngle( getRotation().plus(new Rotation2d(speeds.omegaRadiansPerSecond / Constants.RobotUpdate_hz)).getDegrees());
   }
 }
