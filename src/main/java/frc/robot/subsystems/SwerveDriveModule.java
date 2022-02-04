@@ -30,13 +30,16 @@ public class SwerveDriveModule {
     private TalonFX m_velocityController;
     private TalonFX m_angleController;
     private String m_name;
+    private double m_angleOffset;
 
-    public SwerveDriveModule(double x, double y, String name, int velocityControllerPort, int angleControllerPort) {
+    public SwerveDriveModule(double x, double y, double angleOffset, String name, int velocityControllerPort,
+            int angleControllerPort) {
         m_location = new Translation2d(x, y);
         SmartDashboard.putData(name, m_field);
         m_velocityController = new TalonFX(velocityControllerPort);
         m_angleController = new TalonFX(angleControllerPort);
         m_name = name;
+        m_angleOffset = angleOffset;
         Robot.LogManager.addNumber(m_name + "/targetVelocityMPS", () -> m_targetVelocity);
         Robot.LogManager.addNumber(m_name + "/targetAngleDegrees", () -> m_targetAngle);
         Robot.LogManager.addNumber(m_name + "/actualVelocityMPS", () -> getCurrentVelocityMPS());
@@ -58,7 +61,7 @@ public class SwerveDriveModule {
 
     public double getCurrentAngleDegrees() {
         if (RobotBase.isReal()) {
-            return FalconAngleToDegrees(m_angleController.getSelectedSensorPosition());
+            return FalconAngleToDegrees(m_angleController.getSelectedSensorPosition()) - m_angleOffset;
         }
         return m_targetAngle;
     }
@@ -71,7 +74,7 @@ public class SwerveDriveModule {
         m_targetVelocity = targetState.speedMetersPerSecond;
         m_targetAngle = targetState.angle.getDegrees();
         m_velocityController.set(TalonFXControlMode.Velocity, MPSToFalconVelocity(m_targetVelocity));
-        m_angleController.set(TalonFXControlMode.Position, DegreesToFalconAngle(m_targetAngle));
+        m_angleController.set(TalonFXControlMode.Position, DegreesToFalconAngle(m_targetAngle + m_angleOffset));
     }
 
     public Translation2d getLocation() {
