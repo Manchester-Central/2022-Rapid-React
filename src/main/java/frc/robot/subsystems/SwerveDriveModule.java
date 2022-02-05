@@ -61,7 +61,7 @@ public class SwerveDriveModule {
 
     public double getCurrentAngleDegrees() {
         if (RobotBase.isReal()) {
-            return FalconAngleToDegrees(m_angleController.getSelectedSensorPosition()) - m_angleOffset;
+            return FalconAngleToDegrees(m_angleController.getSelectedSensorPosition()) + m_angleOffset;
         }
         return m_targetAngle;
     }
@@ -74,7 +74,7 @@ public class SwerveDriveModule {
         m_targetVelocity = targetState.speedMetersPerSecond;
         m_targetAngle = targetState.angle.getDegrees();
         m_velocityController.set(TalonFXControlMode.Velocity, MPSToFalconVelocity(m_targetVelocity));
-        m_angleController.set(TalonFXControlMode.Position, DegreesToFalconAngle(m_targetAngle + m_angleOffset));
+        m_angleController.set(TalonFXControlMode.Position, DegreesToFalconAngle(m_targetAngle - m_angleOffset));
     }
 
     public Translation2d getLocation() {
