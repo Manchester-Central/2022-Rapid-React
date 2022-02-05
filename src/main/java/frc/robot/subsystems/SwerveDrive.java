@@ -24,10 +24,10 @@ import edu.wpi.first.wpilibj.SPI;
 
 public class SwerveDrive extends SubsystemBase {
   private Field2d m_field = new Field2d();
-  private SwerveDriveModule m_module1;
-  private SwerveDriveModule m_module2;
-  private SwerveDriveModule m_module3;
-  private SwerveDriveModule m_module4;
+  private SwerveDriveModule m_moduleFL;
+  private SwerveDriveModule m_moduleFR;
+  private SwerveDriveModule m_moduleBR;
+  private SwerveDriveModule m_moduleBL;
   private SwerveDriveKinematics m_kinematics;
   private SwerveDriveOdometry m_odometry;
   private AHRS m_gyro;
@@ -38,6 +38,10 @@ public class SwerveDrive extends SubsystemBase {
   private double angleP;
   private double angleI;
   private double angleD;
+
+  public enum SwerveModulePosition {
+    FrontLeft, FrontRight, BackLeft, BackRight
+  }
 
   public Rotation2d getRotation() {
     return Rotation2d.fromDegrees(m_gyro.getYaw());
@@ -52,16 +56,16 @@ public class SwerveDrive extends SubsystemBase {
   /** Creates a new SwerveDrive. */
   public SwerveDrive() {
     SmartDashboard.putData("Field", m_field);
-    m_module1 = new SwerveDriveModule(-0.5, 0.5, 0, "F_L", Constants.SwerveFrontLeftVelocity,
+    m_moduleFL = new SwerveDriveModule(-0.5, 0.5, 0, SwerveModulePosition.FrontLeft.name(), Constants.SwerveFrontLeftVelocity,
         Constants.SwerveFrontLeftAngle);
-    m_module2 = new SwerveDriveModule(0.5, 0.5, -90, "F_R", Constants.SwerveFrontRightVelocity,
+    m_moduleFR = new SwerveDriveModule(0.5, 0.5, -90, SwerveModulePosition.FrontRight.name(), Constants.SwerveFrontRightVelocity,
         Constants.SwerveFrontRightAngle);
-    m_module3 = new SwerveDriveModule(0.5, -0.5, 180, "B_R", Constants.SwerveBackRightVelocity,
+    m_moduleBR = new SwerveDriveModule(0.5, -0.5, 180, SwerveModulePosition.BackRight.name(), Constants.SwerveBackRightVelocity,
         Constants.SwerveBackRightAngle);
-    m_module4 = new SwerveDriveModule(-0.5, -0.5, 90, "B_L", Constants.SwerveBackLeftVelocity,
+    m_moduleBL = new SwerveDriveModule(-0.5, -0.5, 90, SwerveModulePosition.BackLeft.name(), Constants.SwerveBackLeftVelocity,
         Constants.SwerveBackLeftAngle);
-    m_kinematics = new SwerveDriveKinematics(m_module1.getLocation(), m_module2.getLocation(), m_module3.getLocation(),
-        m_module4.getLocation());
+    m_kinematics = new SwerveDriveKinematics(m_moduleFL.getLocation(), m_moduleFR.getLocation(), m_moduleBR.getLocation(),
+        m_moduleBL.getLocation());
     m_gyro = new AHRS(SPI.Port.kMXP);
     m_odometry = new SwerveDriveOdometry(m_kinematics, getRotation());
 
@@ -84,10 +88,10 @@ public class SwerveDrive extends SubsystemBase {
 
   private void move(ChassisSpeeds speeds) {
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(speeds);
-    m_module1.setTargetState(states[0]);
-    m_module2.setTargetState(states[1]);
-    m_module3.setTargetState(states[2]);
-    m_module4.setTargetState(states[3]);
+    m_moduleFL.setTargetState(states[0]);
+    m_moduleFR.setTargetState(states[1]);
+    m_moduleBR.setTargetState(states[2]);
+    m_moduleBL.setTargetState(states[3]);
   }
 
   public void moveFieldRelative(double x, double y, double theta) {
@@ -105,46 +109,46 @@ public class SwerveDrive extends SubsystemBase {
     move(speeds);
   }
 
-  public void setSwerveModuleState(int moduleID, SwerveModuleState State) {
-    m_module1.Stop();
-    m_module2.Stop();
-    m_module3.Stop();
-    m_module4.Stop();
+  public void setSwerveModuleState(SwerveModulePosition moduleID, SwerveModuleState State) {
+    m_moduleFL.Stop();
+    m_moduleFR.Stop();
+    m_moduleBR.Stop();
+    m_moduleBL.Stop();
     switch (moduleID) {
-      case 1:
-        m_module1.setTargetState(State);
+      case FrontLeft:
+        m_moduleFL.setTargetState(State);
         break;
-      case 2:
-        m_module2.setTargetState(State);
+      case FrontRight:
+        m_moduleFR.setTargetState(State);
         break;
-      case 3:
-        m_module3.setTargetState(State);
+      case BackRight:
+        m_moduleBR.setTargetState(State);
         break;
-      case 4:
-        m_module4.setTargetState(State);
+      case BackLeft:
+        m_moduleBL.setTargetState(State);
         break;
       default:
         break;
     }
   }
 
-  public void setSwerveModuleManual(int moduleID, double velocityControllerPower, double angleControllerPower) {
-    m_module1.Stop();
-    m_module2.Stop();
-    m_module3.Stop();
-    m_module4.Stop();
+  public void setSwerveModuleManual(SwerveModulePosition moduleID, double velocityControllerPower, double angleControllerPower) {
+    m_moduleFL.Stop();
+    m_moduleFR.Stop();
+    m_moduleBR.Stop();
+    m_moduleBL.Stop();
     switch (moduleID) {
-      case 1:
-        m_module1.setManual(velocityControllerPower, angleControllerPower);
+      case FrontLeft:
+        m_moduleFL.setManual(velocityControllerPower, angleControllerPower);
         break;
-      case 2:
-        m_module2.setManual(velocityControllerPower, angleControllerPower);
+      case FrontRight:
+        m_moduleFR.setManual(velocityControllerPower, angleControllerPower);
         break;
-      case 3:
-        m_module3.setManual(velocityControllerPower, angleControllerPower);
+      case BackRight:
+        m_moduleBR.setManual(velocityControllerPower, angleControllerPower);
         break;
-      case 4:
-        m_module4.setManual(velocityControllerPower, angleControllerPower);
+      case BackLeft:
+        m_moduleBL.setManual(velocityControllerPower, angleControllerPower);
         break;
       default:
         break;
@@ -157,7 +161,7 @@ public class SwerveDrive extends SubsystemBase {
 
   private SwerveModuleState[] getModuleStates() {
     SwerveModuleState[] states = {
-        m_module1.getState(), m_module2.getState(), m_module3.getState(), m_module4.getState()
+        m_moduleFL.getState(), m_moduleFR.getState(), m_moduleBR.getState(), m_moduleBL.getState()
     };
     return states;
   }
@@ -167,10 +171,10 @@ public class SwerveDrive extends SubsystemBase {
     // This method will be called once per scheduler run
     m_odometry.update(getRotation(), getModuleStates());
     Pose2d pose = getPose();
-    m_module1.updatePosition(pose);
-    m_module2.updatePosition(pose);
-    m_module3.updatePosition(pose);
-    m_module4.updatePosition(pose);
+    m_moduleFL.updatePosition(pose);
+    m_moduleFR.updatePosition(pose);
+    m_moduleBR.updatePosition(pose);
+    m_moduleBL.updatePosition(pose);
     pose = pose.transformBy(new Transform2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     m_field.setRobotPose(pose);
     SmartDashboard.putBoolean("calibrating", m_gyro.isCalibrating());
@@ -199,17 +203,17 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   private void updateVelocityPIDConstants(double P, double I, double D) {
-    m_module1.UpdateVelocityPIDConstants(P, I, D);
-    m_module2.UpdateVelocityPIDConstants(P, I, D);
-    m_module3.UpdateVelocityPIDConstants(P, I, D);
-    m_module4.UpdateVelocityPIDConstants(P, I, D);
+    m_moduleFL.UpdateVelocityPIDConstants(P, I, D);
+    m_moduleFR.UpdateVelocityPIDConstants(P, I, D);
+    m_moduleBR.UpdateVelocityPIDConstants(P, I, D);
+    m_moduleBL.UpdateVelocityPIDConstants(P, I, D);
   }
 
   private void updateAnglePIDConstants(double P, double I, double D) {
-    m_module1.UpdateAnglePIDConstants(P, I, D);
-    m_module2.UpdateAnglePIDConstants(P, I, D);
-    m_module3.UpdateAnglePIDConstants(P, I, D);
-    m_module4.UpdateAnglePIDConstants(P, I, D);
+    m_moduleFL.UpdateAnglePIDConstants(P, I, D);
+    m_moduleFR.UpdateAnglePIDConstants(P, I, D);
+    m_moduleBR.UpdateAnglePIDConstants(P, I, D);
+    m_moduleBL.UpdateAnglePIDConstants(P, I, D);
   }
 
   @Override

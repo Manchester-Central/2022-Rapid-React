@@ -10,13 +10,14 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.SwerveDrive.SwerveModulePosition;
 
 public class SwerveModuleTest extends CommandBase {
   private SwerveDrive m_drive;
   private Gamepad m_controller;
-  private int m_moduleID;
+  private SwerveModulePosition m_moduleID;
 
-  public SwerveModuleTest(SwerveDrive drive, Gamepad controller, int moduleID) {
+  public SwerveModuleTest(SwerveDrive drive, Gamepad controller, SwerveModulePosition moduleID) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
     m_controller = controller;

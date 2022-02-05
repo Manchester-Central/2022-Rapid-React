@@ -29,6 +29,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Loader;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.SwerveDrive.SwerveModulePosition;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -88,14 +89,15 @@ public class RobotContainer {
         new DriveOverTime(m_swerveDrive, 2, 0, 0, 2000),
         new DriveOverTime(m_swerveDrive, 0, -2, 3, 2000),
         new DriveOverTime(m_swerveDrive, -2, 0, 0, 2000)));
-        m_driver.getButtonLB().whileHeld(new SwerveMotorTest(m_swerveDrive, m_driver, 1));
-        m_driver.getButtonRB().whileHeld(new SwerveMotorTest(m_swerveDrive, m_driver, 2));
-        m_driver.getButtonLT().whileHeld(new SwerveMotorTest(m_swerveDrive, m_driver, 3));
-        m_driver.getButtonRT().whileHeld(new SwerveMotorTest(m_swerveDrive, m_driver, 4));
-        /* m_driver.getButtonLB().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, 1));
-        m_driver.getButtonRB().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, 2));
-        m_driver.getButtonLT().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, 3));
-        m_driver.getButtonRT().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, 4)); */
+    m_driver.getButtonLB().whileHeld(new SwerveMotorTest(m_swerveDrive, m_driver, SwerveModulePosition.BackLeft));
+    m_driver.getButtonRB().whileHeld(new SwerveMotorTest(m_swerveDrive, m_driver, SwerveModulePosition.BackRight));
+    m_driver.getButtonLT().whileHeld(new SwerveMotorTest(m_swerveDrive, m_driver, SwerveModulePosition.FrontLeft));
+    m_driver.getButtonRT().whileHeld(new SwerveMotorTest(m_swerveDrive, m_driver,  SwerveModulePosition.FrontRight));
+    /* m_driver.getButtonLB().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, SwerveModulePosition.BackLeft));
+    m_driver.getButtonRB().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, SwerveModulePosition.BackRight));
+    m_driver.getButtonLT().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, SwerveModulePosition.FrontLeft));
+    m_driver.getButtonRT().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, SwerveModulePosition.FrontRight)); */
+    
     /*
      * m_driver.getButtonLB().whileActiveOnce(new DriveOverDistance(m_swerveDrive,
      * 2, -2, 1, 2));
