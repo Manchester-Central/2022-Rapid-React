@@ -115,7 +115,7 @@ public class RobotContainer {
     m_operator.getButtonRB().whileHeld(new RunCommand(() -> m_climber.MoveArmDown(), m_climber));
     m_operator.getButtonRT().whileHeld(new RunCommand(() -> m_climber.MoveArmUp(), m_climber));
     m_operator.getButtonA().whileHeld(new RunCommand(() -> m_launcher.ManualLaunch(m_operator.getLeftY()), m_launcher));
-    m_operator.getButtonB().whileHeld(new RunCommand(() -> m_loader.ManualLoad(0.5), m_loader));
+    m_operator.getButtonB().whileHeld(new RunCommand(() -> m_loader.ManualLoad(0.5, 0.5), m_loader));
     m_operator.getButtonX().whileHeld(new RunCommand(() -> m_intake.ManualIntake(0.5), m_intake));
     m_operator.getButtonY().whileHeld(new RunCommand(() -> m_intake.ManualIntake(-0.5), m_intake));
   }

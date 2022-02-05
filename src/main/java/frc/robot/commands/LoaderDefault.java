@@ -24,7 +24,7 @@ public class LoaderDefault extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_loader.ManualLoad(0);
+    m_loader.ManualLoad(0, 0);
   }
 
   // Called once the command ends or is interrupted.

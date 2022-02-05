@@ -13,19 +13,18 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Loader extends SubsystemBase {
-  private TalonFX m_ControllerA;
-  private TalonFX m_ControllerB;
+  private TalonFX m_ControllerTop;
+  private TalonFX m_ControllerBottom;
   /** Creates a new Loader. */
   public Loader() {
-    m_ControllerA = new TalonFX(Constants.LoaderA);
-    m_ControllerB = new TalonFX(Constants.LoaderB);
-    m_ControllerA.setNeutralMode(NeutralMode.Coast);
-    m_ControllerB.setNeutralMode(NeutralMode.Coast);
-    m_ControllerB.follow(m_ControllerA);
-    m_ControllerB.setInverted(InvertType.FollowMaster);
+    m_ControllerTop = new TalonFX(Constants.LoaderTop);
+    m_ControllerBottom = new TalonFX(Constants.LoaderBottom);
+    m_ControllerTop.setNeutralMode(NeutralMode.Coast);
+    m_ControllerBottom.setNeutralMode(NeutralMode.Coast);
   }
-  public void ManualLoad(double power) {
-    m_ControllerA.set(TalonFXControlMode.PercentOutput, power);
+  public void ManualLoad(double powerTop, double powerBottom) {
+    m_ControllerTop.set(TalonFXControlMode.PercentOutput, powerTop);
+    m_ControllerBottom.set(TalonFXControlMode.PercentOutput, powerBottom);
   }
 
   @Override
