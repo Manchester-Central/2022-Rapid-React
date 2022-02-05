@@ -14,11 +14,13 @@ import frc.robot.subsystems.SwerveDrive;
 public class SwerveModuleTest extends CommandBase {
   private SwerveDrive m_drive;
   private Gamepad m_controller;
+  private int m_moduleID;
 
-  public SwerveModuleTest(SwerveDrive drive, Gamepad controller) {
+  public SwerveModuleTest(SwerveDrive drive, Gamepad controller, int moduleID) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
     m_controller = controller;
+    m_moduleID = moduleID;
     addRequirements(drive);
   }
 
@@ -32,7 +34,8 @@ public class SwerveModuleTest extends CommandBase {
   public void execute() {
     double angle = Math.toDegrees(Math.atan2(m_controller.getRightY(), m_controller.getRightX()));
     SwerveModuleState target = new SwerveModuleState(m_controller.getLeftY(), Rotation2d.fromDegrees(angle));
-    m_drive.setSwerveModuleState(target);
+    m_drive.setSwerveModuleState(m_moduleID, target);
+
   }
 
   // Called once the command ends or is interrupted.

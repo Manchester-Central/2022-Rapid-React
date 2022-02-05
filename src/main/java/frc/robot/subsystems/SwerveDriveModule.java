@@ -133,4 +133,10 @@ public class SwerveDriveModule {
         m_angleController.config_kD(0, 1);
     }
     
+    public void Stop() {
+        SwerveModuleState State = getState();
+        State.speedMetersPerSecond = 0;
+        setTargetState(State);
+    }
+
 }
