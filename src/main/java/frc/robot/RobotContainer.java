@@ -22,6 +22,7 @@ import frc.robot.commands.LauncherDefault;
 import frc.robot.commands.LoaderDefault;
 import frc.robot.commands.RobotRelativeDrive;
 import frc.robot.commands.SwerveModuleTest;
+import frc.robot.commands.SwerveMotorTest;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
@@ -87,10 +88,14 @@ public class RobotContainer {
         new DriveOverTime(m_swerveDrive, 2, 0, 0, 2000),
         new DriveOverTime(m_swerveDrive, 0, -2, 3, 2000),
         new DriveOverTime(m_swerveDrive, -2, 0, 0, 2000)));
-        m_driver.getButtonLB().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, 1));
+        m_driver.getButtonLB().whileHeld(new SwerveMotorTest(m_swerveDrive, m_driver, 1));
+        m_driver.getButtonRB().whileHeld(new SwerveMotorTest(m_swerveDrive, m_driver, 2));
+        m_driver.getButtonLT().whileHeld(new SwerveMotorTest(m_swerveDrive, m_driver, 3));
+        m_driver.getButtonRT().whileHeld(new SwerveMotorTest(m_swerveDrive, m_driver, 4));
+        /* m_driver.getButtonLB().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, 1));
         m_driver.getButtonRB().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, 2));
         m_driver.getButtonLT().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, 3));
-        m_driver.getButtonRT().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, 4));
+        m_driver.getButtonRT().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, 4)); */
     /*
      * m_driver.getButtonLB().whileActiveOnce(new DriveOverDistance(m_swerveDrive,
      * 2, -2, 1, 2));

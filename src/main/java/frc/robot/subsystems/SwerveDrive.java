@@ -128,6 +128,29 @@ public class SwerveDrive extends SubsystemBase {
     }
   }
 
+  public void setSwerveModuleManual(int moduleID, double velocityControllerPower, double angleControllerPower) {
+    m_module1.Stop();
+    m_module2.Stop();
+    m_module3.Stop();
+    m_module4.Stop();
+    switch (moduleID) {
+      case 1:
+        m_module1.setManual(velocityControllerPower, angleControllerPower);
+        break;
+      case 2:
+        m_module2.setManual(velocityControllerPower, angleControllerPower);
+        break;
+      case 3:
+        m_module3.setManual(velocityControllerPower, angleControllerPower);
+        break;
+      case 4:
+        m_module4.setManual(velocityControllerPower, angleControllerPower);
+        break;
+      default:
+        break;
+    }
+  }
+
   public Pose2d getPose() {
     return m_odometry.getPoseMeters();
   }

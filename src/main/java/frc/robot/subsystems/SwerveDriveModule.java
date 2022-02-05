@@ -77,6 +77,11 @@ public class SwerveDriveModule {
         m_angleController.set(TalonFXControlMode.Position, DegreesToFalconAngle(m_targetAngle - m_angleOffset));
     }
 
+    public void setManual(double velocityControllerPower, double angleControllerPower) {
+        m_velocityController.set(TalonFXControlMode.PercentOutput, velocityControllerPower);
+        m_angleController.set(TalonFXControlMode.PercentOutput, angleControllerPower);
+    }
+
     public Translation2d getLocation() {
         return m_location;
     }
