@@ -121,4 +121,10 @@ public class SwerveDriveModule {
         return wheelRotations * 360;
     }
 
+    public void Stop() {
+        SwerveModuleState State = getState();
+        State.speedMetersPerSecond = 0;
+        setTargetState(State);
+    }
+
 }

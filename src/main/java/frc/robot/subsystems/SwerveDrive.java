@@ -82,8 +82,27 @@ public class SwerveDrive extends SubsystemBase {
     move(speeds);
   }
 
-  public void setSwerveModuleState(SwerveModuleState module1State) {
-    m_module1.setTargetState(module1State);
+  public void setSwerveModuleState(int moduleID, SwerveModuleState State) {
+    m_module1.Stop();
+    m_module2.Stop();
+    m_module3.Stop();
+    m_module4.Stop();
+    switch (moduleID) {
+      case 1:
+        m_module1.setTargetState(State);
+        break;
+      case 2:
+        m_module2.setTargetState(State);
+        break;
+      case 3:
+        m_module3.setTargetState(State);
+        break;
+      case 4:
+        m_module4.setTargetState(State);
+        break;
+      default:
+        break;
+    }
   }
 
   public Pose2d getPose() {

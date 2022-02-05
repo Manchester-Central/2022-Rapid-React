@@ -52,6 +52,7 @@ public class RobotContainer {
   private Launcher m_launcher = new Launcher();
   private Loader m_loader = new Loader();
   private Intake m_intake = new Intake();
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -75,23 +76,31 @@ public class RobotContainer {
     m_intake.setDefaultCommand(new IntakeDefault(m_intake));
     m_launcher.setDefaultCommand(new LauncherDefault(m_launcher));
     m_loader.setDefaultCommand(new LoaderDefault(m_loader));
-    
+
     // Drive Commands
     Command driverRelativeDrive = new DriverRelativeDrive(m_swerveDrive, m_driver);
-    Command swerveModuleTest = new SwerveModuleTest(m_swerveDrive, m_driver);
     Command robotRelativeDrive = new RobotRelativeDrive(m_swerveDrive, m_driver);
     m_driver.getButtonA().whileHeld(driverRelativeDrive);
-    m_driver.getButtonB().whileHeld(swerveModuleTest);
     m_driver.getButtonX().whileHeld(robotRelativeDrive);
     m_driver.getButtonY().whileActiveOnce(new SequentialCommandGroup(
         new DriveOverTime(m_swerveDrive, 0, 2, 0, 2000),
         new DriveOverTime(m_swerveDrive, 2, 0, 0, 2000),
         new DriveOverTime(m_swerveDrive, 0, -2, 3, 2000),
         new DriveOverTime(m_swerveDrive, -2, 0, 0, 2000)));
-    m_driver.getButtonLB().whileActiveOnce(new DriveOverDistance(m_swerveDrive, 2, -2, 1, 2));
-    m_driver.getButtonRB().whileActiveOnce(new DriveToPosition(m_swerveDrive, 0, 0, 0));
-    m_driver.getButtonLT().whileActiveOnce(new DriveToPosition(m_swerveDrive, 14.46, 6.60, -42.80));
-    m_driver.getButtonRT().whileActiveOnce(new DriveOverTime(m_swerveDrive, 0, 2, 0, 2000));
+        m_driver.getButtonLB().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, 1));
+        m_driver.getButtonRB().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, 2));
+        m_driver.getButtonLT().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, 3));
+        m_driver.getButtonRT().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, 4));
+    /*
+     * m_driver.getButtonLB().whileActiveOnce(new DriveOverDistance(m_swerveDrive,
+     * 2, -2, 1, 2));
+     * m_driver.getButtonRB().whileActiveOnce(new DriveToPosition(m_swerveDrive, 0,
+     * 0, 0));
+     * m_driver.getButtonLT().whileActiveOnce(new DriveToPosition(m_swerveDrive,
+     * 14.46, 6.60, -42.80));
+     * m_driver.getButtonRT().whileActiveOnce(new DriveOverTime(m_swerveDrive, 0, 2,
+     * 0, 2000));
+     */
 
     // Operator Commands
     m_operator.getButtonLB().whileHeld(new RunCommand(() -> m_climber.ManualExtend(-0.3), m_climber));
@@ -103,7 +112,6 @@ public class RobotContainer {
     m_operator.getButtonX().whileHeld(new RunCommand(() -> m_intake.ManualIntake(0.5), m_intake));
     m_operator.getButtonY().whileHeld(new RunCommand(() -> m_intake.ManualIntake(-0.5), m_intake));
   }
-
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
