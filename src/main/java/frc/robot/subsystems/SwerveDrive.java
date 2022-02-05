@@ -52,13 +52,13 @@ public class SwerveDrive extends SubsystemBase {
   /** Creates a new SwerveDrive. */
   public SwerveDrive() {
     SmartDashboard.putData("Field", m_field);
-    m_module1 = new SwerveDriveModule(-0.5, 0.5, "F_L", Constants.SwerveFrontLeftVelocity,
+    m_module1 = new SwerveDriveModule(-0.5, 0.5, 0, "F_L", Constants.SwerveFrontLeftVelocity,
         Constants.SwerveFrontLeftAngle);
-    m_module2 = new SwerveDriveModule(0.5, 0.5, "F_R", Constants.SwerveFrontRightVelocity,
+    m_module2 = new SwerveDriveModule(0.5, 0.5, -90, "F_R", Constants.SwerveFrontRightVelocity,
         Constants.SwerveFrontRightAngle);
-    m_module3 = new SwerveDriveModule(0.5, -0.5, "B_R", Constants.SwerveBackRightVelocity,
+    m_module3 = new SwerveDriveModule(0.5, -0.5, 180, "B_R", Constants.SwerveBackRightVelocity,
         Constants.SwerveBackRightAngle);
-    m_module4 = new SwerveDriveModule(-0.5, -0.5, "B_L", Constants.SwerveBackLeftVelocity,
+    m_module4 = new SwerveDriveModule(-0.5, -0.5, 90, "B_L", Constants.SwerveBackLeftVelocity,
         Constants.SwerveBackLeftAngle);
     m_kinematics = new SwerveDriveKinematics(m_module1.getLocation(), m_module2.getLocation(), m_module3.getLocation(),
         m_module4.getLocation());
