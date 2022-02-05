@@ -118,4 +118,16 @@ public class SwerveDriveModule {
         return wheelRotations * 360;
     }
 
+    public void UpdateVelocityPIDConstants(double P, double I, double D) {
+        m_velocityController.config_kP(0, P);
+        m_velocityController.config_kI(0, I);
+        m_velocityController.config_kD(0, D);
+    }
+
+    public void UpdateAnglePIDConstants(double P, double I, double D) {
+        m_angleController.config_kP(0, 1);
+        m_angleController.config_kI(0, 1);
+        m_angleController.config_kD(0, 1);
+    }
+    
 }

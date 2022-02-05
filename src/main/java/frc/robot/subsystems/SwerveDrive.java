@@ -32,6 +32,13 @@ public class SwerveDrive extends SubsystemBase {
   private SwerveDriveOdometry m_odometry;
   private AHRS m_gyro;
 
+  private double velocityP;
+  private double velocityI;
+  private double velocityD;
+  private double angleP;
+  private double angleI;
+  private double angleD;
+
   public Rotation2d getRotation() {
     return Rotation2d.fromDegrees(m_gyro.getYaw());
   }
@@ -57,6 +64,22 @@ public class SwerveDrive extends SubsystemBase {
         m_module4.getLocation());
     m_gyro = new AHRS(SPI.Port.kMXP);
     m_odometry = new SwerveDriveOdometry(m_kinematics, getRotation());
+
+    velocityP = 1;
+    velocityI = 0;
+    velocityD = 0;
+    angleP = 1;
+    angleI = 0;
+    angleD = 0;
+    updateVelocityPIDConstants(velocityP, velocityI, velocityD);
+    updateAnglePIDConstants(angleP, angleI, angleD);
+    
+    SmartDashboard.putNumber("Velocity/P", velocityP);
+    SmartDashboard.putNumber("Velocity/I", velocityI);
+    SmartDashboard.putNumber("Velocity/D", velocityD);
+    SmartDashboard.putNumber("Angle/P", angleP);
+    SmartDashboard.putNumber("Angle/I", angleI);
+    SmartDashboard.putNumber("Angle/D", angleD);
   }
 
   private void move(ChassisSpeeds speeds) {
@@ -109,12 +132,50 @@ public class SwerveDrive extends SubsystemBase {
     pose = pose.transformBy(new Transform2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     m_field.setRobotPose(pose);
     SmartDashboard.putBoolean("calibrating", m_gyro.isCalibrating());
+
+    double newVelocityP = SmartDashboard.getNumber("Velocity/P", velocityP);
+    double newVelocityI = SmartDashboard.getNumber("Velocity/I", velocityI);
+    double newVelocityD = SmartDashboard.getNumber("Velocity/D", velocityD);
+
+    if (newVelocityP != velocityP || newVelocityI != velocityI || newVelocityD != velocityD) {
+      velocityP = newVelocityP;
+      velocityI = newVelocityI;
+      velocityD = newVelocityD;
+      updateVelocityPIDConstants(velocityP, velocityI, velocityD);
+    }
+
+    double newAngleP = SmartDashboard.getNumber("Angle/P", angleP);
+    double newAngleI = SmartDashboard.getNumber("Angle/I", angleI);
+    double newAngleD = SmartDashboard.getNumber("Angle/D", angleD);
+
+    if (newAngleP != angleP || newAngleI != angleI || newAngleD != angleD) {
+      angleP = newAngleP;
+      angleI = newAngleI;
+      angleD = newAngleD;
+      updateAnglePIDConstants(angleP, angleI, angleD);
+    }
+  }
+
+  private void updateVelocityPIDConstants(double P, double I, double D) {
+    m_module1.UpdateVelocityPIDConstants(P, I, D);
+    m_module2.UpdateVelocityPIDConstants(P, I, D);
+    m_module3.UpdateVelocityPIDConstants(P, I, D);
+    m_module4.UpdateVelocityPIDConstants(P, I, D);
+  }
+
+  private void updateAnglePIDConstants(double P, double I, double D) {
+    m_module1.UpdateAnglePIDConstants(P, I, D);
+    m_module2.UpdateAnglePIDConstants(P, I, D);
+    m_module3.UpdateAnglePIDConstants(P, I, D);
+    m_module4.UpdateAnglePIDConstants(P, I, D);
   }
 
   @Override
   public void simulationPeriodic() {
-      super.simulationPeriodic();
-      ChassisSpeeds speeds = m_kinematics.toChassisSpeeds(getModuleStates());
-      setSimulationAngle( getRotation().plus(new Rotation2d(speeds.omegaRadiansPerSecond / Constants.RobotUpdate_hz)).getDegrees());
+    super.simulationPeriodic();
+    ChassisSpeeds speeds = m_kinematics.toChassisSpeeds(getModuleStates());
+    setSimulationAngle(
+        getRotation().plus(new Rotation2d(speeds.omegaRadiansPerSecond / Constants.RobotUpdate_hz)).getDegrees());
   }
+
 }
