@@ -120,6 +120,8 @@ public class RobotContainer {
     m_operator.getButtonB().whileHeld(new RunCommand(() -> m_feeder.ManualFeed(0.5, 0.5), m_feeder));
     m_operator.getButtonX().whileHeld(new RunCommand(() -> m_intake.ManualIntake(0.5), m_intake));
     m_operator.getButtonY().whileHeld(new RunCommand(() -> m_intake.ManualIntake(-0.5), m_intake));
+    m_operator.getButtonSelect().whileHeld(new RunCommand(() -> m_intake.MoveIntakeDown(), m_intake));
+    m_operator.getButtonStart().whileHeld(new RunCommand(() -> m_intake.MoveIntakeUp(), m_intake));
   }
 
   /**
