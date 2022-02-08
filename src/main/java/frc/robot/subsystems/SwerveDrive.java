@@ -188,6 +188,8 @@ public class SwerveDrive extends SubsystemBase {
       velocityI = newVelocityI;
       velocityD = newVelocityD;
       updateVelocityPIDConstants(velocityP, velocityI, velocityD);
+
+  SmartDashboard.putNumber("Yaw", m_gyro.getYaw());
     }
 
     double newAngleP = SmartDashboard.getNumber("Angle/P", angleP);
