@@ -53,7 +53,7 @@ public class RobotContainer {
   private Camera m_camera = new Camera();
   private Launcher m_launcher = new Launcher();
   private Feeder m_feeder = new Feeder();
-  private Intake m_intake = new Intake();
+  //private Intake m_intake = new Intake();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -77,7 +77,7 @@ public class RobotContainer {
     m_swerveDrive.setDefaultCommand(new RunCommand(() -> {}, m_swerveDrive));
     m_swerveDrive.setDefaultCommand(new FieldRelativeDrive(m_swerveDrive, m_driver));
     // m_climber.setDefaultCommand(new ClimberDefault(m_climber));
-    m_intake.setDefaultCommand(new IntakeDefault(m_intake));
+    //m_intake.setDefaultCommand(new IntakeDefault(m_intake));
     m_launcher.setDefaultCommand(new LauncherDefault(m_launcher));
     m_feeder.setDefaultCommand(new FeederDefault(m_feeder));
 
@@ -118,10 +118,10 @@ public class RobotContainer {
     //m_operator.getButtonRT().whileHeld(new RunCommand(() -> m_climber.MoveArmUp(), m_climber));
     m_operator.getButtonA().whileHeld(new RunCommand(() -> m_launcher.ManualLaunch(m_operator.getLeftY()), m_launcher));
     m_operator.getButtonB().whileHeld(new RunCommand(() -> m_feeder.ManualFeed(0.5, 0.5), m_feeder));
-    m_operator.getButtonX().whileHeld(new RunCommand(() -> m_intake.ManualIntake(0.5), m_intake));
+   /*m_operator.getButtonX().whileHeld(new RunCommand(() -> m_intake.ManualIntake(0.5), m_intake));
     m_operator.getButtonY().whileHeld(new RunCommand(() -> m_intake.ManualIntake(-0.5), m_intake));
     m_operator.getButtonSelect().whileHeld(new RunCommand(() -> m_intake.MoveIntakeDown(), m_intake));
-    m_operator.getButtonStart().whileHeld(new RunCommand(() -> m_intake.MoveIntakeUp(), m_intake));
+    m_operator.getButtonStart().whileHeld(new RunCommand(() -> m_intake.MoveIntakeUp(), m_intake));*/
   }
 
   /**
