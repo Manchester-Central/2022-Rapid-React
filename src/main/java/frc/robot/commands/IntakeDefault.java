@@ -25,6 +25,7 @@ public class IntakeDefault extends CommandBase {
   @Override
   public void execute() {
     m_intake.ManualIntake(0);
+    m_intake.ReleaseIntake();
   }
 
   // Called once the command ends or is interrupted.
