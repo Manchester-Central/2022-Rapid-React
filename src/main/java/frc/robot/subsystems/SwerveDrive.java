@@ -178,6 +178,7 @@ public class SwerveDrive extends SubsystemBase {
     pose = pose.transformBy(new Transform2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     m_field.setRobotPose(pose);
     SmartDashboard.putBoolean("calibrating", m_gyro.isCalibrating());
+    SmartDashboard.putNumber("Yaw", m_gyro.getYaw());
 
     double newVelocityP = SmartDashboard.getNumber("Velocity/P", velocityP);
     double newVelocityI = SmartDashboard.getNumber("Velocity/I", velocityI);
@@ -189,7 +190,7 @@ public class SwerveDrive extends SubsystemBase {
       velocityD = newVelocityD;
       updateVelocityPIDConstants(velocityP, velocityI, velocityD);
 
-  SmartDashboard.putNumber("Yaw", m_gyro.getYaw());
+  
     }
 
     double newAngleP = SmartDashboard.getNumber("Angle/P", angleP);
