@@ -49,7 +49,7 @@ public class RobotContainer {
   // ExampleCommand(m_exampleSubsystem);
 
   private SwerveDrive m_swerveDrive = new SwerveDrive();
-  private Climber m_climber = new Climber();
+  // private Climber m_climber = new Climber();
   private Camera m_camera = new Camera();
   private Launcher m_launcher = new Launcher();
   private Loader m_loader = new Loader();
@@ -76,7 +76,7 @@ public class RobotContainer {
     //m_swerveDrive.setDefaultCommand(new FieldRelativeDrive(m_swerveDrive, m_driver));
     m_swerveDrive.setDefaultCommand(new RunCommand(() -> {}, m_swerveDrive));
     m_swerveDrive.setDefaultCommand(new FieldRelativeDrive(m_swerveDrive, m_driver));
-    m_climber.setDefaultCommand(new ClimberDefault(m_climber));
+    // m_climber.setDefaultCommand(new ClimberDefault(m_climber));
     m_intake.setDefaultCommand(new IntakeDefault(m_intake));
     m_launcher.setDefaultCommand(new LauncherDefault(m_launcher));
     m_loader.setDefaultCommand(new LoaderDefault(m_loader));
@@ -112,10 +112,10 @@ public class RobotContainer {
      */
 
     // Operator Commands
-    m_operator.getButtonLB().whileHeld(new RunCommand(() -> m_climber.ManualExtend(-0.3), m_climber));
-    m_operator.getButtonLT().whileHeld(new RunCommand(() -> m_climber.ManualExtend(0.3), m_climber));
-    m_operator.getButtonRB().whileHeld(new RunCommand(() -> m_climber.MoveArmDown(), m_climber));
-    m_operator.getButtonRT().whileHeld(new RunCommand(() -> m_climber.MoveArmUp(), m_climber));
+    //m_operator.getButtonLB().whileHeld(new RunCommand(() -> m_climber.ManualExtend(-0.3), m_climber));
+    //m_operator.getButtonLT().whileHeld(new RunCommand(() -> m_climber.ManualExtend(0.3), m_climber));
+    //m_operator.getButtonRB().whileHeld(new RunCommand(() -> m_climber.MoveArmDown(), m_climber));
+    //m_operator.getButtonRT().whileHeld(new RunCommand(() -> m_climber.MoveArmUp(), m_climber));
     m_operator.getButtonA().whileHeld(new RunCommand(() -> m_launcher.ManualLaunch(m_operator.getLeftY()), m_launcher));
     m_operator.getButtonB().whileHeld(new RunCommand(() -> m_loader.ManualLoad(0.5, 0.5), m_loader));
     m_operator.getButtonX().whileHeld(new RunCommand(() -> m_intake.ManualIntake(0.5), m_intake));
