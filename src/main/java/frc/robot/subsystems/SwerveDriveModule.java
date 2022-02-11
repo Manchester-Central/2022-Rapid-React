@@ -133,9 +133,9 @@ public class SwerveDriveModule {
     }
 
     public void UpdateAnglePIDConstants(double P, double I, double D) {
-        m_angleController.config_kP(0, 1);
-        m_angleController.config_kI(0, 1);
-        m_angleController.config_kD(0, 1);
+        m_angleController.config_kP(0, P);
+        m_angleController.config_kI(0, I);
+        m_angleController.config_kD(0, D);
     }
     
     public void Stop() {
