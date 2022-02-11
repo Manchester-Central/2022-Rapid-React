@@ -31,8 +31,8 @@ public final class Constants {
     public final static int ClimberExtension = 9;
     public final static int LauncherA = 10;
     public final static int LauncherB = 11;
-    public final static int LoaderTop = 12;
-    public final static int LoaderBottom = 13;
+    public final static int UpperFeeder = 12;
+    public final static int LowerFeeder = 13;
     public final static int Intake = 14;
     
     // Drivetrain Properties

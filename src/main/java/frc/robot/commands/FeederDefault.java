@@ -5,16 +5,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Loader;
+import frc.robot.subsystems.Feeder;
 
-public class LoaderDefault extends CommandBase {
-  private Loader m_loader;
-  /** Creates a new LoaderDefault. */
-  public LoaderDefault(Loader loader) {
-    m_loader = loader;
+public class FeederDefault extends CommandBase {
+  private Feeder m_feeder;
+  /** Creates a new FeederDefault. */
+  public FeederDefault(Feeder feeder) {
+    m_feeder = feeder;
    
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(loader);
+    addRequirements(feeder);
   }
 
   // Called when the command is initially scheduled.
@@ -24,7 +24,7 @@ public class LoaderDefault extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_loader.ManualLoad(0, 0);
+    m_feeder.ManualFeed(0, 0);
   }
 
   // Called once the command ends or is interrupted.

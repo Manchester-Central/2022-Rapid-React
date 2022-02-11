@@ -19,7 +19,7 @@ import frc.robot.commands.DriverRelativeDrive;
 import frc.robot.commands.FieldRelativeDrive;
 import frc.robot.commands.IntakeDefault;
 import frc.robot.commands.LauncherDefault;
-import frc.robot.commands.LoaderDefault;
+import frc.robot.commands.FeederDefault;
 import frc.robot.commands.RobotRelativeDrive;
 import frc.robot.commands.SwerveModuleTest;
 import frc.robot.commands.SwerveMotorTest;
@@ -27,7 +27,7 @@ import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
-import frc.robot.subsystems.Loader;
+import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.SwerveDrive.SwerveModulePosition;
 
@@ -52,7 +52,7 @@ public class RobotContainer {
   // private Climber m_climber = new Climber();
   private Camera m_camera = new Camera();
   private Launcher m_launcher = new Launcher();
-  private Loader m_loader = new Loader();
+  private Feeder m_feeder = new Feeder();
   private Intake m_intake = new Intake();
 
   /**
@@ -79,7 +79,7 @@ public class RobotContainer {
     // m_climber.setDefaultCommand(new ClimberDefault(m_climber));
     m_intake.setDefaultCommand(new IntakeDefault(m_intake));
     m_launcher.setDefaultCommand(new LauncherDefault(m_launcher));
-    m_loader.setDefaultCommand(new LoaderDefault(m_loader));
+    m_feeder.setDefaultCommand(new FeederDefault(m_feeder));
 
     // Drive Commands
     Command driverRelativeDrive = new DriverRelativeDrive(m_swerveDrive, m_driver);
@@ -117,7 +117,7 @@ public class RobotContainer {
     //m_operator.getButtonRB().whileHeld(new RunCommand(() -> m_climber.MoveArmDown(), m_climber));
     //m_operator.getButtonRT().whileHeld(new RunCommand(() -> m_climber.MoveArmUp(), m_climber));
     m_operator.getButtonA().whileHeld(new RunCommand(() -> m_launcher.ManualLaunch(m_operator.getLeftY()), m_launcher));
-    m_operator.getButtonB().whileHeld(new RunCommand(() -> m_loader.ManualLoad(0.5, 0.5), m_loader));
+    m_operator.getButtonB().whileHeld(new RunCommand(() -> m_feeder.ManualFeed(0.5, 0.5), m_feeder));
     m_operator.getButtonX().whileHeld(new RunCommand(() -> m_intake.ManualIntake(0.5), m_intake));
     m_operator.getButtonY().whileHeld(new RunCommand(() -> m_intake.ManualIntake(-0.5), m_intake));
   }

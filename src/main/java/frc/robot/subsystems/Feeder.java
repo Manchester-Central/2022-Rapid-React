@@ -12,19 +12,19 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class Loader extends SubsystemBase {
-  private TalonFX m_ControllerTop;
-  private TalonFX m_ControllerBottom;
-  /** Creates a new Loader. */
-  public Loader() {
-    m_ControllerTop = new TalonFX(Constants.LoaderTop);
-    m_ControllerBottom = new TalonFX(Constants.LoaderBottom);
-    m_ControllerTop.setNeutralMode(NeutralMode.Coast);
-    m_ControllerBottom.setNeutralMode(NeutralMode.Coast);
+public class Feeder extends SubsystemBase {
+  private TalonFX m_upperFeeder;
+  private TalonFX m_lowerFeeder;
+  /** Creates a new Feeder. */
+  public Feeder() {
+    m_upperFeeder = new TalonFX(Constants.UpperFeeder);
+    m_lowerFeeder = new TalonFX(Constants.LowerFeeder);
+    m_upperFeeder.setNeutralMode(NeutralMode.Coast);
+    m_lowerFeeder.setNeutralMode(NeutralMode.Coast);
   }
-  public void ManualLoad(double powerTop, double powerBottom) {
-    m_ControllerTop.set(TalonFXControlMode.PercentOutput, powerTop);
-    m_ControllerBottom.set(TalonFXControlMode.PercentOutput, powerBottom);
+  public void ManualFeed(double powerTop, double powerBottom) {
+    m_upperFeeder.set(TalonFXControlMode.PercentOutput, powerTop);
+    m_lowerFeeder.set(TalonFXControlMode.PercentOutput, powerBottom);
   }
 
   @Override
