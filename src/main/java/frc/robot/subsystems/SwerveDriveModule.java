@@ -139,9 +139,7 @@ public class SwerveDriveModule {
     }
     
     public void Stop() {
-        SwerveModuleState State = getState();
-        State.speedMetersPerSecond = 0;
-        setTargetState(State);
+        setManual(0, 0);
     }
 
 }

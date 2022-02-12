@@ -74,8 +74,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // Default Commands
     //m_swerveDrive.setDefaultCommand(new FieldRelativeDrive(m_swerveDrive, m_driver));
-    m_swerveDrive.setDefaultCommand(new RunCommand(() -> {}, m_swerveDrive));
-    m_swerveDrive.setDefaultCommand(new FieldRelativeDrive(m_swerveDrive, m_driver));
+    m_swerveDrive.setDefaultCommand(new RunCommand(() -> {m_swerveDrive.stop();}, m_swerveDrive));
+    // m_swerveDrive.setDefaultCommand(new FieldRelativeDrive(m_swerveDrive, m_driver));
     // m_climber.setDefaultCommand(new ClimberDefault(m_climber));
     //m_intake.setDefaultCommand(new IntakeDefault(m_intake));
     m_launcher.setDefaultCommand(new LauncherDefault(m_launcher));
