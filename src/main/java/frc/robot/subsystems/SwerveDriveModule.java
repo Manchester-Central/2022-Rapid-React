@@ -137,7 +137,11 @@ public class SwerveDriveModule {
         m_angleController.config_kI(0, I);
         m_angleController.config_kD(0, D);
     }
-    
+    public void ResetEncoders(){
+        m_velocityController.setSelectedSensorPosition(0);
+        m_angleController.setSelectedSensorPosition(0);
+    }
+
     public void Stop() {
         setManual(0, 0);
     }
