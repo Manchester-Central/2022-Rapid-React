@@ -85,7 +85,12 @@ public class SwerveDrive extends SubsystemBase {
     SmartDashboard.putNumber("Angle/I", angleI);
     SmartDashboard.putNumber("Angle/D", angleD);
   }
-
+  public void stop(){
+    m_moduleFR.Stop();
+    m_moduleFL.Stop();
+    m_moduleBR.Stop();
+    m_moduleBL.Stop();
+  }
   private void move(ChassisSpeeds speeds) {
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(speeds);
     m_moduleFL.setTargetState(states[0]);
