@@ -58,21 +58,21 @@ public class SwerveDrive extends SubsystemBase {
     SmartDashboard.putData("Field", m_field);
     m_moduleFL = new SwerveDriveModule(-0.5, 0.5, 0, SwerveModulePosition.FrontLeft.name(), Constants.SwerveFrontLeftVelocity,
         Constants.SwerveFrontLeftAngle);
-    m_moduleFR = new SwerveDriveModule(0.5, 0.5, -90, SwerveModulePosition.FrontRight.name(), Constants.SwerveFrontRightVelocity,
+    m_moduleFR = new SwerveDriveModule(0.5, 0.5, 0, SwerveModulePosition.FrontRight.name(), Constants.SwerveFrontRightVelocity,
         Constants.SwerveFrontRightAngle);
-    m_moduleBR = new SwerveDriveModule(0.5, -0.5, 180, SwerveModulePosition.BackRight.name(), Constants.SwerveBackRightVelocity,
+    m_moduleBR = new SwerveDriveModule(0.5, -0.5, 0, SwerveModulePosition.BackRight.name(), Constants.SwerveBackRightVelocity,
         Constants.SwerveBackRightAngle);
-    m_moduleBL = new SwerveDriveModule(-0.5, -0.5, 90, SwerveModulePosition.BackLeft.name(), Constants.SwerveBackLeftVelocity,
+    m_moduleBL = new SwerveDriveModule(-0.5, -0.5, 0, SwerveModulePosition.BackLeft.name(), Constants.SwerveBackLeftVelocity,
         Constants.SwerveBackLeftAngle);
     m_kinematics = new SwerveDriveKinematics(m_moduleFL.getLocation(), m_moduleFR.getLocation(), m_moduleBR.getLocation(),
         m_moduleBL.getLocation());
     m_gyro = new AHRS(SPI.Port.kMXP);
     m_odometry = new SwerveDriveOdometry(m_kinematics, getRotation());
 
-    velocityP = 1;
+    velocityP = 0.1;
     velocityI = 0;
     velocityD = 0;
-    angleP = 1;
+    angleP = 0.15;
     angleI = 0;
     angleD = 0;
     updateVelocityPIDConstants(velocityP, velocityI, velocityD);
@@ -90,6 +90,12 @@ public class SwerveDrive extends SubsystemBase {
     m_moduleFL.Stop();
     m_moduleBR.Stop();
     m_moduleBL.Stop();
+  }
+  public void ResetEncoders(){
+    m_moduleFR.ResetEncoders();
+    m_moduleFL.ResetEncoders();
+    m_moduleBR.ResetEncoders();
+    m_moduleBL.ResetEncoders();
   }
   private void move(ChassisSpeeds speeds) {
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(speeds);
