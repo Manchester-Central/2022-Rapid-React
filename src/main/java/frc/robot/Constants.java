@@ -48,4 +48,7 @@ public final class Constants {
     public final static int ClimberSolenoidReverse = 2;
     public final static int IntakeSolenoidForward = 3;
     public final static int IntakeSolenoidReverse = 4;
+
+    //DIO
+    public final static int FeederBeamSensor = 0;
 }
