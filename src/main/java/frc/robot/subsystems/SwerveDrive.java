@@ -56,13 +56,15 @@ public class SwerveDrive extends SubsystemBase {
   /** Creates a new SwerveDrive. */
   public SwerveDrive() {
     SmartDashboard.putData("Field", m_field);
-    m_moduleFL = new SwerveDriveModule(-0.5, 0.5, 0, SwerveModulePosition.FrontLeft.name(), Constants.SwerveFrontLeftVelocity,
+    double width = 0.2957;
+    double length = 0.32067;
+    m_moduleFL = new SwerveDriveModule(length, -width, 0, SwerveModulePosition.FrontLeft.name(), Constants.SwerveFrontLeftVelocity,
         Constants.SwerveFrontLeftAngle);
-    m_moduleFR = new SwerveDriveModule(0.5, 0.5, 0, SwerveModulePosition.FrontRight.name(), Constants.SwerveFrontRightVelocity,
+    m_moduleFR = new SwerveDriveModule(length, width, 0, SwerveModulePosition.FrontRight.name(), Constants.SwerveFrontRightVelocity,
         Constants.SwerveFrontRightAngle);
-    m_moduleBR = new SwerveDriveModule(0.5, -0.5, 0, SwerveModulePosition.BackRight.name(), Constants.SwerveBackRightVelocity,
+    m_moduleBR = new SwerveDriveModule(-length, width, 0, SwerveModulePosition.BackRight.name(), Constants.SwerveBackRightVelocity,
         Constants.SwerveBackRightAngle);
-    m_moduleBL = new SwerveDriveModule(-0.5, -0.5, 0, SwerveModulePosition.BackLeft.name(), Constants.SwerveBackLeftVelocity,
+    m_moduleBL = new SwerveDriveModule(-length, -width, 0, SwerveModulePosition.BackLeft.name(), Constants.SwerveBackLeftVelocity,
         Constants.SwerveBackLeftAngle);
     m_kinematics = new SwerveDriveKinematics(m_moduleFL.getLocation(), m_moduleFR.getLocation(), m_moduleBR.getLocation(),
         m_moduleBL.getLocation());
