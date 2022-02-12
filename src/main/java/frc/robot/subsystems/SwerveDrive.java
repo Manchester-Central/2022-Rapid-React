@@ -72,7 +72,7 @@ public class SwerveDrive extends SubsystemBase {
     velocityP = 0.1;
     velocityI = 0;
     velocityD = 0;
-    angleP = 0.15;
+    angleP = 0.2;
     angleI = 0;
     angleD = 0;
     updateVelocityPIDConstants(velocityP, velocityI, velocityD);
@@ -105,18 +105,18 @@ public class SwerveDrive extends SubsystemBase {
     m_moduleBL.setTargetState(states[3]);
   }
 
-  public void moveFieldRelative(double x, double y, double theta) {
-    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(x, y, theta, getRotation());
+  public void moveFieldRelative(double sidewaysSpeed, double forwardSpeed, double theta) {
+    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(forwardSpeed, sidewaysSpeed, theta, getRotation());
     move(speeds);
   }
 
-  public void moveDriverRelative(double x, double y, double theta) {
-    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(y, x * -1, theta, getRotation());
+  public void moveDriverRelative(double sidewaysSpeed, double forwardSpeed, double theta) {
+    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(forwardSpeed, sidewaysSpeed * -1, theta, getRotation());
     move(speeds);
   }
 
-  public void moveRobotRelative(double x, double y, double theta) {
-    ChassisSpeeds speeds = new ChassisSpeeds(x, y, theta);
+  public void moveRobotRelative(double sidewaysSpeed, double forwardSpeed, double theta) {
+    ChassisSpeeds speeds = new ChassisSpeeds(forwardSpeed, sidewaysSpeed, theta);
     move(speeds);
   }
 
