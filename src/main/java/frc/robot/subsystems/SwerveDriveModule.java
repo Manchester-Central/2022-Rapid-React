@@ -82,6 +82,17 @@ public class SwerveDriveModule {
         m_angleController.set(TalonFXControlMode.PercentOutput, angleControllerPower);
     }
 
+    public double closestTarget(double currentAngle, double targetAngle) { //15 - 180 or 375 - 180
+        double angleAroundCircle = 360 + targetAngle;
+        double distanceNegative = targetAngle - currentAngle;
+        double distancePositive = angleAroundCircle - currentAngle;
+        if (distanceNegative < distancePositive) {
+            return targetAngle - currentAngle;
+        } else {
+            return angleAroundCircle - currentAngle;
+        }
+    }
+
     public Translation2d getLocation() {
         return m_location;
     }
