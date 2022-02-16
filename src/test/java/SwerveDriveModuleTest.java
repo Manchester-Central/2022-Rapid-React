@@ -24,6 +24,8 @@ public class SwerveDriveModuleTest {
       assertEquals(375.0, m_swerveDriveModule.closestTarget(350, 15), DELTA);
       assertEquals(15.0, m_swerveDriveModule.closestTarget(194, 15), DELTA);
       assertEquals(375.0, m_swerveDriveModule.closestTarget(196, 15), DELTA);
-      // assertEquals(-10.0, m_swerveDriveModule.closestTarget(15, 350), DELTA); 
+      assertEquals(-10.0, m_swerveDriveModule.closestTarget(15, 350), DELTA);
+      assertEquals(-10.0, m_swerveDriveModule.closestTarget(169, 350), DELTA);
+      assertEquals(350.0, m_swerveDriveModule.closestTarget(171, 350), DELTA);
     }
   }
