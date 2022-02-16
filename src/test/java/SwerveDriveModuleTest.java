@@ -19,7 +19,11 @@ public class SwerveDriveModuleTest {
     }
   
     @Test // marks this method as a test
-    public void doesntWorkWhenClosed() {
-      assertEquals(15.0, m_swerveDriveModule.closestTarget(10, 15), DELTA); // make sure that the value set to the motor is 0
+    public void TestClosestTarget() {
+      assertEquals(15.0, m_swerveDriveModule.closestTarget(10, 15), DELTA); 
+      assertEquals(375.0, m_swerveDriveModule.closestTarget(350, 15), DELTA);
+      assertEquals(15.0, m_swerveDriveModule.closestTarget(194, 15), DELTA);
+      assertEquals(375.0, m_swerveDriveModule.closestTarget(196, 15), DELTA);
+      // assertEquals(-10.0, m_swerveDriveModule.closestTarget(15, 350), DELTA); 
     }
   }
