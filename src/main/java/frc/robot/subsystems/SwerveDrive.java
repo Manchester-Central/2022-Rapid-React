@@ -56,13 +56,15 @@ public class SwerveDrive extends SubsystemBase {
   /** Creates a new SwerveDrive. */
   public SwerveDrive() {
     SmartDashboard.putData("Field", m_field);
-    m_moduleFL = new SwerveDriveModule(-0.5, 0.5, 0, SwerveModulePosition.FrontLeft.name(), Constants.SwerveFrontLeftVelocity,
+    double width = 0.2957;
+    double length = 0.32067;
+    m_moduleFL = new SwerveDriveModule(length, -width, 0, SwerveModulePosition.FrontLeft.name(), Constants.SwerveFrontLeftVelocity,
         Constants.SwerveFrontLeftAngle);
-    m_moduleFR = new SwerveDriveModule(0.5, 0.5, 0, SwerveModulePosition.FrontRight.name(), Constants.SwerveFrontRightVelocity,
+    m_moduleFR = new SwerveDriveModule(length, width, 0, SwerveModulePosition.FrontRight.name(), Constants.SwerveFrontRightVelocity,
         Constants.SwerveFrontRightAngle);
-    m_moduleBR = new SwerveDriveModule(0.5, -0.5, 0, SwerveModulePosition.BackRight.name(), Constants.SwerveBackRightVelocity,
+    m_moduleBR = new SwerveDriveModule(-length, width, 0, SwerveModulePosition.BackRight.name(), Constants.SwerveBackRightVelocity,
         Constants.SwerveBackRightAngle);
-    m_moduleBL = new SwerveDriveModule(-0.5, -0.5, 0, SwerveModulePosition.BackLeft.name(), Constants.SwerveBackLeftVelocity,
+    m_moduleBL = new SwerveDriveModule(-length, -width, 0, SwerveModulePosition.BackLeft.name(), Constants.SwerveBackLeftVelocity,
         Constants.SwerveBackLeftAngle);
     m_kinematics = new SwerveDriveKinematics(m_moduleFL.getLocation(), m_moduleFR.getLocation(), m_moduleBR.getLocation(),
         m_moduleBL.getLocation());
@@ -72,7 +74,7 @@ public class SwerveDrive extends SubsystemBase {
     velocityP = 0.1;
     velocityI = 0;
     velocityD = 0;
-    angleP = 0.15;
+    angleP = 0.2;
     angleI = 0;
     angleD = 0;
     updateVelocityPIDConstants(velocityP, velocityI, velocityD);
@@ -105,18 +107,18 @@ public class SwerveDrive extends SubsystemBase {
     m_moduleBL.setTargetState(states[3]);
   }
 
-  public void moveFieldRelative(double x, double y, double theta) {
-    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(x, y, theta, getRotation());
+  public void moveFieldRelative(double sidewaysSpeed, double forwardSpeed, double theta) {
+    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(forwardSpeed, sidewaysSpeed, theta, getRotation());
     move(speeds);
   }
 
-  public void moveDriverRelative(double x, double y, double theta) {
-    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(y, x * -1, theta, getRotation());
+  public void moveDriverRelative(double sidewaysSpeed, double forwardSpeed, double theta) {
+    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(forwardSpeed, sidewaysSpeed * -1, theta, getRotation());
     move(speeds);
   }
 
-  public void moveRobotRelative(double x, double y, double theta) {
-    ChassisSpeeds speeds = new ChassisSpeeds(x, y, theta);
+  public void moveRobotRelative(double sidewaysSpeed, double forwardSpeed, double theta) {
+    ChassisSpeeds speeds = new ChassisSpeeds(forwardSpeed, sidewaysSpeed, theta);
     move(speeds);
   }
 
