@@ -72,7 +72,7 @@ public class SwerveDriveModule {
 
     public void setTargetState(SwerveModuleState targetState) {
         m_targetVelocity = targetState.speedMetersPerSecond;
-        m_targetAngle = targetState.angle.getDegrees();
+        m_targetAngle = closestTarget(getCurrentAngleDegrees(), targetState.angle.getDegrees());
         m_velocityController.set(TalonFXControlMode.Velocity, MPSToFalconVelocity(m_targetVelocity));
         m_angleController.set(TalonFXControlMode.Position, DegreesToFalconAngle(m_targetAngle - m_angleOffset));
     }
@@ -83,6 +83,7 @@ public class SwerveDriveModule {
     }
 
     public double closestTarget(double currentAngle, double targetAngle) { // 15, 350
+        targetAngle = targetAngle + (Math.floor(currentAngle / 360) * 360);
         double otherAngle = targetAngle + 360; // 710
         if (targetAngle > currentAngle) { 
             otherAngle = targetAngle - 360;
