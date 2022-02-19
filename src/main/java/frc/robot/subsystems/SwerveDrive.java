@@ -44,7 +44,15 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public Rotation2d getRotation() {
-    return Rotation2d.fromDegrees(m_gyro.getYaw());
+    return Rotation2d.fromDegrees(m_gyro.getAngle());
+
+  }
+
+  public void updateGyroAdjustmentAngle (double physicalAngle) {
+    double sensorAngle = m_gyro.getYaw();
+    double angleOffset = physicalAngle - sensorAngle;
+    m_gyro.setAngleAdjustment(angleOffset);
+    
   }
 
   private void setSimulationAngle(double angle) {
@@ -191,7 +199,7 @@ public class SwerveDrive extends SubsystemBase {
     pose = pose.transformBy(new Transform2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     m_field.setRobotPose(pose);
     SmartDashboard.putBoolean("calibrating", m_gyro.isCalibrating());
-    SmartDashboard.putNumber("Yaw", m_gyro.getYaw());
+    SmartDashboard.putNumber("Yaw", m_gyro.getAngle());
 
     double newVelocityP = SmartDashboard.getNumber("Velocity/P", velocityP);
     double newVelocityI = SmartDashboard.getNumber("Velocity/I", velocityI);

@@ -23,6 +23,7 @@ import frc.robot.commands.FeederDefault;
 import frc.robot.commands.RobotRelativeDrive;
 import frc.robot.commands.SwerveModuleTest;
 import frc.robot.commands.SwerveMotorTest;
+import frc.robot.commands.ZeroNavX;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
@@ -101,6 +102,10 @@ public class RobotContainer {
     m_driver.getButtonRB().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, SwerveModulePosition.BackRight));
     m_driver.getButtonLT().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, SwerveModulePosition.FrontLeft));
     m_driver.getButtonRT().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, SwerveModulePosition.FrontRight));
+    m_driver.getPOVNorth().whileActiveOnce(new ZeroNavX(0, m_swerveDrive));
+    m_driver.getPOVEast().whileActiveOnce(new ZeroNavX(90, m_swerveDrive));
+    m_driver.getPOVSouth().whileActiveOnce(new ZeroNavX(180, m_swerveDrive));
+    m_driver.getPOVWest().whileActiveOnce(new ZeroNavX(270, m_swerveDrive));
     
     /*
      * m_driver.getButtonLB().whileActiveOnce(new DriveOverDistance(m_swerveDrive,
