@@ -38,9 +38,9 @@ public final class Constants {
     // Drivetrain Properties
     public final static double DriveWheelWidthMeters = 0.1016; // 0.1016 meters = 4 inches, 1 rev of motor = 2048 tics
     public final static double DriveWheelCircumferenceMeters = DriveWheelWidthMeters * Math.PI;
-    public final static double SwerveModuleVelocityGearRatio = 8.14; // Assuming the Standard Gear Ratio; Same link as
+    public final static double SwerveModuleVelocityGearRatio = 7.80; // Assuming the Standard Gear Ratio; Same link as
                                                                      // below
-    public final static double SwerveModuleAngleGearRatio = 12.8 * 0.78; // https://www.swervedrivespecialties.com/products/mk4-swerve-module
+    public final static double SwerveModuleAngleGearRatio = 12.8 * 0.78; // https://wcproducts.info/files/frc/manuals/WCP%20Swerve%20X%20-%20User%20Guide.pdf
     public final static double TalonCountsPerRevolution = 2048;
 
     // Pneumatic Connections
@@ -51,4 +51,5 @@ public final class Constants {
 
     //DIO
     public final static int FeederBeamSensor = 0;
+    public final static int ExtenderLimitSwitch = 1;
 }

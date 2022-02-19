@@ -4,9 +4,12 @@
 
 package frc.robot.subsystems;
 
+import java.security.KeyStore.SecretKeyEntry;
+
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -14,16 +17,26 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
+  private DigitalInput m_limitSwitch;
   private TalonFX m_extensionController;
   private DoubleSolenoid m_solenoid;
+  private double m_downPositionCounts;
+  private boolean m_seenBottom;
 
   /** Creates a new Climber. */
   public Climber() {
     m_extensionController = new TalonFX(Constants.ClimberExtension);
-    m_solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.ClimberSolenoidForward, Constants.ClimberSolenoidReverse);
+    m_solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.ClimberSolenoidForward,
+        Constants.ClimberSolenoidReverse);
+    m_limitSwitch = new DigitalInput(Constants.ExtenderLimitSwitch);
   }
 
   public void ManualExtend(double power) {
+    if (m_limitSwitch.get()) {
+      if (power < 0) {
+        power = 0;
+      }
+    }
     m_extensionController.set(TalonFXControlMode.PercentOutput, power);
   }
 
@@ -41,6 +54,12 @@ public class Climber extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if (!m_seenBottom) {
+      if (m_limitSwitch.get()) {
+        m_downPositionCounts = m_extensionController.getSelectedSensorPosition();
+        m_seenBottom = true;
+      }
+    }
     // This method will be called once per scheduler run
   }
 }
