@@ -40,7 +40,7 @@ public final class Constants {
     public final static double DriveWheelCircumferenceMeters = DriveWheelWidthMeters * Math.PI;
     public final static double SwerveModuleVelocityGearRatio = 7.80; // Assuming the Standard Gear Ratio; Same link as
                                                                      // below
-    public final static double SwerveModuleAngleGearRatio = 12.8 * 0.78; // https://wcproducts.info/files/frc/manuals/WCP%20Swerve%20X%20-%20User%20Guide.pdf
+    public final static double SwerveModuleAngleGearRatio = 144.0 / 14.0; // 12:24 then 14:72 = 14:144
     public final static double TalonCountsPerRevolution = 2048;
 
     // Pneumatic Connections
