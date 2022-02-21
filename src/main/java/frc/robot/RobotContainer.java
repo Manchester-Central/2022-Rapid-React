@@ -5,6 +5,8 @@
 package frc.robot;
 
 import com.chaos131.gamepads.Gamepad;
+import com.chaos131.auto.AutoBuilder;
+import com.chaos131.auto.ParsedCommand;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -24,6 +26,7 @@ import frc.robot.commands.RobotRelativeDrive;
 import frc.robot.commands.SwerveModuleTest;
 import frc.robot.commands.SwerveMotorTest;
 import frc.robot.commands.ZeroNavX;
+import frc.robot.commands.auto.AutoRobotRelativeDrive;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
@@ -56,12 +59,15 @@ public class RobotContainer {
   private Feeder m_feeder = new Feeder();
   //private Intake m_intake = new Intake();
 
+  private AutoBuilder m_autoBuilder = new AutoBuilder();
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+    m_autoBuilder.registerCommand("robotRelativeDrive", (ParsedCommand pc) -> new AutoRobotRelativeDrive(pc, m_swerveDrive));
   }
 
   /**
@@ -139,6 +145,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     // return m_autoCommand;
-    return null;
+    return m_autoBuilder.createAutoCommand();
   }
 }

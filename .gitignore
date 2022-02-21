@@ -57,6 +57,9 @@
 *.tar.gz
 *.rar
 
+# Allow lib jars #
+!libs/*.jar
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
@@ -167,3 +170,5 @@ simgui-ds.json
 test.csv
 log-*.csv
 logs
+
+networktables.ini*
