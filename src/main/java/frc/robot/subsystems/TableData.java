@@ -28,6 +28,9 @@ public class TableData {
         return new Comparator<TableData>() {
             @Override
             public int compare(TableData arg0, TableData arg1) {
+                if (arg1.getDistance() == arg0.getDistance()){
+                    return 0;
+                }
                 return arg1.getDistance() < arg0.getDistance() ? 1 : -1;
             }
         };
