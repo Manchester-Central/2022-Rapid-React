@@ -17,6 +17,7 @@ public class Feeder extends SubsystemBase {
   private TalonFX m_upperFeeder;
   private TalonFX m_lowerFeeder;
   private DigitalInput m_beamSensor;
+  private double k_intakeSpeed = 0.2;
 
   /** Creates a new Feeder. */
   public Feeder() {
@@ -30,6 +31,21 @@ public class Feeder extends SubsystemBase {
   public void ManualFeed(double powerTop, double powerBottom) {
     m_upperFeeder.set(TalonFXControlMode.PercentOutput, powerTop);
     m_lowerFeeder.set(TalonFXControlMode.PercentOutput, powerBottom);
+  }
+
+  public void Stop() {
+    m_upperFeeder.set(TalonFXControlMode.PercentOutput, 0);
+    m_lowerFeeder.set(TalonFXControlMode.PercentOutput, 0);
+  }
+
+  public void Both() {
+    m_upperFeeder.set(TalonFXControlMode.PercentOutput, k_intakeSpeed);
+    m_lowerFeeder.set(TalonFXControlMode.PercentOutput, k_intakeSpeed);
+  }
+  
+  public void Bottom() {
+    m_upperFeeder.set(TalonFXControlMode.PercentOutput, 0);
+    m_lowerFeeder.set(TalonFXControlMode.PercentOutput, k_intakeSpeed);
   }
 
   public boolean IsBallAtTopFeeder() {
