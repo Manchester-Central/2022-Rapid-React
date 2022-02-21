@@ -26,6 +26,7 @@ import frc.robot.commands.RobotRelativeDrive;
 import frc.robot.commands.SwerveModuleTest;
 import frc.robot.commands.SwerveMotorTest;
 import frc.robot.commands.ZeroNavX;
+import frc.robot.commands.auto.AutoDriverRelativeDrive;
 import frc.robot.commands.auto.AutoRobotRelativeDrive;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Climber;
@@ -68,6 +69,7 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
     m_autoBuilder.registerCommand("robotRelativeDrive", (ParsedCommand pc) -> new AutoRobotRelativeDrive(pc, m_swerveDrive));
+    m_autoBuilder.registerCommand("driverRelativeDrive", (ParsedCommand pc) -> new AutoDriverRelativeDrive(pc, m_swerveDrive));
   }
 
   /**
