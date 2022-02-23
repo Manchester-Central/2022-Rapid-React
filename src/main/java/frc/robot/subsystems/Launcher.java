@@ -27,7 +27,12 @@ public class Launcher extends SubsystemBase {
   public void ManualLaunch(double power) {
     m_ControllerA.set(TalonFXControlMode.PercentOutput, power);
   }
-
+public void coast(){
+  m_ControllerA.set(TalonFXControlMode.PercentOutput, 0);
+}
+public void setTargetRpm(double rpm){
+  m_ControllerA.set(TalonFXControlMode.Velocity, rpm);
+}
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

@@ -7,14 +7,13 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Launcher;
 
-public class LauncherDefault extends CommandBase {
+public class LauncherShoot extends CommandBase {
   private Launcher m_launcher;
-  /** Creates a new launch. */
-  public LauncherDefault(Launcher launcher) {
+  /** Creates a new LauncherShoot. */
+  public LauncherShoot(Launcher launcher) {
     m_launcher = launcher;
-   
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(launcher);
+    addRequirements(m_launcher);
   }
 
   // Called when the command is initially scheduled.
@@ -24,7 +23,7 @@ public class LauncherDefault extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_launcher.coast();
+    
   }
 
   // Called once the command ends or is interrupted.
