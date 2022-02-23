@@ -33,6 +33,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.FlywheelTable;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.SwerveDrive.SwerveModulePosition;
 
@@ -59,6 +60,7 @@ public class RobotContainer {
   private Launcher m_launcher = new Launcher();
   private Feeder m_feeder = new Feeder();
   //private Intake m_intake = new Intake();
+  private FlywheelTable m_flywheelTable = new FlywheelTable();
 
   private AutoBuilder m_autoBuilder = new AutoBuilder();
 

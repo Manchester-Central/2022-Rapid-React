@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.subsystems.turret;
+package frc.robot.subsystems;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -24,23 +24,22 @@ public class FlywheelTable {
 
     String row;
     BufferedReader csvReader;
-    final String PATH = "flywheelTable.csv";
+    final String PATH = "FlywheelTable.csv";
     String[] data;
     double[] doubleData;
-    Path realPath = Filesystem.getDeployDirectory().toPath().resolve(PATH);
 
     // holds an ArrayList with a key (distance) as reference to [key]
     ArrayList<TableData> flyTable = new ArrayList<TableData>();
 
     public FlywheelTable() {
-        readCSV(PATH);
+        readCSV( Filesystem.getDeployDirectory().toPath().resolve(PATH));
     }
 
     // parses data from .csv into doubles for addData()
-    public void readCSV(String path) { // change return type
+    public void readCSV(Path path) { // change return type
         try {
             // System.out.println(realPath.toString());
-            csvReader = new BufferedReader(new FileReader(realPath.toString()));
+            csvReader = new BufferedReader(new FileReader(path.toString()));
         } catch (FileNotFoundException ie) {
             ie.printStackTrace();
         }
@@ -51,25 +50,24 @@ public class FlywheelTable {
                 // System.out.println(row);
                 data = row.split(",");
 
-                if (data.length == 3) {
+                if (data.length == 2) {
 
                     // converts String array to double array
                     doubleData = Arrays.stream(data).mapToDouble(Double::parseDouble).toArray();
 
                     double distance = doubleData[0];
                     double speed = doubleData[1];
-                    double angle = doubleData[2];
 
-                    addData(new TableData(distance, speed, angle));
+                    addData(new TableData(distance, speed));
 
                 } else {
-                    System.out.println("ERROR: Flywheel Table data less than 3 values at " + row);
+                    System.out.println("ERROR: Flywheel Table data less than 2 values at " + row);
                 }
             }
 
             flyTable.sort(TableData.getComparator());
             for (TableData data : flyTable) {
-                System.out.println(data.getDistance() + " " + data.getSpeed() + " " + data.getAngle());
+                System.out.println(data.getDistance() + " " + data.getSpeed());
             }
 
         } catch (IOException ie) {
@@ -95,10 +93,6 @@ public class FlywheelTable {
         return getTableData(index).getSpeed();
     }
 
-    private double getAngle(int index) {
-        return getTableData(index).getAngle();
-    }
-
     private int findIndex(double distance) {
         for (int i = 0; i < flyTable.size(); i++) {
             if (distance < getDistance(i)) {
@@ -121,8 +115,7 @@ public class FlywheelTable {
         int botIndex = topIndex - 1;
 
         double idealSpeed = getInterpolatedValue(getDistance(topIndex), getDistance(botIndex), getSpeed(topIndex), getSpeed(botIndex), distance);
-        double idealAngle = getInterpolatedValue(getDistance(topIndex), getDistance(botIndex), getAngle(topIndex), getAngle(botIndex), distance);
 
-        return new TableData(distance, idealSpeed, idealAngle);
+        return new TableData(distance, idealSpeed);
     }
 }
