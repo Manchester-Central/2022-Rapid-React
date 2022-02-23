@@ -24,12 +24,15 @@ public class FeederDefault extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_feeder.IsBallAtTopFeeder()){
+    if (m_feeder.IsBallAtTopFeeder() && m_feeder.IsBallAtMiddleFeeder()){
+      m_feeder.Stop();
+    }
+    else if(m_feeder.IsBallAtTopFeeder()){
       m_feeder.Bottom();
     }
     else {
       m_feeder.Both();
-    }
+    } 
   }
 
   // Called once the command ends or is interrupted.
