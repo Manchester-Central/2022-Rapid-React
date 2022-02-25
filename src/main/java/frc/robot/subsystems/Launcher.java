@@ -15,6 +15,7 @@ import frc.robot.Constants;
 public class Launcher extends SubsystemBase {
   private TalonFX m_ControllerA;
   private TalonFX m_ControllerB;
+
   /** Creates a new Launcher. */
   public Launcher() {
     m_ControllerA = new TalonFX(Constants.LauncherA);
@@ -24,17 +25,26 @@ public class Launcher extends SubsystemBase {
     m_ControllerB.follow(m_ControllerA);
     m_ControllerB.setInverted(InvertType.OpposeMaster);
   }
+
   public void ManualLaunch(double power) {
     m_ControllerA.set(TalonFXControlMode.PercentOutput, power);
   }
-public void coast(){
-  m_ControllerA.set(TalonFXControlMode.PercentOutput, 0);
-}
-public void setTargetRpm(double rpm){
-  m_ControllerA.set(TalonFXControlMode.Velocity, rpm);
-}
+
+  public void coast() {
+    m_ControllerA.set(TalonFXControlMode.PercentOutput, 0);
+  }
+
+  public void setTargetRpm(double rpm) {
+    m_ControllerA.set(TalonFXControlMode.Velocity, rpm);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public boolean isAtTargetSpeed(double targetRpm) {
+    var currentRpm = m_ControllerA.getSelectedSensorVelocity();
+    return currentRpm > targetRpm * 0.9 && currentRpm < targetRpm * 1.1;
   }
 }

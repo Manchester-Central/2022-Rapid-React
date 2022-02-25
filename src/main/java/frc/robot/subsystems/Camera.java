@@ -75,4 +75,8 @@ public class Camera extends SubsystemBase {
 
   }
 
+  public double getDistance() {
+    return (0.0); // TODO figure out
+  }
+
 }

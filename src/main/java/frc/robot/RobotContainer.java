@@ -21,6 +21,7 @@ import frc.robot.commands.DriverRelativeDrive;
 import frc.robot.commands.FieldRelativeDrive;
 import frc.robot.commands.IntakeDefault;
 import frc.robot.commands.LauncherDefault;
+import frc.robot.commands.LauncherShoot;
 import frc.robot.commands.FeederDefault;
 import frc.robot.commands.RobotRelativeDrive;
 import frc.robot.commands.SwerveModuleTest;
@@ -131,14 +132,15 @@ public class RobotContainer {
     // Operator Commands
     //m_operator.getButtonLB().whileHeld(new RunCommand(() -> m_climber.ManualExtend(-0.3), m_climber));
     //m_operator.getButtonLT().whileHeld(new RunCommand(() -> m_climber.ManualExtend(0.3), m_climber));
-    //m_operator.getButtonRB().whileHeld(new RunCommand(() -> m_climber.MoveArmDown(), m_climber));
-    //m_operator.getButtonRT().whileHeld(new RunCommand(() -> m_climber.MoveArmUp(), m_climber));
+    //m_operator.getPOVSouth().whileHeld(new RunCommand(() -> m_climber.MoveArmDown(), m_climber));
+    //m_operator.getPOVNorth().whileHeld(new RunCommand(() -> m_climber.MoveArmUp(), m_climber));
     m_operator.getButtonA().whileHeld(new RunCommand(() -> m_launcher.ManualLaunch(m_operator.getLeftY()), m_launcher));
     m_operator.getButtonB().whileHeld(new RunCommand(() -> m_feeder.ManualFeed(0.5, 0.5), m_feeder));
    /*m_operator.getButtonX().whileHeld(new RunCommand(() -> m_intake.ManualIntake(0.5), m_intake));
     m_operator.getButtonY().whileHeld(new RunCommand(() -> m_intake.ManualIntake(-0.5), m_intake));
     m_operator.getButtonSelect().whileHeld(new RunCommand(() -> m_intake.MoveIntakeDown(), m_intake));
     m_operator.getButtonStart().whileHeld(new RunCommand(() -> m_intake.MoveIntakeUp(), m_intake));*/
+    m_operator.getButtonRT().whileHeld(new LauncherShoot(m_launcher, m_camera, m_feeder, m_flywheelTable));
   }
 
   /**
