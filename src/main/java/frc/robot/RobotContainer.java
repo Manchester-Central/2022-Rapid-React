@@ -76,6 +76,7 @@ public class RobotContainer {
     m_autoBuilder.registerCommand("driverRelativeDrive", (ParsedCommand pc) -> new AutoDriverRelativeDrive(pc, m_swerveDrive));
     m_autoBuilder.registerCommand("launch", (ParsedCommand pc) -> new LauncherShoot(m_launcher, m_camera, m_feeder, m_flywheelTable));
     m_autoBuilder.registerCommand("startingPosition", (ParsedCommand pc) -> new StartingPosition(pc, m_swerveDrive));
+    m_autoBuilder.registerCommand("driveToPosition", (ParsedCommand pc) -> DriveToPosition.CreateAutoCommand(pc, m_swerveDrive));
   }
 
   /**
@@ -88,8 +89,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Default Commands
-    //m_swerveDrive.setDefaultCommand(new FieldRelativeDrive(m_swerveDrive, m_driver));
-    m_swerveDrive.setDefaultCommand(new RunCommand(() -> {m_swerveDrive.stop();}, m_swerveDrive));
+    m_swerveDrive.setDefaultCommand(new FieldRelativeDrive(m_swerveDrive, m_driver));
+    //m_swerveDrive.setDefaultCommand(new RunCommand(() -> {m_swerveDrive.stop();}, m_swerveDrive));
     // m_swerveDrive.setDefaultCommand(new FieldRelativeDrive(m_swerveDrive, m_driver));
     // m_climber.setDefaultCommand(new ClimberDefault(m_climber));
     //m_intake.setDefaultCommand(new IntakeDefault(m_intake));

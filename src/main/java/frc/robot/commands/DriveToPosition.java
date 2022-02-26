@@ -4,10 +4,13 @@
 
 package frc.robot.commands;
 
+import com.chaos131.auto.ParsedCommand;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.commands.auto.AutoUtil;
 import frc.robot.subsystems.SwerveDrive;
 
 public class DriveToPosition extends CommandBase {
@@ -29,6 +32,14 @@ public class DriveToPosition extends CommandBase {
     m_thetaDegrees = thetaDegrees;
     m_targetPose = new Pose2d(x, y, Rotation2d.fromDegrees(thetaDegrees));
   }
+  
+  public static DriveToPosition CreateAutoCommand(ParsedCommand pc, SwerveDrive swerveDrive) {
+    var x = AutoUtil.parseDouble(pc.getArgument("x"), 0.0);
+    var y = AutoUtil.parseDouble(pc.getArgument("y"), 0.0);
+    var angle = AutoUtil.parseDouble(pc.getArgument("angle"), 0.0);
+    return new DriveToPosition(swerveDrive, x, y, angle);
+  }
+
 
   // Called when the command is initially scheduled.
   @Override
@@ -56,6 +67,7 @@ public class DriveToPosition extends CommandBase {
       double slowDownRatio = rotationDifferenceDegrees / k_slowDownAngleDegrees;
       rotationChangeSpeed *= slowDownRatio;
     }
+    System.out.println(speedX);
     m_drive.moveFieldRelative(speedX, speedY, rotationChangeSpeed);
   }
 
