@@ -95,6 +95,12 @@ public class SwerveDrive extends SubsystemBase {
     SmartDashboard.putNumber("Angle/I", angleI);
     SmartDashboard.putNumber("Angle/D", angleD);
   }
+  
+  public void updateOdometry(double x, double y, double angle){
+    updateGyroAdjustmentAngle(angle);
+    m_odometry.resetPosition(new Pose2d(x, y, getRotation()), getRotation());
+  }
+ 
   public void stop(){
     m_moduleFR.Stop();
     m_moduleFL.Stop();
@@ -196,7 +202,7 @@ public class SwerveDrive extends SubsystemBase {
     m_moduleFR.updatePosition(pose);
     m_moduleBR.updatePosition(pose);
     m_moduleBL.updatePosition(pose);
-    pose = pose.transformBy(new Transform2d(new Translation2d(), Rotation2d.fromDegrees(90)));
+    //pose = pose.transformBy(new Transform2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     m_field.setRobotPose(pose);
     SmartDashboard.putBoolean("calibrating", m_gyro.isCalibrating());
     SmartDashboard.putNumber("Yaw", m_gyro.getAngle());
@@ -244,8 +250,9 @@ public class SwerveDrive extends SubsystemBase {
   public void simulationPeriodic() {
     super.simulationPeriodic();
     ChassisSpeeds speeds = m_kinematics.toChassisSpeeds(getModuleStates());
-    setSimulationAngle(
-        getRotation().plus(new Rotation2d(speeds.omegaRadiansPerSecond / Constants.RobotUpdate_hz)).getDegrees());
+    var currentYaw = m_gyro.getYaw();
+    setSimulationAngle( 
+        currentYaw + new Rotation2d(speeds.omegaRadiansPerSecond / Constants.RobotUpdate_hz).getDegrees());
   }
 
 }
