@@ -63,8 +63,8 @@ public class DriveToPosition extends CommandBase {
     var rotationDifference = getRotationFromTarget();
     var rotationDifferenceDegrees = rotationDifference.getDegrees();
     var rotationChangeSpeed = rotationDifferenceDegrees < 0 ? -k_maxRotationChange : k_maxRotationChange;
-    if (rotationDifferenceDegrees < k_slowDownAngleDegrees) {
-      double slowDownRatio = rotationDifferenceDegrees / k_slowDownAngleDegrees;
+    if (Math.abs(rotationDifferenceDegrees) < k_slowDownAngleDegrees) {
+      double slowDownRatio = Math.abs(rotationDifferenceDegrees) / k_slowDownAngleDegrees;
       rotationChangeSpeed *= slowDownRatio;
     }
     System.out.println(speedX);
