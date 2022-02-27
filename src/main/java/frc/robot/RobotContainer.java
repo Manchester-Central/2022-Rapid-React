@@ -94,22 +94,17 @@ public class RobotContainer {
     Command driverRelativeDrive = new DriverRelativeDrive(m_swerveDrive, m_driver);
     Command robotRelativeDrive = new RobotRelativeDrive(m_swerveDrive, m_driver);
     m_driver.getButtonStart().whileHeld(new RunCommand(() -> {m_swerveDrive.ResetEncoders();}, m_swerveDrive));
-    m_driver.getButtonA().whileHeld(driverRelativeDrive);
-    m_driver.getButtonX().toggleWhenPressed(robotRelativeDrive);
-    m_driver.getButtonY().whileActiveOnce(new SequentialCommandGroup(
-        new DriveOverTime(m_swerveDrive, 0, 2, 0, 2000),
-        new DriveOverTime(m_swerveDrive, 2, 0, 0, 2000),
-        new DriveOverTime(m_swerveDrive, 0, -2, 3, 2000),
-        new DriveOverTime(m_swerveDrive, -2, 0, 0, 2000)));
+    m_driver.getButtonLB().whenPressed(driverRelativeDrive);
+    m_driver.getButtonRB().whenPressed(robotRelativeDrive);
     /* m_driver.getButtonLB().whileHeld(new SwerveMotorTest(m_swerveDrive, m_driver, SwerveModulePosition.BackLeft));
     m_driver.getButtonRB().whileHeld(new SwerveMotorTest(m_swerveDrive, m_driver, SwerveModulePosition.BackRight));
     m_driver.getButtonLT().whileHeld(new SwerveMotorTest(m_swerveDrive, m_driver, SwerveModulePosition.FrontLeft));
     m_driver.getButtonRT().whileHeld(new SwerveMotorTest(m_swerveDrive, m_driver,  SwerveModulePosition.FrontRight)); */
 
-    m_driver.getButtonLB().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, SwerveModulePosition.BackLeft));
+    /*m_driver.getButtonLB().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, SwerveModulePosition.BackLeft));
     m_driver.getButtonRB().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, SwerveModulePosition.BackRight));
     m_driver.getButtonLT().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, SwerveModulePosition.FrontLeft));
-    m_driver.getButtonRT().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, SwerveModulePosition.FrontRight));
+    m_driver.getButtonRT().whileHeld(new SwerveModuleTest(m_swerveDrive, m_driver, SwerveModulePosition.FrontRight));*/
     m_driver.getPOVNorth().whileActiveOnce(new ZeroNavX(0, m_swerveDrive));
     m_driver.getPOVEast().whileActiveOnce(new ZeroNavX(90, m_swerveDrive));
     m_driver.getPOVSouth().whileActiveOnce(new ZeroNavX(180, m_swerveDrive));

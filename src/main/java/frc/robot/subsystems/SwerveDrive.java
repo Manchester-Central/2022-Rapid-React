@@ -252,8 +252,9 @@ public class SwerveDrive extends SubsystemBase {
   public void simulationPeriodic() {
     super.simulationPeriodic();
     ChassisSpeeds speeds = m_kinematics.toChassisSpeeds(getModuleStates());
-    setSimulationAngle(
-        getRotation().plus(new Rotation2d(speeds.omegaRadiansPerSecond / Constants.RobotUpdate_hz)).getDegrees());
+    var currentYaw = m_gyro.getYaw();
+    setSimulationAngle( 
+        currentYaw + new Rotation2d(speeds.omegaRadiansPerSecond / Constants.RobotUpdate_hz).getDegrees());
   }
 
 }
