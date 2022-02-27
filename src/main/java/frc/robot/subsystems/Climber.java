@@ -27,8 +27,7 @@ public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
   public Climber() {
     m_extensionController = new TalonFX(Constants.ClimberExtension);
-    m_solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.ClimberSolenoidForward,
-        Constants.ClimberSolenoidReverse);
+    m_solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.ClimberSolenoidForward, Constants.ClimberSolenoidReverse);
     m_limitSwitch = new DigitalInput(Constants.ExtenderLimitSwitch);
   }
 
