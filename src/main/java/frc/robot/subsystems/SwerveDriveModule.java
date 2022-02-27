@@ -41,8 +41,8 @@ public class SwerveDriveModule {
         m_velocityController = new TalonFX(velocityControllerPort);
         m_angleController = new TalonFX(angleControllerPort);
         m_name = name;
-        m_angleOffset = GetAbsoluteEncoderAngle();
         m_absoluteEncoder = new CANifier(absoluteEncoderPort);
+        m_angleOffset = GetAbsoluteEncoderAngle();
         Robot.LogManager.addNumber(m_name + "/targetVelocityMPS", () -> m_targetVelocity);
         Robot.LogManager.addNumber(m_name + "/targetAngleDegrees", () -> m_targetAngle);
         Robot.LogManager.addNumber(m_name + "/actualVelocityMPS", () -> getCurrentVelocityMPS());
