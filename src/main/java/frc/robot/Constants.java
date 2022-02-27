@@ -44,10 +44,10 @@ public final class Constants {
     public final static double TalonCountsPerRevolution = 2048;
 
     // Pneumatic Connections
-    public final static int ClimberSolenoidForward = 1;
-    public final static int ClimberSolenoidReverse = 2;
-    public final static int IntakeSolenoidForward = 3;
-    public final static int IntakeSolenoidReverse = 4;
+    public final static int ClimberSolenoidForward = 9;
+    public final static int ClimberSolenoidReverse = 6;
+    public final static int IntakeSolenoidForward = 8;
+    public final static int IntakeSolenoidReverse = 7;
 
     //DIO
     public final static int FeederBeamSensorTop = 2;
