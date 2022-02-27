@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -59,6 +60,7 @@ public class Feeder extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("Feeder - Top", this.m_beamSensorTop.get());
+    SmartDashboard.putBoolean("Feeder - Middle", this.m_beamSensorMiddle.get());
   }
 }

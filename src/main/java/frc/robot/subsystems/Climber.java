@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -60,6 +61,7 @@ public class Climber extends SubsystemBase {
         m_seenBottom = true;
       }
     }
+    SmartDashboard.putBoolean("Climber - Limit Switch", this.m_limitSwitch.get());
     // This method will be called once per scheduler run
   }
 }
