@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
     // autonomous chooser on the dashboard.
-    compressor.enableAnalog(110.0, 120.0);
+    compressor.enableAnalog(110.0, 115.0);
     m_robotContainer = new RobotContainer();
     LogManager.writeHeaders();
   }
