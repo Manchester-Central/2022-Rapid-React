@@ -10,7 +10,7 @@ public class SwerveDriveModuleTest {
   
     @Before // this method will run before each test
     public void setup() {
-    m_swerveDriveModule = new SwerveDriveModule(0, 0, 0, "Hi!", 1, 2);
+    m_swerveDriveModule = new SwerveDriveModule(0, 0, "Hi!", 1, 2, 3, 0);
     }
   
     @After // this method will run after each test
