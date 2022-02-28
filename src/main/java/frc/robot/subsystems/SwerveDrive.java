@@ -116,10 +116,10 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public void adjustToDefaultPosition() {
-    m_moduleFL.setTargetState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
-    m_moduleFR.setTargetState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
-    m_moduleBR.setTargetState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
-    m_moduleBL.setTargetState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
+    m_moduleFL.setTargetState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
+    m_moduleFR.setTargetState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+    m_moduleBR.setTargetState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
+    m_moduleBL.setTargetState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
   }
 
   private void move(ChassisSpeeds speeds) {
