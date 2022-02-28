@@ -30,9 +30,10 @@ public class SwerveDriveModule {
     private TalonFX m_angleController;
     private String m_name;
     private CANCoder m_absoluteEncoder;
+    private double m_absoluteAngleOffset;
 
     public SwerveDriveModule(double x, double y, String name, int velocityControllerPort,
-            int angleControllerPort, int absoluteEncoderPort) {
+            int angleControllerPort, int absoluteEncoderPort, double absoluteAngleOffset) {
         m_location = new Translation2d(x, y);
         SmartDashboard.putData(name, m_field);
         m_velocityController = new TalonFX(velocityControllerPort);
@@ -41,8 +42,9 @@ public class SwerveDriveModule {
         m_angleController.setNeutralMode(NeutralMode.Brake);
         m_name = name;
         m_absoluteEncoder = new CANCoder(absoluteEncoderPort);
-        var absoluteEncoderAnle = GetAbsoluteEncoderAngle();
-        var angleTicksOffset = this.DegreesToFalconAngle(absoluteEncoderAnle);
+        m_absoluteAngleOffset = absoluteAngleOffset;
+        var absoluteEncoderAngle = GetAbsoluteEncoderAngle();
+        var angleTicksOffset = this.DegreesToFalconAngle(absoluteEncoderAngle);
         m_angleController.setSelectedSensorPosition(angleTicksOffset);
         Robot.LogManager.addNumber(m_name + "/targetVelocityMPS", () -> m_targetVelocity);
         Robot.LogManager.addNumber(m_name + "/targetAngleDegrees", () -> m_targetAngle);
@@ -168,7 +170,7 @@ public class SwerveDriveModule {
     }
 
     private double GetAbsoluteEncoderAngle() {
-        return m_absoluteEncoder.getAbsolutePosition();
+        return 360 - m_absoluteEncoder.getAbsolutePosition() + m_absoluteAngleOffset;
 
     }
 
