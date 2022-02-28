@@ -28,8 +28,12 @@ public class RobotRelativeDrive extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    m_drive.moveRobotRelative(m_controller.getLeftX() * 3, m_controller.getLeftY() * 3, m_controller.getRightX() * 3);
+  public void execute() { 
+    // Absolute max meters per second = 3.8
+    var maxMPS = 3.8;
+    // Absolute max omegaradiant per second = 6.9 
+    var maxOrPS = 8.75;
+    m_drive.moveRobotRelative(m_controller.getLeftX() * maxMPS, m_controller.getLeftY() * maxMPS, m_controller.getRightX() * maxOrPS);
   }
 
   // Called once the command ends or is interrupted.

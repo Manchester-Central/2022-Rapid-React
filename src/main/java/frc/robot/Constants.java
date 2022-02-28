@@ -34,6 +34,10 @@ public final class Constants {
     public final static int UpperFeeder = 15;
     public final static int LowerFeeder = 12;
     public final static int Intake = 11;
+    public final static int SwerveFrontLeftAbsolute = 22;
+    public final static int SwerveFrontRightAbsolute = 21;
+    public final static int SwerveBackLeftAbsolute = 23;
+    public final static int SwerveBackRightAbsolute = 20;
     
     // Drivetrain Properties
     public final static double DriveWheelWidthMeters = 0.1016; // 0.1016 meters = 4 inches, 1 rev of motor = 2048 tics
