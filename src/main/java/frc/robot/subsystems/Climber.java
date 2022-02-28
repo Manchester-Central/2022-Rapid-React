@@ -31,8 +31,12 @@ public class Climber extends SubsystemBase {
     m_limitSwitch = new DigitalInput(Constants.ExtenderLimitSwitch);
   }
 
+  public boolean isCLimberAtBottom() {
+    return !m_limitSwitch.get();
+  }
+
   public void ManualExtend(double power) {
-    if (m_limitSwitch.get()) {
+    if (isCLimberAtBottom()) {
       if (power < 0) {
         power = 0;
       }
@@ -55,12 +59,12 @@ public class Climber extends SubsystemBase {
   @Override
   public void periodic() {
     if (!m_seenBottom) {
-      if (m_limitSwitch.get()) {
+      if (isCLimberAtBottom()) {
         m_downPositionCounts = m_extensionController.getSelectedSensorPosition();
         m_seenBottom = true;
       }
     }
-    SmartDashboard.putBoolean("Climber - Limit Switch", this.m_limitSwitch.get());
+    SmartDashboard.putBoolean("Climber - At Bottom", isCLimberAtBottom());
     // This method will be called once per scheduler run
   }
 }

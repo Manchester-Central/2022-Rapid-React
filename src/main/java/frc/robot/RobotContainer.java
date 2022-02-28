@@ -11,6 +11,7 @@ import com.chaos131.auto.ParsedCommand;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.ClimberDefault;
@@ -54,11 +55,11 @@ public class RobotContainer {
   // ExampleCommand(m_exampleSubsystem);
 
   private SwerveDrive m_swerveDrive = new SwerveDrive();
-  // private Climber m_climber = new Climber();
+  private Climber m_climber = new Climber();
   private Camera m_camera = new Camera();
   private Launcher m_launcher = new Launcher();
   private Feeder m_feeder = new Feeder();
-  //private Intake m_intake = new Intake();
+  private Intake m_intake = new Intake();
 
   private AutoBuilder m_autoBuilder = new AutoBuilder();
 
@@ -89,10 +90,11 @@ public class RobotContainer {
     m_swerveDrive.setDefaultCommand(new RunCommand(() -> {m_swerveDrive.stop();}, m_swerveDrive));
     // m_swerveDrive.setDefaultCommand(driverRelativeDrive);
     // m_swerveDrive.setDefaultCommand(robotRelativeDrive);
-    // m_climber.setDefaultCommand(new ClimberDefault(m_climber));
-    // m_intake.setDefaultCommand(new IntakeDefault(m_intake));
+    m_climber.setDefaultCommand(new ClimberDefault(m_climber));
+    m_intake.setDefaultCommand(new IntakeDefault(m_intake));
     // m_launcher.setDefaultCommand(new LauncherDefault(m_launcher));
     // m_feeder.setDefaultCommand(new FeederDefault(m_feeder));
+    m_feeder.setDefaultCommand(new RunCommand(() -> m_feeder.Stop(), m_feeder));
 
     // Drive Commands
     m_driver.getButtonStart().whileHeld(new RunCommand(() -> {m_swerveDrive.ResetEncoders();}, m_swerveDrive));
@@ -105,16 +107,17 @@ public class RobotContainer {
     m_driver.getPOVWest().whileActiveOnce(new ZeroNavX(270, m_swerveDrive));
 
     // Operator Commands
-    // m_operator.getButtonLB().whileHeld(new RunCommand(() -> m_climber.ManualExtend(-0.3), m_climber));
-    // m_operator.getButtonLT().whileHeld(new RunCommand(() -> m_climber.ManualExtend(0.3), m_climber));
-    // m_operator.getButtonRB().whileHeld(new RunCommand(() -> m_climber.MoveArmDown(), m_climber));
-    // m_operator.getButtonRT().whileHeld(new RunCommand(() -> m_climber.MoveArmUp(), m_climber));
+    m_operator.getButtonLB().whileHeld(new RunCommand(() -> m_climber.ManualExtend(-0.3), m_climber));
+    m_operator.getButtonLT().whileHeld(new RunCommand(() -> m_climber.ManualExtend(0.3), m_climber));
+    m_operator.getButtonRB().whileHeld(new RunCommand(() -> m_climber.MoveArmDown(), m_climber));
+    m_operator.getButtonRT().whileHeld(new RunCommand(() -> m_climber.MoveArmUp(), m_climber));
     // m_operator.getButtonA().whileHeld(new RunCommand(() -> m_launcher.ManualLaunch(m_operator.getLeftY()), m_launcher));
-    // m_operator.getButtonB().whileHeld(new RunCommand(() -> m_feeder.ManualFeed(0.5, 0.5), m_feeder));
-    // m_operator.getButtonX().whileHeld(new RunCommand(() -> m_intake.ManualIntake(0.5), m_intake));
-    // m_operator.getButtonY().whileHeld(new RunCommand(() -> m_intake.ManualIntake(-0.5), m_intake));
-    // m_operator.getButtonSelect().whileHeld(new RunCommand(() -> m_intake.MoveIntakeDown(), m_intake));
-    // m_operator.getButtonStart().whileHeld(new RunCommand(() -> m_intake.MoveIntakeUp(), m_intake)); 
+    m_operator.getButtonB().whileHeld(new RunCommand(() -> m_feeder.ManualFeed(1.0, 0.0), m_feeder));
+    m_operator.getButtonA().whileHeld(new RunCommand(() -> m_feeder.ManualFeed(0.0, 1.0), m_feeder));
+    m_operator.getButtonX().whileHeld(new RunCommand(() -> m_intake.ManualIntake(1.0), m_intake));
+    m_operator.getButtonY().whileHeld(new RunCommand(() -> m_intake.ManualIntake(-0.5), m_intake));
+    m_operator.getButtonSelect().whileHeld(new RunCommand(() -> m_intake.MoveIntakeDown(), m_intake));
+    m_operator.getButtonStart().whileHeld(new RunCommand(() -> m_intake.MoveIntakeUp(), m_intake)); 
   }
 
   /**
