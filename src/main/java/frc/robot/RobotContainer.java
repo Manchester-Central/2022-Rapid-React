@@ -22,6 +22,7 @@ import frc.robot.commands.DriverRelativeDrive;
 import frc.robot.commands.FieldRelativeDrive;
 import frc.robot.commands.IntakeDefault;
 import frc.robot.commands.LauncherDefault;
+import frc.robot.commands.Output;
 import frc.robot.commands.FeederDefault;
 import frc.robot.commands.RobotRelativeDrive;
 import frc.robot.commands.SwerveModuleTest;
@@ -117,6 +118,7 @@ public class RobotContainer {
     m_operator.getButtonY().whileHeld(new RunCommand(() -> m_intake.ManualIntake(-0.5), m_intake));
     m_operator.getButtonSelect().whileHeld(new RunCommand(() -> m_intake.MoveIntakeDown(), m_intake));
     m_operator.getButtonStart().whileHeld(new RunCommand(() -> m_intake.MoveIntakeUp(), m_intake)); 
+    m_operator.getPOVNorth().whileHeld(new Output(m_feeder, m_intake));
   }
 
   /**
