@@ -71,10 +71,10 @@ public class SwerveDrive extends SubsystemBase {
         Constants.SwerveFrontLeftAngle, Constants.SwerveFrontLeftAbsolute, -110.5);
     m_moduleFR = new SwerveDriveModule(length, width, SwerveModulePosition.FrontRight.name(),
         Constants.SwerveFrontRightVelocity,
-        Constants.SwerveFrontRightAngle, Constants.SwerveFrontRightAbsolute, -7.0);
+        Constants.SwerveFrontRightAngle, Constants.SwerveFrontRightAbsolute, 173.0);
     m_moduleBL = new SwerveDriveModule(-length, -width, SwerveModulePosition.BackLeft.name(),
         Constants.SwerveBackLeftVelocity,
-        Constants.SwerveBackLeftAngle, Constants.SwerveBackLeftAbsolute, 56.6);
+        Constants.SwerveBackLeftAngle, Constants.SwerveBackLeftAbsolute, 236.6);
     m_moduleBR = new SwerveDriveModule(-length, width, SwerveModulePosition.BackRight.name(),
         Constants.SwerveBackRightVelocity,
         Constants.SwerveBackRightAngle, Constants.SwerveBackRightAbsolute, -15.7);

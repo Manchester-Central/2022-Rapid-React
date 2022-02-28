@@ -24,8 +24,8 @@ public class Feeder extends SubsystemBase {
   public Feeder() {
     m_upperFeeder = new TalonFX(Constants.UpperFeeder);
     m_lowerFeeder = new TalonFX(Constants.LowerFeeder);
-    m_upperFeeder.configOpenloopRamp(0.1);
-    m_lowerFeeder.configOpenloopRamp(0.1);
+    m_upperFeeder.configOpenloopRamp(0.2);
+    m_lowerFeeder.configOpenloopRamp(0.2);
     m_upperFeeder.setNeutralMode(NeutralMode.Coast);
     m_lowerFeeder.setNeutralMode(NeutralMode.Coast);
     m_beamSensorTop = new DigitalInput(Constants.FeederBeamSensorTop);
