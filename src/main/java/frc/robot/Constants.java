@@ -34,17 +34,17 @@ public final class Constants {
     public final static int UpperFeeder = 12;
     public final static int LowerFeeder = 13;
     public final static int Intake = 14;
-    public final static int SwerveFrontLeftAbsolute = 15;
-    public final static int SwerveFrontRightAbsolute = 16;
-    public final static int SwerveBackLeftAbsolute = 17;
-    public final static int SwerveBackRightAbsolute = 18;
+    public final static int SwerveFrontLeftAbsolute = 22;
+    public final static int SwerveFrontRightAbsolute = 21;
+    public final static int SwerveBackLeftAbsolute = 23;
+    public final static int SwerveBackRightAbsolute = 20;
     
     // Drivetrain Properties
     public final static double DriveWheelWidthMeters = 0.1016; // 0.1016 meters = 4 inches, 1 rev of motor = 2048 tics
     public final static double DriveWheelCircumferenceMeters = DriveWheelWidthMeters * Math.PI;
-    public final static double SwerveModuleVelocityGearRatio = 8.14; // Assuming the Standard Gear Ratio; Same link as
+    public final static double SwerveModuleVelocityGearRatio = 7.80; // Assuming the Standard Gear Ratio; Same link as
                                                                      // below
-    public final static double SwerveModuleAngleGearRatio = 12.8 * 0.78; // https://www.swervedrivespecialties.com/products/mk4-swerve-module
+    public final static double SwerveModuleAngleGearRatio = 144.0 / 14.0; // 12:24 then 14:72 = 14:144
     public final static double TalonCountsPerRevolution = 2048;
 
     // Pneumatic Connections
@@ -54,5 +54,8 @@ public final class Constants {
     public final static int IntakeSolenoidReverse = 4;
 
     //DIO
-    public final static int FeederBeamSensor = 0;
+    public final static int FeederBeamSensorTop = 0;
+    public final static int FeederBeamSensorMiddle = 1;
+    public final static int ExtenderLimitSwitch = 2;
+    
 }

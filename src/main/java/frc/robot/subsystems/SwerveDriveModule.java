@@ -4,12 +4,10 @@
 
 package frc.robot.subsystems;
 
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-
-import com.ctre.phoenix.CANifier;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -31,18 +29,21 @@ public class SwerveDriveModule {
     private TalonFX m_velocityController;
     private TalonFX m_angleController;
     private String m_name;
-    private double m_angleOffset;
-    private CANifier m_absoluteEncoder;
+    private CANCoder m_absoluteEncoder;
 
-    public SwerveDriveModule(double x, double y, double angleOffset, String name, int velocityControllerPort,
+    public SwerveDriveModule(double x, double y, String name, int velocityControllerPort,
             int angleControllerPort, int absoluteEncoderPort) {
         m_location = new Translation2d(x, y);
         SmartDashboard.putData(name, m_field);
         m_velocityController = new TalonFX(velocityControllerPort);
         m_angleController = new TalonFX(angleControllerPort);
+        m_velocityController.setNeutralMode(NeutralMode.Coast);
+        m_angleController.setNeutralMode(NeutralMode.Brake);
         m_name = name;
-        m_angleOffset = GetAbsoluteEncoderAngle();
-        m_absoluteEncoder = new CANifier(absoluteEncoderPort);
+        m_absoluteEncoder = new CANCoder(absoluteEncoderPort);
+        var absoluteEncoderAnle = GetAbsoluteEncoderAngle();
+        var angleTicksOffset = this.DegreesToFalconAngle(absoluteEncoderAnle);
+        m_angleController.setSelectedSensorPosition(angleTicksOffset);
         Robot.LogManager.addNumber(m_name + "/targetVelocityMPS", () -> m_targetVelocity);
         Robot.LogManager.addNumber(m_name + "/targetAngleDegrees", () -> m_targetAngle);
         Robot.LogManager.addNumber(m_name + "/actualVelocityMPS", () -> getCurrentVelocityMPS());
@@ -65,7 +66,7 @@ public class SwerveDriveModule {
 
     public double getCurrentAngleDegrees() {
         if (RobotBase.isReal()) {
-            return FalconAngleToDegrees(m_angleController.getSelectedSensorPosition()) + m_angleOffset;
+            return FalconAngleToDegrees(m_angleController.getSelectedSensorPosition());
         }
         return m_targetAngle;
     }
@@ -78,7 +79,7 @@ public class SwerveDriveModule {
         m_targetVelocity = targetState.speedMetersPerSecond;
         m_targetAngle = closestTarget(getCurrentAngleDegrees(), targetState.angle.getDegrees());
         m_velocityController.set(TalonFXControlMode.Velocity, MPSToFalconVelocity(m_targetVelocity));
-        m_angleController.set(TalonFXControlMode.Position, DegreesToFalconAngle(m_targetAngle - m_angleOffset));
+        m_angleController.set(TalonFXControlMode.Position, DegreesToFalconAngle(m_targetAngle));
     }
 
     public void setManual(double velocityControllerPower, double angleControllerPower) {
@@ -167,11 +168,7 @@ public class SwerveDriveModule {
     }
 
     private double GetAbsoluteEncoderAngle() {
-        double[] pwmValues = new double[2];
-        m_absoluteEncoder.getPWMInput(CANifier.PWMChannel.PWMChannel0, pwmValues);
-        double dutyCycle = pwmValues[0];
-        double angle = dutyCycle * 360.0;
-        return angle;
+        return m_absoluteEncoder.getAbsolutePosition();
 
     }
 

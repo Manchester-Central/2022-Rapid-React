@@ -16,7 +16,8 @@ import frc.robot.Constants;
 public class Feeder extends SubsystemBase {
   private TalonFX m_upperFeeder;
   private TalonFX m_lowerFeeder;
-  private DigitalInput m_beamSensor;
+  private DigitalInput m_beamSensorTop, m_beamSensorMiddle;
+  private double k_intakeSpeed = 0.2;
 
   /** Creates a new Feeder. */
   public Feeder() {
@@ -24,7 +25,8 @@ public class Feeder extends SubsystemBase {
     m_lowerFeeder = new TalonFX(Constants.LowerFeeder);
     m_upperFeeder.setNeutralMode(NeutralMode.Coast);
     m_lowerFeeder.setNeutralMode(NeutralMode.Coast);
-    m_beamSensor = new DigitalInput(Constants.FeederBeamSensor);
+    m_beamSensorTop = new DigitalInput(Constants.FeederBeamSensorTop);
+    m_beamSensorMiddle = new DigitalInput(Constants.FeederBeamSensorMiddle);
   }
 
   public void ManualFeed(double powerTop, double powerBottom) {
@@ -32,8 +34,27 @@ public class Feeder extends SubsystemBase {
     m_lowerFeeder.set(TalonFXControlMode.PercentOutput, powerBottom);
   }
 
+  public void Stop() {
+    m_upperFeeder.set(TalonFXControlMode.PercentOutput, 0);
+    m_lowerFeeder.set(TalonFXControlMode.PercentOutput, 0);
+  }
+
+  public void Both() {
+    m_upperFeeder.set(TalonFXControlMode.PercentOutput, k_intakeSpeed);
+    m_lowerFeeder.set(TalonFXControlMode.PercentOutput, k_intakeSpeed);
+  }
+
+  public void Bottom() {
+    m_upperFeeder.set(TalonFXControlMode.PercentOutput, 0);
+    m_lowerFeeder.set(TalonFXControlMode.PercentOutput, k_intakeSpeed);
+  }
+
   public boolean IsBallAtTopFeeder() {
-    return m_beamSensor.get();
+    return m_beamSensorTop.get();
+  }
+
+  public boolean IsBallAtMiddleFeeder() {
+    return m_beamSensorMiddle.get();
   }
 
   @Override
