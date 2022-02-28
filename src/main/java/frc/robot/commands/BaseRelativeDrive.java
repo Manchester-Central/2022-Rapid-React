@@ -27,13 +27,17 @@ public abstract class BaseRelativeDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public final void execute() {
+    // Absolute max meters per second = 3.8
+    var maxMPS = 3.8;
+    // Absolute max omegaradiant per second = 6.9 
+    var maxOrPS = 8.75;
     var leftX = m_controller.getLeftX();
     var leftY = m_controller.getLeftY();
     var rightX = m_controller.getRightX();
     if(leftX == 0.0 && leftY == 0.0 && rightX == 0.0) {
       m_drive.adjustToDefaultPosition();
     } else {
-      moveRobot(leftX, leftY, rightX);
+      moveRobot(leftX * maxMPS, leftY * maxMPS, rightX * maxOrPS);
     }
   }
 
@@ -49,5 +53,5 @@ public abstract class BaseRelativeDrive extends CommandBase {
     return false;
   }
 
-  public abstract void moveRobot(double leftX, double leftY, double rightX);
+  public abstract void moveRobot(double sidewaySpeed, double forwardSpeed, double thetaSpeed);
 }
