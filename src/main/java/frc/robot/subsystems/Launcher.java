@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -19,6 +20,8 @@ public class Launcher extends SubsystemBase {
   public Launcher() {
     m_ControllerA = new TalonFX(Constants.LauncherA);
     m_ControllerB = new TalonFX(Constants.LauncherB);
+    m_ControllerA.configOpenloopRamp(0.1);
+    m_ControllerB.configOpenloopRamp(0.1);
     m_ControllerA.setNeutralMode(NeutralMode.Coast);
     m_ControllerB.setNeutralMode(NeutralMode.Coast);
     m_ControllerB.follow(m_ControllerA);
@@ -30,6 +33,7 @@ public class Launcher extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Launcher - Speed", m_ControllerA.getSelectedSensorVelocity());
     // This method will be called once per scheduler run
   }
 }

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -26,13 +27,16 @@ public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
   public Climber() {
     m_extensionController = new TalonFX(Constants.ClimberExtension);
-    m_solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.ClimberSolenoidForward,
-        Constants.ClimberSolenoidReverse);
+    m_solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.ClimberSolenoidForward, Constants.ClimberSolenoidReverse);
     m_limitSwitch = new DigitalInput(Constants.ExtenderLimitSwitch);
   }
 
+  public boolean isCLimberAtBottom() {
+    return !m_limitSwitch.get();
+  }
+
   public void ManualExtend(double power) {
-    if (m_limitSwitch.get()) {
+    if (isCLimberAtBottom()) {
       if (power < 0) {
         power = 0;
       }
@@ -55,11 +59,12 @@ public class Climber extends SubsystemBase {
   @Override
   public void periodic() {
     if (!m_seenBottom) {
-      if (m_limitSwitch.get()) {
+      if (isCLimberAtBottom()) {
         m_downPositionCounts = m_extensionController.getSelectedSensorPosition();
         m_seenBottom = true;
       }
     }
+    SmartDashboard.putBoolean("Climber - At Bottom", isCLimberAtBottom());
     // This method will be called once per scheduler run
   }
 }

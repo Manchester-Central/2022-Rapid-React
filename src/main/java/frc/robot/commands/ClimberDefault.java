@@ -25,6 +25,7 @@ public class ClimberDefault extends CommandBase {
   @Override
   public void execute() {
     m_climber.ManualExtend(0);
+    m_climber.ReleaseArm();
   }
 
   // Called once the command ends or is interrupted.
