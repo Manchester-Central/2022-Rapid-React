@@ -20,8 +20,8 @@ public class Launcher extends SubsystemBase {
   public Launcher() {
     m_ControllerA = new TalonFX(Constants.LauncherA);
     m_ControllerB = new TalonFX(Constants.LauncherB);
-    m_ControllerA.configClosedloopRamp(0.1);
-    m_ControllerB.configClosedloopRamp(0.1);
+    m_ControllerA.configOpenloopRamp(0.1);
+    m_ControllerB.configOpenloopRamp(0.1);
     m_ControllerA.setNeutralMode(NeutralMode.Coast);
     m_ControllerB.setNeutralMode(NeutralMode.Coast);
     m_ControllerB.follow(m_ControllerA);
