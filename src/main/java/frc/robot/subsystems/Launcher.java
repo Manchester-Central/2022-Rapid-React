@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
@@ -24,7 +25,7 @@ public class Launcher extends SubsystemBase {
     m_ControllerB.configOpenloopRamp(0.2);
     m_ControllerA.setNeutralMode(NeutralMode.Coast);
     m_ControllerB.setNeutralMode(NeutralMode.Coast);
-    m_ControllerB.follow(m_ControllerA);
+    m_ControllerB.set(ControlMode.Follower, m_ControllerA.getDeviceID());
     m_ControllerB.setInverted(InvertType.OpposeMaster);
   }
   public void ManualLaunch(double power) {
