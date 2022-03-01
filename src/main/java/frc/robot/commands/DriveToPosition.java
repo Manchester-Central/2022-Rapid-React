@@ -67,7 +67,6 @@ public class DriveToPosition extends CommandBase {
       double slowDownRatio = Math.abs(rotationDifferenceDegrees) / k_slowDownAngleDegrees;
       rotationChangeSpeed *= slowDownRatio;
     }
-    System.out.println(speedX);
     m_drive.moveFieldRelative(speedX, speedY, rotationChangeSpeed);
   }
 
