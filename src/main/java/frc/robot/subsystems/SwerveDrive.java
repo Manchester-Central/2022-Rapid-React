@@ -48,11 +48,11 @@ public class SwerveDrive extends SubsystemBase {
 
   }
 
-  public void updateGyroAdjustmentAngle (double physicalAngle) {
+  public void updateGyroAdjustmentAngle(double physicalAngle) {
     double sensorAngle = m_gyro.getYaw();
     double angleOffset = physicalAngle - sensorAngle;
     m_gyro.setAngleAdjustment(angleOffset);
-    
+
   }
 
   private void setSimulationAngle(double angle) {
@@ -66,15 +66,20 @@ public class SwerveDrive extends SubsystemBase {
     SmartDashboard.putData("Field", m_field);
     double width = 0.2957;
     double length = 0.32067;
-    m_moduleFL = new SwerveDriveModule(length, -width, 0, SwerveModulePosition.FrontLeft.name(), Constants.SwerveFrontLeftVelocity,
-        Constants.SwerveFrontLeftAngle);
-    m_moduleFR = new SwerveDriveModule(length, width, 0, SwerveModulePosition.FrontRight.name(), Constants.SwerveFrontRightVelocity,
-        Constants.SwerveFrontRightAngle);
-    m_moduleBR = new SwerveDriveModule(-length, width, 0, SwerveModulePosition.BackRight.name(), Constants.SwerveBackRightVelocity,
-        Constants.SwerveBackRightAngle);
-    m_moduleBL = new SwerveDriveModule(-length, -width, 0, SwerveModulePosition.BackLeft.name(), Constants.SwerveBackLeftVelocity,
-        Constants.SwerveBackLeftAngle);
-    m_kinematics = new SwerveDriveKinematics(m_moduleFL.getLocation(), m_moduleFR.getLocation(), m_moduleBR.getLocation(),
+    m_moduleFL = new SwerveDriveModule(length, -width, SwerveModulePosition.FrontLeft.name(),
+        Constants.SwerveFrontLeftVelocity,
+        Constants.SwerveFrontLeftAngle, Constants.SwerveFrontLeftAbsolute, -110.5);
+    m_moduleFR = new SwerveDriveModule(length, width, SwerveModulePosition.FrontRight.name(),
+        Constants.SwerveFrontRightVelocity,
+        Constants.SwerveFrontRightAngle, Constants.SwerveFrontRightAbsolute, 173.0);
+    m_moduleBL = new SwerveDriveModule(-length, -width, SwerveModulePosition.BackLeft.name(),
+        Constants.SwerveBackLeftVelocity,
+        Constants.SwerveBackLeftAngle, Constants.SwerveBackLeftAbsolute, 236.6);
+    m_moduleBR = new SwerveDriveModule(-length, width, SwerveModulePosition.BackRight.name(),
+        Constants.SwerveBackRightVelocity,
+        Constants.SwerveBackRightAngle, Constants.SwerveBackRightAbsolute, -15.7);
+    m_kinematics = new SwerveDriveKinematics(m_moduleFL.getLocation(), m_moduleFR.getLocation(),
+        m_moduleBR.getLocation(),
         m_moduleBL.getLocation());
     m_gyro = new AHRS(SPI.Port.kMXP);
     m_odometry = new SwerveDriveOdometry(m_kinematics, getRotation());
@@ -87,7 +92,7 @@ public class SwerveDrive extends SubsystemBase {
     angleD = 0;
     updateVelocityPIDConstants(velocityP, velocityI, velocityD);
     updateAnglePIDConstants(angleP, angleI, angleD);
-    
+
     SmartDashboard.putNumber("Velocity/P", velocityP);
     SmartDashboard.putNumber("Velocity/I", velocityI);
     SmartDashboard.putNumber("Velocity/D", velocityD);
@@ -95,18 +100,28 @@ public class SwerveDrive extends SubsystemBase {
     SmartDashboard.putNumber("Angle/I", angleI);
     SmartDashboard.putNumber("Angle/D", angleD);
   }
-  public void stop(){
+
+  public void stop() {
     m_moduleFR.Stop();
     m_moduleFL.Stop();
     m_moduleBR.Stop();
     m_moduleBL.Stop();
   }
-  public void ResetEncoders(){
+
+  public void ResetEncoders() {
     m_moduleFR.ResetEncoders();
     m_moduleFL.ResetEncoders();
     m_moduleBR.ResetEncoders();
     m_moduleBL.ResetEncoders();
   }
+
+  public void adjustToDefaultPosition() {
+    m_moduleFL.setTargetState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
+    m_moduleFR.setTargetState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+    m_moduleBR.setTargetState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
+    m_moduleBL.setTargetState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+  }
+
   private void move(ChassisSpeeds speeds) {
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(speeds);
     m_moduleFL.setTargetState(states[0]);
@@ -121,7 +136,8 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public void moveDriverRelative(double sidewaysSpeed, double forwardSpeed, double theta) {
-    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(forwardSpeed, sidewaysSpeed * -1, theta, getRotation());
+    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(forwardSpeed, sidewaysSpeed * -1, theta,
+        getRotation());
     move(speeds);
   }
 
@@ -153,7 +169,8 @@ public class SwerveDrive extends SubsystemBase {
     }
   }
 
-  public void setSwerveModuleManual(SwerveModulePosition moduleID, double velocityControllerPower, double angleControllerPower) {
+  public void setSwerveModuleManual(SwerveModulePosition moduleID, double velocityControllerPower,
+      double angleControllerPower) {
     m_moduleFL.Stop();
     m_moduleFR.Stop();
     m_moduleBR.Stop();
@@ -196,10 +213,11 @@ public class SwerveDrive extends SubsystemBase {
     m_moduleFR.updatePosition(pose);
     m_moduleBR.updatePosition(pose);
     m_moduleBL.updatePosition(pose);
-    pose = pose.transformBy(new Transform2d(new Translation2d(), Rotation2d.fromDegrees(90)));
+    //pose = pose.transformBy(new Transform2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     m_field.setRobotPose(pose);
-    SmartDashboard.putBoolean("calibrating", m_gyro.isCalibrating());
-    SmartDashboard.putNumber("Yaw", m_gyro.getAngle());
+    SmartDashboard.putBoolean("Gyro - calibrating", m_gyro.isCalibrating());
+    SmartDashboard.putNumber("Gyro - Yaw", m_gyro.getYaw());
+    SmartDashboard.putNumber("Gyro - Angle (adjusted)", m_gyro.getAngle());
 
     double newVelocityP = SmartDashboard.getNumber("Velocity/P", velocityP);
     double newVelocityI = SmartDashboard.getNumber("Velocity/I", velocityI);
@@ -211,7 +229,6 @@ public class SwerveDrive extends SubsystemBase {
       velocityD = newVelocityD;
       updateVelocityPIDConstants(velocityP, velocityI, velocityD);
 
-  
     }
 
     double newAngleP = SmartDashboard.getNumber("Angle/P", angleP);
@@ -244,8 +261,9 @@ public class SwerveDrive extends SubsystemBase {
   public void simulationPeriodic() {
     super.simulationPeriodic();
     ChassisSpeeds speeds = m_kinematics.toChassisSpeeds(getModuleStates());
-    setSimulationAngle(
-        getRotation().plus(new Rotation2d(speeds.omegaRadiansPerSecond / Constants.RobotUpdate_hz)).getDegrees());
+    var currentYaw = m_gyro.getYaw();
+    setSimulationAngle( 
+        currentYaw + new Rotation2d(speeds.omegaRadiansPerSecond / Constants.RobotUpdate_hz).getDegrees());
   }
 
 }

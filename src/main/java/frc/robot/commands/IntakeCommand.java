@@ -6,40 +6,45 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.Intake;
 
-public class FeederDefault extends CommandBase {
+public class IntakeCommand extends CommandBase {
   private Feeder m_feeder;
-  /** Creates a new FeederDefault. */
-  public FeederDefault(Feeder feeder) {
+  private Intake m_intake;
+
+  /** Creates a new Output. */
+  public IntakeCommand(Feeder feeder, Intake intake) {
     m_feeder = feeder;
-   
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(feeder);
+    m_intake = intake;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_feeder.IsBallAtTopFeeder() && m_feeder.IsBallAtMiddleFeeder()){
+    if (m_feeder.IsBallAtTopFeeder() && m_feeder.IsBallAtMiddleFeeder()) {
       m_feeder.Stop();
+      m_intake.ManualIntake(0);
+    } else if (m_feeder.IsBallAtTopFeeder()) {
+      m_intake.ManualIntake(1);
+      m_feeder.ManualFeed(0, 0.5);
+    } else {
+      m_intake.ManualIntake(1);
+      m_feeder.ManualFeed(0.15, 1);
     }
-    else if(m_feeder.IsBallAtTopFeeder()){
-      m_feeder.Bottom();
-    }
-    else {
-      m_feeder.Both();
-    } 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_feeder.Stop();
+    m_intake.ManualIntake(0);
   }
+
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
