@@ -46,6 +46,11 @@ public final class Constants {
                                                                      // below
     public final static double SwerveModuleAngleGearRatio = 144.0 / 14.0; // 12:24 then 14:72 = 14:144
     public final static double TalonCountsPerRevolution = 2048;
+    
+    // Absolute max meters per second = 3.8
+    public static final double MaxMPS = 3.8;
+    // Absolute max omegaradiant per second = 8.75
+    public static final double MaxORPS = 8.75;
 
     // Pneumatic Connections
     public final static int ClimberSolenoidForward = 9;
