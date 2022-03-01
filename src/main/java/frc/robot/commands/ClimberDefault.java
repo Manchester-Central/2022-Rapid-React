@@ -29,7 +29,7 @@ public class ClimberDefault extends CommandBase {
   @Override
   public void execute() {
     if(!m_climber.hasSeenBottom()) {
-      m_climber.ManualExtend(-0.3);
+      m_climber.ManualExtend(Math.min(m_gamepad.getRightY(), 0));
     } else {
       m_climber.ManualExtend(m_gamepad.getRightY());
     }
