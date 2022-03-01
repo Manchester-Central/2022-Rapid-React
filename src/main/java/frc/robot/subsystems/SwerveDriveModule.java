@@ -40,6 +40,7 @@ public class SwerveDriveModule {
         m_angleController = new TalonFX(angleControllerPort);
         m_velocityController.setNeutralMode(NeutralMode.Coast);
         m_angleController.setNeutralMode(NeutralMode.Brake);
+        m_velocityController.configClosedloopRamp(0.05);
         m_name = name;
         m_absoluteEncoder = new CANCoder(absoluteEncoderPort);
         m_absoluteAngleOffset = absoluteAngleOffset;

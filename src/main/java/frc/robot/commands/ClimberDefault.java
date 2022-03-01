@@ -28,13 +28,19 @@ public class ClimberDefault extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_climber.ManualExtend(m_gamepad.getRightY());
-    m_climber.ReleaseArm();
+    if(!m_climber.hasSeenBottom()) {
+      m_climber.ManualExtend(-0.3);
+    } else {
+      m_climber.ManualExtend(m_gamepad.getRightY());
+    }
+    //m_climber.ReleaseArm();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_climber.ReleaseArm();
+  }
 
   // Returns true when the command should end.
   @Override

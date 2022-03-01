@@ -31,6 +31,11 @@ public class Climber extends SubsystemBase {
     m_extensionController.setNeutralMode(NeutralMode.Brake);
     m_solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.ClimberSolenoidForward, Constants.ClimberSolenoidReverse);
     m_limitSwitch = new DigitalInput(Constants.ExtenderLimitSwitch);
+    m_extensionController.config_kP(0, 0.1);
+  }
+
+  public boolean hasSeenBottom() {
+    return m_seenBottom;
   }
 
   public boolean isCLimberAtBottom() {
@@ -56,6 +61,18 @@ public class Climber extends SubsystemBase {
 
   public void ReleaseArm() {
     m_solenoid.set(Value.kOff);
+  }
+
+  public void ExtendToTop() {
+    if(m_seenBottom) {
+      m_extensionController.set(TalonFXControlMode.Position, m_downPositionCounts + 400000);
+    }
+  }
+
+  public void ExtendToBottom() {
+    if(m_seenBottom && !isCLimberAtBottom()) {
+      m_extensionController.set(TalonFXControlMode.Position, m_downPositionCounts);
+    }
   }
 
   @Override

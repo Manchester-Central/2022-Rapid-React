@@ -121,16 +121,21 @@ public class RobotContainer {
     // m_operator.getButtonStart().whileHeld(new RunCommand(() -> m_intake.MoveIntakeUp(), m_intake)); 
     // m_operator.getPOVNorth().whileHeld(new Output(m_feeder, m_intake));
 
+    m_operator.getButtonA().whileHeld(new IntakeCommand(m_feeder, m_intake));
+    m_operator.getButtonB().whileHeld(new RunCommand(() -> {m_intake.ManualIntake(1.0);m_feeder.ManualFeed(0.0, 0.5);}, m_intake, m_feeder));
+    m_operator.getButtonX().whileHeld(new RunCommand(() -> m_feeder.ManualFeed(1.0, 1.0), m_feeder));
+    m_operator.getButtonY().whileHeld(new Output(m_feeder, m_intake));
+
+    m_operator.getButtonRB().whileHeld(new RunCommand(() -> m_launcher.SetTargetRPM(9500), m_launcher));
+    m_operator.getButtonRT().whileHeld(new RunCommand(() -> m_launcher.SetTargetRPM(5000), m_launcher));
+    
     m_operator.getButtonLB().whileHeld(new RunCommand(() -> m_intake.MoveIntakeUp(), m_intake));
     m_operator.getButtonLT().whileHeld(new RunCommand(() -> m_intake.MoveIntakeDown(), m_intake));
-    m_operator.getButtonB().whileHeld(new RunCommand(() -> {m_intake.ManualIntake(1.0);m_feeder.ManualFeed(0.0, 0.5);}, m_intake, m_feeder));
-    m_operator.getButtonY().whileHeld(new Output(m_feeder, m_intake));
+
     m_operator.getPOVWest().whileHeld(new RunCommand(() -> m_climber.MoveArmUp(), m_climber));
     m_operator.getPOVEast().whileHeld(new RunCommand(() -> m_climber.MoveArmDown(), m_climber));
-    m_operator.getButtonA().whileHeld(new IntakeCommand(m_feeder, m_intake));
-    m_operator.getButtonRB().whileHeld(new RunCommand(() -> m_launcher.SetTargetRPM(5000), m_launcher));
-    m_operator.getButtonRT().whileHeld(new RunCommand(() -> m_launcher.SetTargetRPM(9500), m_launcher));
-    m_operator.getButtonX().whileHeld(new RunCommand(() -> m_feeder.ManualFeed(1.0, 1.0), m_feeder));
+    m_operator.getPOVNorth().whileHeld(new RunCommand(() -> m_climber.ExtendToTop(), m_climber));
+    m_operator.getPOVSouth().whileHeld(new RunCommand(() -> m_climber.ExtendToBottom(), m_climber));
 
   }
 
