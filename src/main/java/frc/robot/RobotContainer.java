@@ -63,7 +63,6 @@ public class RobotContainer {
   private Camera m_camera = new Camera();
   private Launcher m_launcher = new Launcher();
   private Feeder m_feeder = new Feeder();
-  //private Intake m_intake = new Intake();
   private FlywheelTable m_flywheelTable = new FlywheelTable();
   private Intake m_intake = new Intake();
 
