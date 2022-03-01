@@ -28,12 +28,16 @@ public final class Constants {
     public final static int SwerveBackLeftAngle = 7;
     public final static int SwerveBackRightVelocity = 2;
     public final static int SwerveBackRightAngle = 1;
-    public final static int ClimberExtension = 9;
-    public final static int LauncherA = 10;
-    public final static int LauncherB = 11;
-    public final static int UpperFeeder = 12;
-    public final static int LowerFeeder = 13;
-    public final static int Intake = 14;
+    public final static int ClimberExtension = 10;
+    public final static int LauncherA = 14;
+    public final static int LauncherB = 13;
+    public final static int UpperFeeder = 15;
+    public final static int LowerFeeder = 12;
+    public final static int Intake = 11;
+    public final static int SwerveFrontLeftAbsolute = 22;
+    public final static int SwerveFrontRightAbsolute = 21;
+    public final static int SwerveBackLeftAbsolute = 23;
+    public final static int SwerveBackRightAbsolute = 20;
     
     // Drivetrain Properties
     public final static double DriveWheelWidthMeters = 0.1016; // 0.1016 meters = 4 inches, 1 rev of motor = 2048 tics
@@ -44,12 +48,14 @@ public final class Constants {
     public final static double TalonCountsPerRevolution = 2048;
 
     // Pneumatic Connections
-    public final static int ClimberSolenoidForward = 1;
-    public final static int ClimberSolenoidReverse = 2;
-    public final static int IntakeSolenoidForward = 3;
-    public final static int IntakeSolenoidReverse = 4;
+    public final static int ClimberSolenoidForward = 9;
+    public final static int ClimberSolenoidReverse = 7; //6
+    public final static int IntakeSolenoidForward = 8;
+    public final static int IntakeSolenoidReverse = 6; //7
 
     //DIO
-    public final static int FeederBeamSensor = 0;
-    public final static int ExtenderLimitSwitch = 1;
+    public final static int FeederBeamSensorTop = 1;
+    public final static int FeederBeamSensorMiddle = 2;
+    public final static int ExtenderLimitSwitch = 0;
+    
 }

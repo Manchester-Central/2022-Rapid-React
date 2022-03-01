@@ -21,10 +21,14 @@ public class Intake extends SubsystemBase {
   public Intake() {
     m_IntakeController = new TalonFX(Constants.Intake);
     m_IntakeController.setNeutralMode(NeutralMode.Coast);
+    m_IntakeController.configOpenloopRamp(0.2);
     m_solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.IntakeSolenoidForward, Constants.IntakeSolenoidReverse);
     
   }
   public void ManualIntake(double power) {
+    if (m_solenoid.get() == Value.kForward) {
+      power = 0;
+    }
     m_IntakeController.set(TalonFXControlMode.PercentOutput, power);
   }
   @Override

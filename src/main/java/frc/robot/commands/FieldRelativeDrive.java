@@ -5,40 +5,16 @@
 package frc.robot.commands;
 
 import com.chaos131.gamepads.Gamepad;
-
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDrive;
 
-public class FieldRelativeDrive extends CommandBase {
-  private SwerveDrive m_drive;
-  private Gamepad m_controller;
+public class FieldRelativeDrive extends BaseRelativeDrive {
 
   public FieldRelativeDrive(SwerveDrive drive, Gamepad controller) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    m_drive = drive;
-    m_controller = controller;
-    addRequirements(drive);
+    super(drive, controller);
   }
 
-  // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    m_drive.moveFieldRelative(m_controller.getLeftX() * 3, m_controller.getLeftY() * 3, m_controller.getRightX() * -3);
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
+  public void moveRobot(double sidewaySpeed, double forwardSpeed, double thetaSpeed) {
+    m_drive.moveFieldRelative(sidewaySpeed, forwardSpeed, -thetaSpeed);
   }
 }

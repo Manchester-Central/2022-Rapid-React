@@ -6,15 +6,15 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.Intake;
 
-public class FeederDefault extends CommandBase {
+public class Output extends CommandBase {
   private Feeder m_feeder;
-  /** Creates a new FeederDefault. */
-  public FeederDefault(Feeder feeder) {
+  private Intake m_intake;
+  /** Creates a new Output. */
+  public Output(Feeder feeder, Intake intake) {
     m_feeder = feeder;
-   
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(feeder);
+    m_intake = intake;
   }
 
   // Called when the command is initially scheduled.
@@ -24,22 +24,17 @@ public class FeederDefault extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_feeder.IsBallAtTopFeeder() && m_feeder.IsBallAtMiddleFeeder()){
-      m_feeder.Stop();
-    }
-    else if(m_feeder.IsBallAtTopFeeder()){
-      m_feeder.Bottom();
-    }
-    else {
-      m_feeder.Both();
-    } 
+    m_feeder.ManualFeed(-0.5, -0.5);
+    m_intake.ManualIntake(-0.5);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_feeder.Stop();
+    m_intake.ManualIntake(0);
   }
+
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {

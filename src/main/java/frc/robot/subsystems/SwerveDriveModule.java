@@ -4,11 +4,10 @@
 
 package frc.robot.subsystems;
 
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -30,20 +29,30 @@ public class SwerveDriveModule {
     private TalonFX m_velocityController;
     private TalonFX m_angleController;
     private String m_name;
-    private double m_angleOffset;
+    private CANCoder m_absoluteEncoder;
+    private double m_absoluteAngleOffset;
 
-    public SwerveDriveModule(double x, double y, double angleOffset, String name, int velocityControllerPort,
-            int angleControllerPort) {
+    public SwerveDriveModule(double x, double y, String name, int velocityControllerPort,
+            int angleControllerPort, int absoluteEncoderPort, double absoluteAngleOffset) {
         m_location = new Translation2d(x, y);
         SmartDashboard.putData(name, m_field);
         m_velocityController = new TalonFX(velocityControllerPort);
         m_angleController = new TalonFX(angleControllerPort);
+        m_velocityController.setNeutralMode(NeutralMode.Coast);
+        m_angleController.setNeutralMode(NeutralMode.Brake);
+        m_velocityController.configClosedloopRamp(0.05);
         m_name = name;
-        m_angleOffset = angleOffset;
+        m_absoluteEncoder = new CANCoder(absoluteEncoderPort);
+        m_absoluteAngleOffset = absoluteAngleOffset;
+        var absoluteEncoderAngle = GetAbsoluteEncoderAngle();
+        var angleTicksOffset = this.DegreesToFalconAngle(absoluteEncoderAngle);
+        m_angleController.setSelectedSensorPosition(angleTicksOffset);
         Robot.LogManager.addNumber(m_name + "/targetVelocityMPS", () -> m_targetVelocity);
         Robot.LogManager.addNumber(m_name + "/targetAngleDegrees", () -> m_targetAngle);
         Robot.LogManager.addNumber(m_name + "/actualVelocityMPS", () -> getCurrentVelocityMPS());
         Robot.LogManager.addNumber(m_name + "/actualAngleDegrees", () -> getCurrentAngleDegrees());
+        Robot.LogManager.addNumber(m_name + "/AbsoluteAngleDegrees", () -> GetAbsoluteEncoderAngle());
+        Robot.LogManager.addNumber(m_name + "/DriveShaftSpeed", () -> m_velocityController.getSelectedSensorVelocity());
 
     }
 
@@ -61,7 +70,7 @@ public class SwerveDriveModule {
 
     public double getCurrentAngleDegrees() {
         if (RobotBase.isReal()) {
-            return FalconAngleToDegrees(m_angleController.getSelectedSensorPosition()) + m_angleOffset;
+            return FalconAngleToDegrees(m_angleController.getSelectedSensorPosition());
         }
         return m_targetAngle;
     }
@@ -74,7 +83,7 @@ public class SwerveDriveModule {
         m_targetVelocity = targetState.speedMetersPerSecond;
         m_targetAngle = closestTarget(getCurrentAngleDegrees(), targetState.angle.getDegrees());
         m_velocityController.set(TalonFXControlMode.Velocity, MPSToFalconVelocity(m_targetVelocity));
-        m_angleController.set(TalonFXControlMode.Position, DegreesToFalconAngle(m_targetAngle - m_angleOffset));
+        m_angleController.set(TalonFXControlMode.Position, DegreesToFalconAngle(m_targetAngle));
     }
 
     public void setManual(double velocityControllerPower, double angleControllerPower) {
@@ -82,18 +91,18 @@ public class SwerveDriveModule {
         m_angleController.set(TalonFXControlMode.PercentOutput, angleControllerPower);
     }
 
-    public double closestTarget(double currentAngle, double targetAngle) { // 15, 350
+    public double closestTarget(double currentAngle, double targetAngle) {
         targetAngle = targetAngle + (Math.floor(currentAngle / 360) * 360);
-        double otherAngle = targetAngle + 360; // 710
-        if (targetAngle > currentAngle) { 
+        double otherAngle = targetAngle + 360;
+        if (targetAngle > currentAngle) {
             otherAngle = targetAngle - 360;
         }
-        double distanceNegative =Math.abs(targetAngle - currentAngle); // 335
-        double distancePositive = Math.abs(otherAngle - currentAngle); // 695
-        if (distanceNegative < distancePositive) { // 335 < 695 -> true
-            return targetAngle; // 350
+        double distanceNegative = Math.abs(targetAngle - currentAngle);
+        double distancePositive = Math.abs(otherAngle - currentAngle);
+        if (distanceNegative < distancePositive) {
+            return targetAngle;
         } else {
-            return otherAngle; 
+            return otherAngle;
         }
     }
 
@@ -152,13 +161,19 @@ public class SwerveDriveModule {
         m_angleController.config_kI(0, I);
         m_angleController.config_kD(0, D);
     }
-    public void ResetEncoders(){
+
+    public void ResetEncoders() {
         m_velocityController.setSelectedSensorPosition(0);
         m_angleController.setSelectedSensorPosition(0);
     }
 
     public void Stop() {
         setManual(0, 0);
+    }
+
+    private double GetAbsoluteEncoderAngle() {
+        return 360 - m_absoluteEncoder.getAbsolutePosition() + m_absoluteAngleOffset;
+
     }
 
 }

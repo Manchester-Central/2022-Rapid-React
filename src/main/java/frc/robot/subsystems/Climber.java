@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import java.security.KeyStore.SecretKeyEntry;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -26,13 +28,22 @@ public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
   public Climber() {
     m_extensionController = new TalonFX(Constants.ClimberExtension);
-    m_solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.ClimberSolenoidForward,
-        Constants.ClimberSolenoidReverse);
+    m_extensionController.setNeutralMode(NeutralMode.Brake);
+    m_solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.ClimberSolenoidForward, Constants.ClimberSolenoidReverse);
     m_limitSwitch = new DigitalInput(Constants.ExtenderLimitSwitch);
+    m_extensionController.config_kP(0, 0.1);
+  }
+
+  public boolean hasSeenBottom() {
+    return m_seenBottom;
+  }
+
+  public boolean isCLimberAtBottom() {
+    return !m_limitSwitch.get();
   }
 
   public void ManualExtend(double power) {
-    if (m_limitSwitch.get()) {
+    if (isCLimberAtBottom()) {
       if (power < 0) {
         power = 0;
       }
@@ -52,14 +63,30 @@ public class Climber extends SubsystemBase {
     m_solenoid.set(Value.kOff);
   }
 
+  public void ExtendToTop() {
+    if(m_seenBottom) {
+      m_extensionController.set(TalonFXControlMode.Position, m_downPositionCounts + 400000);
+    }
+  }
+
+  public void ExtendToBottom() {
+    if(m_seenBottom && !isCLimberAtBottom()) {
+      m_extensionController.set(TalonFXControlMode.Position, m_downPositionCounts);
+    }
+  }
+
   @Override
   public void periodic() {
     if (!m_seenBottom) {
-      if (m_limitSwitch.get()) {
+      if (isCLimberAtBottom()) {
         m_downPositionCounts = m_extensionController.getSelectedSensorPosition();
         m_seenBottom = true;
       }
     }
+    SmartDashboard.putBoolean("Climber - At Bottom", isCLimberAtBottom());
+    SmartDashboard.putNumber("Climber - Absolute", m_extensionController.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Climber - From Bottom", m_seenBottom? m_extensionController.getSelectedSensorPosition() - m_downPositionCounts:-1);
+
     // This method will be called once per scheduler run
   }
 }
