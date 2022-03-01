@@ -37,7 +37,7 @@ public class LauncherShoot extends CommandBase {
   public void execute() {
     var distance = m_camera.getDistance();
     var speed = m_flyWheelTable.getIdealTarget(distance).getSpeed();
-    m_launcher.setTargetRpm(speed);
+    m_launcher.SetTargetRPM(speed);
     if (m_launcher.isAtTargetSpeed(speed)) {
       m_feeder.Both();
     }

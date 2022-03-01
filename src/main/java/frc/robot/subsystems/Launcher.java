@@ -49,10 +49,7 @@ public class Launcher extends SubsystemBase {
 
   public void coast() {
     m_ControllerA.set(TalonFXControlMode.PercentOutput, 0);
-  }
-
-  public void setTargetRpm(double rpm) {
-    m_ControllerA.set(TalonFXControlMode.Velocity, rpm);
+    m_ControllerB.set(TalonFXControlMode.PercentOutput, 0);
   }
 
   @Override
@@ -68,6 +65,6 @@ public class Launcher extends SubsystemBase {
 
   public boolean isAtTargetSpeed(double targetRpm) {
     var currentRpm = m_ControllerA.getSelectedSensorVelocity();
-    return currentRpm > targetRpm * 0.9 && currentRpm < targetRpm * 1.1;
+    return currentRpm > targetRpm * 0.95 && currentRpm < targetRpm * 1.05;
   }
 }
