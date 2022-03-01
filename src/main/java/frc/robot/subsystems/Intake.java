@@ -26,6 +26,9 @@ public class Intake extends SubsystemBase {
     
   }
   public void ManualIntake(double power) {
+    if (m_solenoid.get() == Value.kForward) {
+      power = 0;
+    }
     m_IntakeController.set(TalonFXControlMode.PercentOutput, power);
   }
   @Override
