@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import java.security.KeyStore.SecretKeyEntry;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
@@ -27,6 +28,7 @@ public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
   public Climber() {
     m_extensionController = new TalonFX(Constants.ClimberExtension);
+    m_extensionController.setNeutralMode(NeutralMode.Brake);
     m_solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.ClimberSolenoidForward, Constants.ClimberSolenoidReverse);
     m_limitSwitch = new DigitalInput(Constants.ExtenderLimitSwitch);
   }
@@ -65,6 +67,9 @@ public class Climber extends SubsystemBase {
       }
     }
     SmartDashboard.putBoolean("Climber - At Bottom", isCLimberAtBottom());
+    SmartDashboard.putNumber("Climber - Absolute", m_extensionController.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Climber - From Bottom", m_seenBottom? m_extensionController.getSelectedSensorPosition() - m_downPositionCounts:-1);
+
     // This method will be called once per scheduler run
   }
 }

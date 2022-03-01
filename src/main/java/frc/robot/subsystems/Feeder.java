@@ -26,8 +26,8 @@ public class Feeder extends SubsystemBase {
     m_lowerFeeder = new TalonFX(Constants.LowerFeeder);
     m_upperFeeder.configOpenloopRamp(0.2);
     m_lowerFeeder.configOpenloopRamp(0.2);
-    m_upperFeeder.setNeutralMode(NeutralMode.Coast);
-    m_lowerFeeder.setNeutralMode(NeutralMode.Coast);
+    m_upperFeeder.setNeutralMode(NeutralMode.Brake);
+    m_lowerFeeder.setNeutralMode(NeutralMode.Brake);
     m_beamSensorTop = new DigitalInput(Constants.FeederBeamSensorTop);
     m_beamSensorMiddle = new DigitalInput(Constants.FeederBeamSensorMiddle);
   }
@@ -53,16 +53,16 @@ public class Feeder extends SubsystemBase {
   }
 
   public boolean IsBallAtTopFeeder() {
-    return m_beamSensorTop.get();
+    return !m_beamSensorTop.get();
   }
 
   public boolean IsBallAtMiddleFeeder() {
-    return m_beamSensorMiddle.get();
+    return !m_beamSensorMiddle.get();
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("Feeder - Top", this.m_beamSensorTop.get());
-    SmartDashboard.putBoolean("Feeder - Middle", this.m_beamSensorMiddle.get());
+    SmartDashboard.putBoolean("Feeder - Top", IsBallAtTopFeeder());
+    SmartDashboard.putBoolean("Feeder - Middle", IsBallAtMiddleFeeder());
   }
 }

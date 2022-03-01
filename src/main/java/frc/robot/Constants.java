@@ -54,8 +54,8 @@ public final class Constants {
     public final static int IntakeSolenoidReverse = 6; //7
 
     //DIO
-    public final static int FeederBeamSensorTop = 2;
-    public final static int FeederBeamSensorMiddle = 1;
+    public final static int FeederBeamSensorTop = 1;
+    public final static int FeederBeamSensorMiddle = 2;
     public final static int ExtenderLimitSwitch = 0;
     
 }

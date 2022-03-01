@@ -4,14 +4,18 @@
 
 package frc.robot.commands;
 
+import com.chaos131.gamepads.Gamepad;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
 public class ClimberDefault extends CommandBase {
   private Climber m_climber;
+  private Gamepad m_gamepad;
   /** Creates a new ClimberDefault. */
-  public ClimberDefault(Climber climber) {
+  public ClimberDefault(Climber climber, Gamepad gamepad) {
     m_climber = climber;
+    m_gamepad = gamepad;
    
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(climber);
@@ -24,7 +28,7 @@ public class ClimberDefault extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_climber.ManualExtend(0);
+    m_climber.ManualExtend(m_gamepad.getRightY());
     m_climber.ReleaseArm();
   }
 
