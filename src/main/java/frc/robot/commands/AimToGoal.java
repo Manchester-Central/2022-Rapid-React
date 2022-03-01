@@ -5,6 +5,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -14,7 +16,7 @@ import frc.robot.subsystems.SwerveDrive;
 public class AimToGoal extends CommandBase {
   private SwerveDrive m_swerveDrive;
   private Camera m_camera;
-  private final Translation2d k_goalLocation = new Translation2d(0, 0); // TODO: Get real values
+  private final Translation2d k_goalLocation = new Translation2d(8.0, 4.1); // TODO: Get real values
 
   /** Creates a new AimToGoal. */
   public AimToGoal(SwerveDrive swerveDrive, Camera camera) {
@@ -31,13 +33,19 @@ public class AimToGoal extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    var thetaSpeed = 0.0;
     if(m_camera.hasTarget()) {
-      var thetaSpeed = m_camera.getXAngle();
-      thetaSpeed = MathUtil.clamp(thetaSpeed, -Constants.MaxORPS * 0.5, Constants.MaxORPS * 0.5);
-      m_swerveDrive.moveRobotRelative(0, 0, thetaSpeed);
+      thetaSpeed = m_camera.getXAngle();
     } else {
-      var currentLocation = m_swerveDrive.getPose().getTranslation();
+      var currentPose = m_swerveDrive.getPose();
+      var relativeLocation = currentPose.relativeTo(new Pose2d(k_goalLocation, Rotation2d.fromDegrees(0)));
+      var angle = Math.atan(relativeLocation.getY() / relativeLocation.getX());
+      var rotation = new Rotation2d(angle).minus(m_swerveDrive.getRotation());
+      rotation = currentPose.getX() > k_goalLocation.getX() ? rotation.rotateBy(Rotation2d.fromDegrees(180)) : rotation;
+      thetaSpeed = rotation.getDegrees();
     }
+    thetaSpeed = MathUtil.clamp(thetaSpeed, -Constants.MaxORPS * 0.5, Constants.MaxORPS * 0.5);
+    m_swerveDrive.moveRobotRelative(0, 0, thetaSpeed);
   }
 
   // Called once the command ends or is interrupted.

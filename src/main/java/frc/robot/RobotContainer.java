@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.AimToGoal;
 import frc.robot.commands.ClimberDefault;
 import frc.robot.commands.DriveOverDistance;
 import frc.robot.commands.DriveOverTime;
@@ -147,6 +148,6 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     // return m_autoCommand;
-    return m_autoBuilder.createAutoCommand();
+    return new AimToGoal(m_swerveDrive, m_camera);
   }
 }
