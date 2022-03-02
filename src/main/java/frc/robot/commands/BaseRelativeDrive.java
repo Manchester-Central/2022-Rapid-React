@@ -35,7 +35,8 @@ public abstract class BaseRelativeDrive extends CommandBase {
     var leftY = m_controller.getLeftY();
     var rightX = m_controller.getRightX();
     if(leftX == 0.0 && leftY == 0.0 && rightX == 0.0) {
-      m_drive.adjustToDefaultPosition();
+      //m_drive.adjustToDefaultPosition();
+      m_drive.stop();
     } else {
       moveRobot(leftX * maxMPS, leftY * maxMPS, rightX * maxOrPS);
     }
