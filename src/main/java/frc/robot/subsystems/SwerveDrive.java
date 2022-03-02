@@ -101,7 +101,7 @@ public class SwerveDrive extends SubsystemBase {
     SmartDashboard.putNumber("Angle/D", angleD);
   }
   
-  public void updateOdometry(double x, double y, double angle){
+  public void updateOdometry(double x, double y, double angle) {
     updateGyroAdjustmentAngle(angle);
     m_odometry.resetPosition(new Pose2d(x, y, getRotation()), getRotation());
   }
