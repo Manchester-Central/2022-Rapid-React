@@ -137,7 +137,7 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public void moveFieldRelative(double sidewaysSpeed, double forwardSpeed, double theta) {
-    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(forwardSpeed, sidewaysSpeed, theta, getRotation());
+    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(sidewaysSpeed, forwardSpeed, theta, getRotation());
     move(speeds);
   }
 

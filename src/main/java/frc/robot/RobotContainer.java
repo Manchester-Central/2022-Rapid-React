@@ -79,6 +79,7 @@ public class RobotContainer {
     m_autoBuilder.registerCommand("driverRelativeDrive", (ParsedCommand pc) -> new AutoDriverRelativeDrive(pc, m_swerveDrive));
     m_autoBuilder.registerCommand("launch", (ParsedCommand pc) -> new LauncherShoot(m_launcher, m_camera, m_feeder, m_flywheelTable));
     m_autoBuilder.registerCommand("startingPosition", (ParsedCommand pc) -> new StartingPosition(pc, m_swerveDrive));
+    m_autoBuilder.registerCommand("driveToPosition", (ParsedCommand pc) -> DriveToPosition.CreateAutoCommand(pc, m_swerveDrive));
   }
 
   /**
