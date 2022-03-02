@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
@@ -24,8 +25,14 @@ public class IntakeDefault extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intake.ManualIntake(0);
-    m_intake.ReleaseIntake();
+    if(DriverStation.isAutonomousEnabled()) {
+      m_intake.MoveIntakeDown();
+      m_intake.ManualIntake(0.3);
+    }
+    else {
+      m_intake.ManualIntake(0);
+    }
+    //m_intake.MoveIntakeDown();
   }
 
   // Called once the command ends or is interrupted.

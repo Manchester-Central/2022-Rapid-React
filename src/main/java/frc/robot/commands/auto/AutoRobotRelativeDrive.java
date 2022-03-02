@@ -14,17 +14,10 @@ public class AutoRobotRelativeDrive extends BaseAutoCommand {
     public AutoRobotRelativeDrive(ParsedCommand parsedCommand, SwerveDrive swerveDrive) {
         super(parsedCommand);
         m_drive = swerveDrive;
-        m_sidewaysSpeed = parseDouble(parsedCommand.getArgument("sideSpeed"), 0.0);
-        m_forwardSpeed = parseDouble(parsedCommand.getArgument("forwardSpeed"), 0.0);
-        m_thetaSpeed = parseDouble(parsedCommand.getArgument("thetaSpeed"), 0.0);
+        m_sidewaysSpeed = AutoUtil.parseDouble(parsedCommand.getArgument("sideSpeed"), 0.0);
+        m_forwardSpeed = AutoUtil.parseDouble(parsedCommand.getArgument("forwardSpeed"), 0.0);
+        m_thetaSpeed = AutoUtil.parseDouble(parsedCommand.getArgument("thetaSpeed"), 0.0);
         addRequirements(swerveDrive);
-    }
-
-    private double parseDouble(String valueToParse, double defaultValue) {
-        if(valueToParse == null) {
-            return defaultValue;
-        }
-        return Double.parseDouble(valueToParse);
     }
 
     @Override

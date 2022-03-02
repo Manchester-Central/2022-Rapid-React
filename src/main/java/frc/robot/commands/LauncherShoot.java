@@ -49,6 +49,7 @@ public class LauncherShoot extends CommandBase {
       } else {
         m_feeder.Stop();
       }
+    }
   }
 
   // Called once the command ends or is interrupted.
