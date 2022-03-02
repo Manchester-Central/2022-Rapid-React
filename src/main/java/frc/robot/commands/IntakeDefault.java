@@ -27,7 +27,7 @@ public class IntakeDefault extends CommandBase {
   public void execute() {
     if(DriverStation.isAutonomousEnabled()) {
       m_intake.MoveIntakeDown();
-      m_intake.ManualIntake(0.3);
+      m_intake.ManualIntake(1.0);
     }
     else {
       m_intake.ManualIntake(0);

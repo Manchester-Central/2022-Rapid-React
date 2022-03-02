@@ -14,10 +14,10 @@ import frc.robot.commands.auto.AutoUtil;
 import frc.robot.subsystems.SwerveDrive;
 
 public class DriveToPosition extends CommandBase {
-  private final double k_maxSpeedMps = 4;
+  private final double k_maxSpeedMps = 1;
   private final double k_slowDownDistanceM = 1;
-  private final double k_maxRotationChange = 1;
-  private final double k_slowDownAngleDegrees = 10;
+  private final double k_maxRotationChange = 4;
+  private final double k_slowDownAngleDegrees = 30;
   SwerveDrive m_drive;
   double m_x, m_y, m_thetaDegrees;
   Pose2d m_targetPose;
