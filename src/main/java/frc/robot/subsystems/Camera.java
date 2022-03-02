@@ -20,6 +20,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public class Camera extends SubsystemBase {
 
   NetworkTableEntry tv, tx, ty, ta, ts, tl, tshort, tlong, thor, tvert, getpipe, camtran, pipeline, ledMode;
+  public static final double ComputerVision = 0;
+  public static final double HumanVision = 1;
 
   public Camera() {
 
