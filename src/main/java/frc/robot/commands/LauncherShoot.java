@@ -15,6 +15,7 @@ public class LauncherShoot extends CommandBase {
   private Camera m_camera;
   private Feeder m_feeder;
   private FlywheelTable m_flyWheelTable;
+  //private double m_targetSpeed;
 
   /** Creates a new LauncherShoot. */
   public LauncherShoot(Launcher launcher, Camera camera, Feeder feeder, FlywheelTable flyWheel) {
@@ -29,21 +30,25 @@ public class LauncherShoot extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+    m_camera.setPipeline(0);
+    var speed = m_flyWheelTable.getIdealTarget(-25).getSpeed();
+    m_launcher.SetTargetRPM(speed);
+    m_feeder.Stop();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    var distance = m_camera.getDistance();
-    var speed = m_flyWheelTable.getIdealTarget(distance).getSpeed();
-    m_launcher.SetTargetRPM(speed);
-    if (m_launcher.isAtTargetSpeed(speed)) {
-      m_feeder.Both();
-    }
-    else {
-      m_feeder.Stop();
-    }
+    if (m_camera.hasTarget()) {
+      var distance = m_camera.getDistance();
+      var speed = m_flyWheelTable.getIdealTarget(distance).getSpeed();
+      m_launcher.SetTargetRPM(speed);
+
+      if (m_launcher.isAtTargetSpeed(speed)) {
+        m_feeder.Both();
+      } else {
+        m_feeder.Stop();
+      }
   }
 
   // Called once the command ends or is interrupted.
