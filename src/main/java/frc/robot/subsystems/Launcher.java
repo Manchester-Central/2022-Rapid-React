@@ -17,6 +17,7 @@ import frc.robot.Constants;
 public class Launcher extends SubsystemBase {
   private TalonFX m_ControllerA;
   private TalonFX m_ControllerB;
+
   /** Creates a new Launcher. */
   public Launcher() {
     m_ControllerA = new TalonFX(Constants.LauncherA);
@@ -35,6 +36,7 @@ public class Launcher extends SubsystemBase {
     m_ControllerB.config_kF(0, 0.05);
 
   }
+
   public void ManualLaunch(double power) {
     m_ControllerA.set(TalonFXControlMode.PercentOutput, power);
     m_ControllerB.set(TalonFXControlMode.PercentOutput, power);
@@ -43,6 +45,11 @@ public class Launcher extends SubsystemBase {
   public void SetTargetRPM(double rpm) {
     m_ControllerA.set(TalonFXControlMode.Velocity, rpm);
     m_ControllerB.set(TalonFXControlMode.Velocity, rpm);
+  }
+
+  public void coast() {
+    m_ControllerA.set(TalonFXControlMode.PercentOutput, 0);
+    m_ControllerB.set(TalonFXControlMode.PercentOutput, 0);
   }
 
   @Override
@@ -54,5 +61,10 @@ public class Launcher extends SubsystemBase {
     SmartDashboard.putString("Launcher - Control", m_ControllerA.getControlMode().toString());
     SmartDashboard.putNumber("Launcher - PowerOut", m_ControllerA.getMotorOutputPercent());
     // This method will be called once per scheduler run
+  }
+
+  public boolean isAtTargetSpeed(double targetRpm) {
+    var currentRpm = m_ControllerA.getSelectedSensorVelocity();
+    return currentRpm > targetRpm * 0.95 && currentRpm < targetRpm * 1.05;
   }
 }

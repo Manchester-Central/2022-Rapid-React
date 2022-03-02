@@ -23,6 +23,7 @@ import frc.robot.commands.FieldRelativeDrive;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.IntakeDefault;
 import frc.robot.commands.LauncherDefault;
+import frc.robot.commands.LauncherShoot;
 import frc.robot.commands.Output;
 import frc.robot.commands.FeederDefault;
 import frc.robot.commands.RobotRelativeDrive;
@@ -36,6 +37,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.FlywheelTable;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.SwerveDrive.SwerveModulePosition;
 
@@ -61,6 +63,7 @@ public class RobotContainer {
   private Camera m_camera = new Camera();
   private Launcher m_launcher = new Launcher();
   private Feeder m_feeder = new Feeder();
+  private FlywheelTable m_flywheelTable = new FlywheelTable();
   private Intake m_intake = new Intake();
 
   private AutoBuilder m_autoBuilder = new AutoBuilder();
