@@ -81,6 +81,7 @@ public class RobotContainer {
     m_autoBuilder.registerCommand("launch", (ParsedCommand pc) -> new LauncherShoot(m_launcher, m_camera, m_feeder, m_flywheelTable));
     m_autoBuilder.registerCommand("startingPosition", (ParsedCommand pc) -> new StartingPosition(pc, m_swerveDrive));
     m_autoBuilder.registerCommand("driveToPosition", (ParsedCommand pc) -> DriveToPosition.CreateAutoCommand(pc, m_swerveDrive));
+    m_autoBuilder.registerCommand("aimToGoal", (ParsedCommand pc) -> new AimToGoal(m_swerveDrive, m_camera));
   }
 
   /**
@@ -154,7 +155,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    // return m_autoCommand;
-    return new AimToGoal(m_swerveDrive, m_camera);
+    return m_autoBuilder.createAutoCommand();
   }
 }
