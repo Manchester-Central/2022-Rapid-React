@@ -38,6 +38,7 @@ public class SwerveDriveModule {
         SmartDashboard.putData(name, m_field);
         m_velocityController = new TalonFX(velocityControllerPort);
         m_angleController = new TalonFX(angleControllerPort);
+        m_angleController.configAllowableClosedloopError(0, DegreesToFalconAngle(3)); //TODO Reduce after toning PID
         m_velocityController.setNeutralMode(NeutralMode.Coast);
         m_angleController.setNeutralMode(NeutralMode.Brake);
         m_velocityController.configClosedloopRamp(0.05);

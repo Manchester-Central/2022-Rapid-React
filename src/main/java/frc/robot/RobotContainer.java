@@ -24,6 +24,7 @@ import frc.robot.commands.FieldRelativeDrive;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.IntakeDefault;
 import frc.robot.commands.LauncherDefault;
+import frc.robot.commands.LauncherShoot;
 import frc.robot.commands.Output;
 import frc.robot.commands.FeederDefault;
 import frc.robot.commands.RobotRelativeDrive;
@@ -32,11 +33,13 @@ import frc.robot.commands.SwerveMotorTest;
 import frc.robot.commands.ZeroNavX;
 import frc.robot.commands.auto.AutoDriverRelativeDrive;
 import frc.robot.commands.auto.AutoRobotRelativeDrive;
+import frc.robot.commands.auto.StartingPosition;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.FlywheelTable;
 import frc.robot.subsystems.SwerveDrive;
 import frc.robot.subsystems.SwerveDrive.SwerveModulePosition;
 
@@ -62,6 +65,7 @@ public class RobotContainer {
   private Camera m_camera = new Camera();
   private Launcher m_launcher = new Launcher();
   private Feeder m_feeder = new Feeder();
+  private FlywheelTable m_flywheelTable = new FlywheelTable();
   private Intake m_intake = new Intake();
 
   private AutoBuilder m_autoBuilder = new AutoBuilder();
@@ -74,6 +78,9 @@ public class RobotContainer {
     configureButtonBindings();
     m_autoBuilder.registerCommand("robotRelativeDrive", (ParsedCommand pc) -> new AutoRobotRelativeDrive(pc, m_swerveDrive));
     m_autoBuilder.registerCommand("driverRelativeDrive", (ParsedCommand pc) -> new AutoDriverRelativeDrive(pc, m_swerveDrive));
+    m_autoBuilder.registerCommand("launch", (ParsedCommand pc) -> new LauncherShoot(m_launcher, m_camera, m_feeder, m_flywheelTable));
+    m_autoBuilder.registerCommand("startingPosition", (ParsedCommand pc) -> new StartingPosition(pc, m_swerveDrive));
+    m_autoBuilder.registerCommand("driveToPosition", (ParsedCommand pc) -> DriveToPosition.CreateAutoCommand(pc, m_swerveDrive));
   }
 
   /**
