@@ -4,15 +4,7 @@
 
 package frc.robot.logging;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,42 +12,23 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
-import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import frc.robot.Robot;
 
 /** Add your docs here. */
 public class LogManager {
     private boolean m_willLogShuffleBoard;
     private ShuffleboardTab m_shuffleboardTab;
-    private FileWriter m_fileWriter;
-    private PrintWriter m_PrintWriter;
     private List<String> m_headers = new ArrayList<String>();
     private Map<String, Supplier<String>> m_suppliers = new HashMap<String, Supplier<String>>();
+    private LoggingThread m_loggingThread;
 
     public LogManager(boolean willLogShuffleBoard) {
-        
+        m_loggingThread = new LoggingThread();
         m_shuffleboardTab = Shuffleboard.getTab("Logging");
         m_willLogShuffleBoard = willLogShuffleBoard;
-        try {
-            Calendar rightNow = Calendar.getInstance();
-            var simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ss.SSSZ");
-            var dateString = simpleDateFormat.format(rightNow.getTime()); 
-            var filePath = "logs/log-" +dateString+".csv";
-            if (RobotBase.isReal()) {
-                // Save data to USB
-                filePath = "/U/" + filePath;
-            }
-            Path pathToFile = Paths.get(filePath);
-            Files.createDirectories(pathToFile.getParent());
-            m_fileWriter = new FileWriter(filePath);
-            m_PrintWriter = new PrintWriter(m_fileWriter);
-        } catch (IOException e) {
-            System.err.println("failed to load log file");
-            e.printStackTrace();
-        }
         addNumber("timeMs", () -> RobotController.getFPGATime() / 1000);
     }
 
@@ -84,32 +57,24 @@ public class LogManager {
     }
 
     public void writeHeaders() {
-        if (m_PrintWriter == null) {
-            return;
+        StringBuilder sb = new StringBuilder();
+        for (String header : m_headers) {
+            sb.append(header + ",");
         }
-        try {
-            for (String header : m_headers) {
-                m_PrintWriter.print(header + ",");
-            }
-            m_PrintWriter.println();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        m_loggingThread.enqueue(sb.toString());
     }
 
-    public void writeLine() {
-        if (m_PrintWriter == null) {
-            return;
-        }
-        try {
-            for (String header : m_headers) {
-                m_PrintWriter.print(m_suppliers.get(header).get() + ",");
+    public void update() {
+        if (m_loggingThread.getState() == Thread.State.NEW) {
+            if (DriverStation.isDSAttached()) {
+                m_loggingThread.start();
             }
-            m_PrintWriter.println();
-            m_PrintWriter.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            StringBuilder sb = new StringBuilder();
+            for (String header : m_headers) {
+                sb.append(m_suppliers.get(header).get() + ",");
+            }
+            m_loggingThread.enqueue(sb.toString());
         }
     }
 }
