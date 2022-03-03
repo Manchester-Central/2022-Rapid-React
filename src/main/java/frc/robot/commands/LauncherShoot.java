@@ -9,6 +9,7 @@ import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.FlywheelTable;
 import frc.robot.subsystems.Launcher;
+import frc.robot.subsystems.Feeder.FeederMode;
 
 public class LauncherShoot extends CommandBase {
   private Launcher m_launcher;
@@ -33,7 +34,7 @@ public class LauncherShoot extends CommandBase {
     m_camera.setPipeline(0);
     var speed = m_flyWheelTable.getIdealTarget(-25).getSpeed();
     m_launcher.SetTargetRPM(speed);
-    m_feeder.Stop();
+    m_feeder.setFeederMode(FeederMode.DEFAULT);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -45,9 +46,9 @@ public class LauncherShoot extends CommandBase {
       m_launcher.SetTargetRPM(speed);
 
       if (m_launcher.isAtTargetSpeed(speed)) {
-        m_feeder.Both();
+        m_feeder.setFeederMode(FeederMode.LAUNCH);
       } else {
-        m_feeder.Stop();
+        m_feeder.setFeederMode(FeederMode.DEFAULT);
       }
     }
   }
@@ -56,7 +57,7 @@ public class LauncherShoot extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     m_launcher.coast();
-    m_feeder.Stop();
+    m_feeder.setFeederMode(FeederMode.DEFAULT);
   }
 
   // Returns true when the command should end.
