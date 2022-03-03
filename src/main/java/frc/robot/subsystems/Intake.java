@@ -43,7 +43,4 @@ public class Intake extends SubsystemBase {
     m_solenoid.set(Value.kReverse);
   }
 
-  public void ReleaseIntake() {
-    m_solenoid.set(Value.kOff);
-  }
 }
