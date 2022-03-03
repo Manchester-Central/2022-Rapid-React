@@ -134,7 +134,7 @@ public class RobotContainer {
     m_operator.getButtonY().whileHeld(new Output(m_feeder, m_intake));
 
     m_operator.getButtonRB().whileHeld(new RunCommand(() -> m_launcher.SetTargetRPM(9500), m_launcher));
-    m_operator.getButtonRT().whileHeld(new RunCommand(() -> m_launcher.SetTargetRPM(5000), m_launcher));
+    m_operator.getButtonRT().whileHeld(new RunCommand(() -> m_launcher.SetTargetRPM(4500), m_launcher));
     
     m_operator.getButtonLB().whileHeld(new RunCommand(() -> m_intake.MoveIntakeUp(), m_intake));
     m_operator.getButtonLT().whileHeld(new RunCommand(() -> m_intake.MoveIntakeDown(), m_intake));
