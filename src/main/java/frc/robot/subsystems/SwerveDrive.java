@@ -20,9 +20,11 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.SPI;
 
 public class SwerveDrive extends SubsystemBase {
+  private final boolean m_enableTuningPIDs = false;
   private Field2d m_field = new Field2d();
   private SwerveDriveModule m_moduleFL;
   private SwerveDriveModule m_moduleFR;
@@ -59,11 +61,13 @@ public class SwerveDrive extends SubsystemBase {
     int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
     SimDouble SimAngle = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "Yaw"));
     SimAngle.set(angle);
-  }
+  }  
 
   /** Creates a new SwerveDrive. */
   public SwerveDrive() {
-    SmartDashboard.putData("Field", m_field);
+    if (RobotBase.isSimulation()) {
+      SmartDashboard.putData("Field", m_field);
+    }
     double width = 0.2957;
     double length = 0.32067;
     m_moduleFL = new SwerveDriveModule(length, -width, SwerveModulePosition.FrontLeft.name(),
@@ -93,12 +97,14 @@ public class SwerveDrive extends SubsystemBase {
     updateVelocityPIDConstants(velocityP, velocityI, velocityD);
     updateAnglePIDConstants(angleP, angleI, angleD);
 
-    SmartDashboard.putNumber("Velocity/P", velocityP);
-    SmartDashboard.putNumber("Velocity/I", velocityI);
-    SmartDashboard.putNumber("Velocity/D", velocityD);
-    SmartDashboard.putNumber("Angle/P", angleP);
-    SmartDashboard.putNumber("Angle/I", angleI);
-    SmartDashboard.putNumber("Angle/D", angleD);
+    if (m_enableTuningPIDs) {
+      SmartDashboard.putNumber("Velocity/P", velocityP);
+      SmartDashboard.putNumber("Velocity/I", velocityI);
+      SmartDashboard.putNumber("Velocity/D", velocityD);
+      SmartDashboard.putNumber("Angle/P", angleP);
+      SmartDashboard.putNumber("Angle/I", angleI);
+      SmartDashboard.putNumber("Angle/D", angleD);
+    }
   }
   
   public void updateOdometry(double x, double y, double angle) {
@@ -221,10 +227,15 @@ public class SwerveDrive extends SubsystemBase {
     m_moduleBL.updatePosition(pose);
     //pose = pose.transformBy(new Transform2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     m_field.setRobotPose(pose);
-    SmartDashboard.putBoolean("Gyro - calibrating", m_gyro.isCalibrating());
-    SmartDashboard.putNumber("Gyro - Yaw", m_gyro.getYaw());
-    SmartDashboard.putNumber("Gyro - Angle (adjusted)", m_gyro.getAngle());
+    SmartDashboard.putBoolean("Gyro/Calibrating", m_gyro.isCalibrating());
+    SmartDashboard.putNumber("Gyro/Angle", m_gyro.getAngle());
 
+    if (m_enableTuningPIDs) {
+      tunePIDs();
+    }
+  }
+
+  private void tunePIDs() {
     double newVelocityP = SmartDashboard.getNumber("Velocity/P", velocityP);
     double newVelocityI = SmartDashboard.getNumber("Velocity/I", velocityI);
     double newVelocityD = SmartDashboard.getNumber("Velocity/D", velocityD);

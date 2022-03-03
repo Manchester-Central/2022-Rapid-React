@@ -54,13 +54,7 @@ public class Launcher extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Launcher - Position", m_ControllerA.getSelectedSensorPosition(0));
-    SmartDashboard.putNumber("Launcher - Speed", m_ControllerA.getSelectedSensorVelocity(0));
-    SmartDashboard.putNumber("Launcher - Error", m_ControllerA.getClosedLoopError(0));
-    SmartDashboard.putNumber("Launcher - Target", m_ControllerA.getClosedLoopTarget(0));
-    SmartDashboard.putString("Launcher - Control", m_ControllerA.getControlMode().toString());
-    SmartDashboard.putNumber("Launcher - PowerOut", m_ControllerA.getMotorOutputPercent());
-    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Launcher/Speed", m_ControllerA.getSelectedSensorVelocity(0));
   }
 
   public boolean isAtTargetSpeed(double targetRpm) {

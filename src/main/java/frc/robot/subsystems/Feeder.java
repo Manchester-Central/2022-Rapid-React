@@ -62,7 +62,7 @@ public class Feeder extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("Feeder - Top", IsBallAtTopFeeder());
-    SmartDashboard.putBoolean("Feeder - Middle", IsBallAtMiddleFeeder());
+    SmartDashboard.putBoolean("Feeder/Top", IsBallAtTopFeeder());
+    SmartDashboard.putBoolean("Feeder/Middle", IsBallAtMiddleFeeder());
   }
 }

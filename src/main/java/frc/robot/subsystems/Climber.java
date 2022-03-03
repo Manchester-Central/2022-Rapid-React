@@ -83,10 +83,6 @@ public class Climber extends SubsystemBase {
         m_seenBottom = true;
       }
     }
-    SmartDashboard.putBoolean("Climber - At Bottom", isCLimberAtBottom());
-    SmartDashboard.putNumber("Climber - Absolute", m_extensionController.getSelectedSensorPosition());
-    SmartDashboard.putNumber("Climber - From Bottom", m_seenBottom? m_extensionController.getSelectedSensorPosition() - m_downPositionCounts:-1);
-
-    // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("Climber/At Bottom", isCLimberAtBottom());
   }
 }
