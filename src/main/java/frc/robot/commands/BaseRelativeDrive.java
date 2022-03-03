@@ -7,6 +7,7 @@ package frc.robot.commands;
 import com.chaos131.gamepads.Gamepad;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.SwerveDrive;
 
 public abstract class BaseRelativeDrive extends CommandBase {
@@ -27,10 +28,6 @@ public abstract class BaseRelativeDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public final void execute() {
-    // Absolute max meters per second = 3.8
-    var maxMPS = 3.8;
-    // Absolute max omegaradiant per second = 6.9 
-    var maxOrPS = 8.75;
     var leftX = m_controller.getLeftX();
     var leftY = m_controller.getLeftY();
     var rightX = m_controller.getRightX();
@@ -38,7 +35,7 @@ public abstract class BaseRelativeDrive extends CommandBase {
       //m_drive.adjustToDefaultPosition();
       m_drive.stop();
     } else {
-      moveRobot(leftX * maxMPS, leftY * maxMPS, rightX * maxOrPS);
+      moveRobot(leftX * Constants.MaxMPS, leftY * Constants.MaxMPS, rightX * Constants.MaxORPS);
     }
   }
 
