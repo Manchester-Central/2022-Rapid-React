@@ -31,10 +31,10 @@ public class IntakeCommand extends CommandBase {
       m_intake.ManualIntake(0);
     } else if (m_feeder.IsBallAtTopFeeder()) {
       m_intake.ManualIntake(1);
-      m_feeder.ManualFeed(0, 0.5);
+      m_feeder.Bottom();
     } else {
       m_intake.ManualIntake(1);
-      m_feeder.ManualFeed(0.15, 1);
+      m_feeder.Both();
     }
   }
 
