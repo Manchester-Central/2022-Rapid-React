@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AimToGoal;
 import frc.robot.commands.EnableSlowDriverSpeed;
 import frc.robot.commands.ClimberDefault;
+import frc.robot.commands.DashboardSpeedLauncherShoot;
 import frc.robot.commands.DriveOverDistance;
 import frc.robot.commands.DriveOverTime;
 import frc.robot.commands.DriveToPosition;
@@ -123,6 +124,7 @@ public class RobotContainer {
 
     m_driver.getButtonA().whenPressed(new EnableSlowDriverSpeed(true));
     m_driver.getButtonB().whenPressed(new EnableSlowDriverSpeed(false));
+    m_driver.getButtonY().whenPressed(new DashboardSpeedLauncherShoot(m_launcher, m_feeder));
 
     m_driver.getButtonLB().whileHeld(() -> m_intake.MoveIntakeUp(), m_intake);
     m_driver.getButtonLT().whileHeld(new IntakeCommand(m_feeder, m_intake));
