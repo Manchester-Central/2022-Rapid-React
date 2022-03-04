@@ -31,6 +31,7 @@ import frc.robot.commands.Output;
 import frc.robot.commands.FeederDefault;
 import frc.robot.commands.RobotRelativeDrive;
 import frc.robot.commands.SetSpeedLauncherShoot;
+import frc.robot.commands.SetFeederMode;
 import frc.robot.commands.SwerveModuleTest;
 import frc.robot.commands.SwerveMotorTest;
 import frc.robot.commands.ZeroNavX;
@@ -44,6 +45,7 @@ import frc.robot.subsystems.Launcher;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.FlywheelTable;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.Feeder.FeederMode;
 import frc.robot.subsystems.SwerveDrive.SwerveModulePosition;
 
 /**
@@ -109,8 +111,8 @@ public class RobotContainer {
     m_climber.setDefaultCommand(new ClimberDefault(m_climber, m_operator));
     m_intake.setDefaultCommand(new IntakeDefault(m_intake));
     m_launcher.setDefaultCommand(new LauncherDefault(m_launcher));
-    // m_feeder.setDefaultCommand(new FeederDefault(m_feeder));
-    m_feeder.setDefaultCommand(new RunCommand(() -> m_feeder.Stop(), m_feeder));
+    m_feeder.setDefaultCommand(new FeederDefault(m_feeder));
+    //m_feeder.setDefaultCommand(new RunCommand(() -> m_feeder.Stop(), m_feeder));
 
     // Drive Commands
     m_driver.getButtonSelect().whenPressed(robotRelativeDrive);
@@ -135,8 +137,8 @@ public class RobotContainer {
 
     // Operator Commands
     m_operator.getButtonA().whileHeld(new IntakeCommand(m_feeder, m_intake));
-    m_operator.getButtonB().whileHeld(new RunCommand(() -> {m_intake.ManualIntake(1.0);m_feeder.ManualFeed(0.0, 0.5);}, m_intake, m_feeder));
-    m_operator.getButtonX().whileHeld(new RunCommand(() -> m_feeder.ManualFeed(1.0, 1.0), m_feeder));
+    m_operator.getButtonB().whileHeld(new RunCommand(() -> m_intake.ManualIntake(1.0), m_intake).alongWith(new SetFeederMode(m_feeder, FeederMode.BOTTOM_ONLY)));
+    m_operator.getButtonX().whileHeld(new SetFeederMode(m_feeder, FeederMode.LAUNCH));
     m_operator.getButtonY().whileHeld(new Output(m_feeder, m_intake));
 
     m_operator.getButtonRB().whileHeld(new RunCommand(() -> m_launcher.SetTargetRPM(Constants.DefaultLauncherHighSpeed), m_launcher));

@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Launcher;
+import frc.robot.subsystems.Feeder.FeederMode;
 
 public abstract class BaseLauncherShoot extends CommandBase {
   protected Launcher m_launcher;
@@ -34,9 +35,9 @@ public abstract class BaseLauncherShoot extends CommandBase {
       m_launcher.SetTargetRPM(speed);
 
       if (m_launcher.isAtTargetSpeed(speed)) {
-        m_feeder.Both();
+        m_feeder.setFeederMode(FeederMode.LAUNCH);
       } else {
-        m_feeder.Stop();
+        m_feeder.setFeederMode(FeederMode.DEFAULT);
       }
     }
   }
@@ -45,7 +46,7 @@ public abstract class BaseLauncherShoot extends CommandBase {
   @Override
   public final void end(boolean interrupted) {
     m_launcher.coast();
-    m_feeder.Stop();
+    m_feeder.setFeederMode(FeederMode.DEFAULT);
   }
 
   // Returns true when the command should end.
