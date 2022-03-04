@@ -5,43 +5,32 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Feeder;
-import frc.robot.subsystems.FlywheelTable;
 import frc.robot.subsystems.Launcher;
 
-public class LauncherShoot extends CommandBase {
-  private Launcher m_launcher;
-  private Camera m_camera;
-  private Feeder m_feeder;
-  private FlywheelTable m_flyWheelTable;
-  //private double m_targetSpeed;
+public abstract class BaseLauncherShoot extends CommandBase {
+  protected Launcher m_launcher;
+  protected Feeder m_feeder;
+  protected final double DoNotLaunchSpeed = -1.0;
 
   /** Creates a new LauncherShoot. */
-  public LauncherShoot(Launcher launcher, Camera camera, Feeder feeder, FlywheelTable flyWheel) {
+  public BaseLauncherShoot(Launcher launcher, Feeder feeder) {
     m_launcher = launcher;
-    m_camera = camera;
     m_feeder = feeder;
-    m_flyWheelTable = flyWheel;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_launcher);
+    addRequirements(m_launcher, feeder); // remove feeder as requirement. See PR #75
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_camera.setPipeline(0);
-    var speed = m_flyWheelTable.getIdealTarget(-25).getSpeed();
-    m_launcher.SetTargetRPM(speed);
-    m_feeder.Stop();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    if (m_camera.hasTarget()) {
-      var distance = m_camera.getDistance();
-      var speed = m_flyWheelTable.getIdealTarget(distance).getSpeed();
+  public final void execute() {
+    var speed = getTargetSpeed();
+    if (getTargetSpeed() != DoNotLaunchSpeed) {
       m_launcher.SetTargetRPM(speed);
 
       if (m_launcher.isAtTargetSpeed(speed)) {
@@ -54,7 +43,7 @@ public class LauncherShoot extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
+  public final void end(boolean interrupted) {
     m_launcher.coast();
     m_feeder.Stop();
   }
@@ -64,4 +53,6 @@ public class LauncherShoot extends CommandBase {
   public boolean isFinished() {
     return false;
   }
+
+  protected abstract double getTargetSpeed();
 }

@@ -49,7 +49,7 @@ public final class Constants {
     
     // Absolute max meters per second = 3.8
     public static final double MaxMPS = 3.8;
-    // Absolute max omegaradiant per second = 8.75
+    // Absolute max omega radians per second = 8.75
     public static final double MaxORPS = 8.75;
 
     // Pneumatic Connections
@@ -63,4 +63,8 @@ public final class Constants {
     public final static int FeederBeamSensorMiddle = 2;
     public final static int ExtenderLimitSwitch = 0;
     
+    // Launcher Settings
+    public final static double DefaultLauncherLowSpeed = 4500.0;
+    public final static double DefaultLauncherHighSpeed = 9500.0;
+
 }
