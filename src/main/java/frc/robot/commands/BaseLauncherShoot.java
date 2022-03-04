@@ -19,12 +19,13 @@ public abstract class BaseLauncherShoot extends CommandBase {
     m_launcher = launcher;
     m_feeder = feeder;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_launcher, feeder); // remove feeder as requirement. See PR #75
+    addRequirements(m_launcher); // remove feeder as requirement. See PR #75
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_feeder.setFeederMode(FeederMode.DEFAULT);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
