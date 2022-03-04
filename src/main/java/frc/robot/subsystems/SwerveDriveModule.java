@@ -35,10 +35,12 @@ public class SwerveDriveModule {
     public SwerveDriveModule(double x, double y, String name, int velocityControllerPort,
             int angleControllerPort, int absoluteEncoderPort, double absoluteAngleOffset) {
         m_location = new Translation2d(x, y);
-        SmartDashboard.putData(name, m_field);
+        if (RobotBase.isSimulation()) {
+            SmartDashboard.putData(name, m_field);
+        }
         m_velocityController = new TalonFX(velocityControllerPort);
         m_angleController = new TalonFX(angleControllerPort);
-        m_angleController.configAllowableClosedloopError(0, DegreesToFalconAngle(0.5)); //TODO Reduce after toning PID
+        m_angleController.configAllowableClosedloopError(0, DegreesToFalconAngle(0.5)); //TODO Reduce after tuning PID
         m_velocityController.setNeutralMode(NeutralMode.Coast);
         m_angleController.setNeutralMode(NeutralMode.Brake);
         m_velocityController.configClosedloopRamp(0.05);
