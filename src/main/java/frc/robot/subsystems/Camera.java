@@ -8,6 +8,8 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
+import frc.robot.logging.LogManager;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -74,6 +76,11 @@ public class Camera extends SubsystemBase {
 
   public void updateDashboard() {
 
+  }
+
+  public void periodic()
+  {
+    Robot.LogManager.addNumber("Camera/TY", () -> getYAngle());
   }
 
   public double getDistance() {

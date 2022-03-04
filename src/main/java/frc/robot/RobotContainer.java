@@ -123,8 +123,8 @@ public class RobotContainer {
     m_driver.getButtonLeftStick().whileHeld(new EnableSlowDriverSpeed(true));
     m_driver.getButtonRightStick().whileHeld(new AimToGoal(m_swerveDrive, m_camera));
 
-    m_driver.getButtonA().whenPressed(new EnableSlowDriverSpeed(true));
-    m_driver.getButtonB().whenPressed(new EnableSlowDriverSpeed(false));
+    // m_driver.getButtonA().whenPressed(new EnableSlowDriverSpeed(true));
+    // m_driver.getButtonB().whenPressed(new EnableSlowDriverSpeed(false));
     m_driver.getButtonY().whileHeld(new DashboardSpeedLauncherShoot(m_launcher, m_feeder));
 
     m_driver.getButtonLB().whileHeld(() -> m_intake.MoveIntakeUp(), m_intake);

@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 
 public class Launcher extends SubsystemBase {
   private TalonFX m_ControllerA;
@@ -55,6 +56,8 @@ public class Launcher extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Launcher/Speed", m_ControllerA.getSelectedSensorVelocity(0));
+    Robot.LogManager.addNumber("Launcher/Speed2", () -> m_ControllerA.getSelectedSensorVelocity());
+  
   }
 
   public boolean isAtTargetSpeed(double targetRpm) {
