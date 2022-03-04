@@ -21,6 +21,7 @@ import frc.robot.commands.DriveOverTime;
 import frc.robot.commands.DriveToPosition;
 import frc.robot.commands.DriverRelativeDrive;
 import frc.robot.commands.FieldRelativeDrive;
+import frc.robot.commands.HandBrake;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.IntakeDefault;
 import frc.robot.commands.LauncherDefault;
@@ -115,6 +116,7 @@ public class RobotContainer {
     m_driver.getPOVEast().whileActiveOnce(new ZeroNavX(90, m_swerveDrive));
     m_driver.getPOVSouth().whileActiveOnce(new ZeroNavX(180, m_swerveDrive));
     m_driver.getPOVWest().whileActiveOnce(new ZeroNavX(270, m_swerveDrive));
+    m_driver.getButtonX().whileActiveContinuous(new HandBrake(m_swerveDrive));
 
     // Operator Commands
     // m_operator.getButtonLB().whileHeld(new RunCommand(() -> m_climber.ManualExtend(-0.3), m_climber));
