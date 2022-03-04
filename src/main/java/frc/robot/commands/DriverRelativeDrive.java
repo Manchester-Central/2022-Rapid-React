@@ -15,6 +15,6 @@ public class DriverRelativeDrive extends BaseRelativeDrive {
 
   @Override
   public void moveRobot(double sidewaySpeed, double forwardSpeed, double thetaSpeed) {
-    m_drive.moveDriverRelative(-sidewaySpeed, forwardSpeed, thetaSpeed);
+    m_drive.moveDriverRelative(sidewaySpeed, forwardSpeed, thetaSpeed);
   }
 }

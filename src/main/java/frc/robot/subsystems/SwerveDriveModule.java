@@ -175,7 +175,7 @@ public class SwerveDriveModule {
     }
 
     private double GetAbsoluteEncoderAngle() {
-        return 360 - m_absoluteEncoder.getAbsolutePosition() + m_absoluteAngleOffset;
+        return m_absoluteEncoder.getAbsolutePosition() + m_absoluteAngleOffset;
 
     }
 

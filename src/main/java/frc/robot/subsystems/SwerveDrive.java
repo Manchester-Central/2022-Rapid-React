@@ -148,13 +148,13 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public void moveDriverRelative(double sidewaysSpeed, double forwardSpeed, double theta) {
-    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(forwardSpeed, sidewaysSpeed * -1, theta,
+    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(forwardSpeed, -sidewaysSpeed, theta,
         getRotation());
     move(speeds);
   }
 
   public void moveRobotRelative(double sidewaysSpeed, double forwardSpeed, double theta) {
-    ChassisSpeeds speeds = new ChassisSpeeds(forwardSpeed, sidewaysSpeed, theta);
+    ChassisSpeeds speeds = new ChassisSpeeds(forwardSpeed, -sidewaysSpeed, theta);
     move(speeds);
   }
 
