@@ -42,6 +42,7 @@ public class Camera extends SubsystemBase {
     pipeline = table.getEntry("pipeline");
     ledMode = table.getEntry("ledMode");
     ledMode.setDouble(0);
+    Robot.LogManager.addNumber("Camera/TY", () -> getYAngle());
 
   }
 
@@ -76,11 +77,6 @@ public class Camera extends SubsystemBase {
 
   public void updateDashboard() {
 
-  }
-
-  public void periodic()
-  {
-    Robot.LogManager.addNumber("Camera/TY", () -> getYAngle());
   }
 
   public double getDistance() {

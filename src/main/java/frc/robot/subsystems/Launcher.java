@@ -35,6 +35,7 @@ public class Launcher extends SubsystemBase {
     m_ControllerB.config_kP(0, 0.05);
     m_ControllerA.config_kF(0, 0.05);
     m_ControllerB.config_kF(0, 0.05);
+    Robot.LogManager.addNumber("Launcher/Speed2", () -> m_ControllerA.getSelectedSensorVelocity());
 
   }
 
@@ -56,7 +57,6 @@ public class Launcher extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Launcher/Speed", m_ControllerA.getSelectedSensorVelocity(0));
-    Robot.LogManager.addNumber("Launcher/Speed2", () -> m_ControllerA.getSelectedSensorVelocity());
   
   }
 
