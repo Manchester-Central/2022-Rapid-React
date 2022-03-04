@@ -124,7 +124,7 @@ public class RobotContainer {
 
     m_driver.getButtonA().whenPressed(new EnableSlowDriverSpeed(true));
     m_driver.getButtonB().whenPressed(new EnableSlowDriverSpeed(false));
-    m_driver.getButtonY().whenPressed(new DashboardSpeedLauncherShoot(m_launcher, m_feeder));
+    m_driver.getButtonY().whileHeld(new DashboardSpeedLauncherShoot(m_launcher, m_feeder));
 
     m_driver.getButtonLB().whileHeld(() -> m_intake.MoveIntakeUp(), m_intake);
     m_driver.getButtonLT().whileHeld(new IntakeCommand(m_feeder, m_intake));
