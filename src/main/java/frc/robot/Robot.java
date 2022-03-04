@@ -5,7 +5,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -24,8 +26,8 @@ public class Robot extends TimedRobot {
   public static final LogManager LogManager = new LogManager(true);
   private final Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
   private Command m_autonomousCommand;
-
   private RobotContainer m_robotContainer;
+  private double m_lastLoop_ms = 0;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -39,7 +41,37 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     compressor.enableAnalog(110.0, 115.0);
     m_robotContainer = new RobotContainer();
+
+    LogManager.addNumber("GameState", Robot::robotMode);
+    LogManager.addNumber("PDP/Temperature", m_robotContainer.m_pdp::getTemperature);
+    LogManager.addNumber("PDP/Current", m_robotContainer.m_pdp::getTotalCurrent);
+    LogManager.addNumber("PDP/Voltage", m_robotContainer.m_pdp::getVoltage);
+    LogManager.addNumber("Robot/LoopTime", () -> m_lastLoop_ms);
+
     LogManager.writeHeaders();
+  }
+
+  public static double robotMode()
+  {
+    if (DriverStation.isDisabled()) {
+      return 1.0;
+    }
+    if (DriverStation.isAutonomous()) {
+      return 2.0;
+    }
+    if (DriverStation.isTeleop()) {
+      return 3.0;
+    }
+    if (DriverStation.isTest()) {
+      return 4.0;
+    }
+    return 0.0;
+  }
+
+  protected void loopFunc() {
+    long loopStart = RobotController.getFPGATime();
+    super.loopFunc();
+    m_lastLoop_ms = (RobotController.getFPGATime() - loopStart) / 1000;
   }
 
   /**
@@ -63,7 +95,7 @@ public class Robot extends TimedRobot {
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    LogManager.writeLine();
+    LogManager.update();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

@@ -5,36 +5,29 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Feeder;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Feeder.FeederMode;
 
-public class Output extends CommandBase {
-  private Feeder m_feeder;
-  private Intake m_intake;
-  /** Creates a new Output. */
-  public Output(Feeder feeder, Intake intake) {
-    m_feeder = feeder;
-    m_intake = intake;
-    addRequirements(intake);
+public class EnableSlowDriverSpeed extends CommandBase {
+  private boolean m_isSlowMode;
+
+  /** Creates a new ChangeDriverSpeed. */
+  public EnableSlowDriverSpeed(boolean isSlowMode) {
+    m_isSlowMode = isSlowMode;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    BaseRelativeDrive.IsSlowMode = m_isSlowMode;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    m_intake.ManualIntake(-0.5);
-    m_feeder.setFeederMode(FeederMode.OUTPUT);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_feeder.setFeederMode(FeederMode.DEFAULT);
-    m_intake.ManualIntake(0);
+    BaseRelativeDrive.IsSlowMode = false;
   }
 
   // Returns true when the command should end.

@@ -11,6 +11,8 @@ import frc.robot.Constants;
 import frc.robot.subsystems.SwerveDrive;
 
 public abstract class BaseRelativeDrive extends CommandBase {
+  public static boolean IsSlowMode = false;
+
   protected SwerveDrive m_drive;
   private Gamepad m_controller;
 
@@ -31,11 +33,16 @@ public abstract class BaseRelativeDrive extends CommandBase {
     var leftX = m_controller.getLeftX();
     var leftY = m_controller.getLeftY();
     var rightX = m_controller.getRightX();
+    var multiplier = IsSlowMode ? 0.5 : 1.0;
     if(leftX == 0.0 && leftY == 0.0 && rightX == 0.0) {
       //m_drive.adjustToDefaultPosition();
       m_drive.stop();
     } else {
-      moveRobot(leftX * Constants.MaxMPS, leftY * Constants.MaxMPS, rightX * Constants.MaxORPS);
+      moveRobot(
+        leftX * Constants.MaxMPS * multiplier,
+        leftY * Constants.MaxMPS * multiplier,
+        rightX * Constants.MaxORPS * multiplier
+      );
     }
   }
 
