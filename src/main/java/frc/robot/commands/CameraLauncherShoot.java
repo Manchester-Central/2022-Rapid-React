@@ -19,6 +19,7 @@ public class CameraLauncherShoot extends BaseLauncherShoot {
     super(launcher, feeder);
     m_camera = camera;
     m_flyWheelTable = flyWheel;
+    addRequirements(camera);
   }
 
   // Called when the command is initially scheduled.

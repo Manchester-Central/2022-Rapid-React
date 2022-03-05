@@ -23,7 +23,7 @@ public class AimToGoal extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     m_swerveDrive = swerveDrive;
     m_camera = camera;
-    addRequirements(swerveDrive);
+    addRequirements(swerveDrive, camera);
   }
 
   // Called when the command is initially scheduled.

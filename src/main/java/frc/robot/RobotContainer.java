@@ -145,7 +145,7 @@ public class RobotContainer {
     m_operator.getButtonX().whileHeld(new SetFeederMode(m_feeder, FeederMode.LAUNCH));
     m_operator.getButtonY().whileHeld(new Output(m_feeder, m_intake));
 
-    m_operator.getButtonRB().whileHeld(new RunCommand(() -> m_launcher.SetTargetRPM(Constants.DefaultLauncherHighSpeed), m_launcher));
+    m_operator.getButtonRB().whileHeld(new CameraLauncherShoot(m_launcher, m_camera, m_feeder, m_flywheelTable));
     m_operator.getButtonRT().whileHeld(new RunCommand(() -> m_launcher.SetTargetRPM(Constants.DefaultLauncherLowSpeed), m_launcher));
     
     m_operator.getButtonLB().whileHeld(new RunCommand(() -> m_intake.MoveIntakeUp(), m_intake));
@@ -155,6 +155,9 @@ public class RobotContainer {
     m_operator.getPOVEast().whileHeld(new RunCommand(() -> m_climber.MoveArmDown(), m_climber));
     m_operator.getPOVNorth().whileHeld(new RunCommand(() -> m_climber.ExtendToTop(), m_climber));
     m_operator.getPOVSouth().whileHeld(new RunCommand(() -> m_climber.ExtendToBottom(), m_climber));
+
+    m_operator.getButtonStart().whileHeld(new RunCommand(() -> m_launcher.SetTargetRPM(Constants.DefaultLauncherHighSpeed), m_launcher));
+
 
   }
 
