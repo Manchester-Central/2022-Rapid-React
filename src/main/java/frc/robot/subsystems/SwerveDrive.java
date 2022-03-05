@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.SPI;
 
@@ -105,6 +106,10 @@ public class SwerveDrive extends SubsystemBase {
       SmartDashboard.putNumber("Angle/I", angleI);
       SmartDashboard.putNumber("Angle/D", angleD);
     }
+
+    Robot.LogManager.addNumber("Gyro/AccelX", m_gyro::getRawAccelX);
+    Robot.LogManager.addNumber("Gyro/AccelY", m_gyro::getRawAccelY);
+    Robot.LogManager.addNumber("Gyro/AccelZ", m_gyro::getRawAccelZ);
   }
   
   public void updateOdometry(double x, double y, double angle) {
