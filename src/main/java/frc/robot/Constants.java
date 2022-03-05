@@ -40,7 +40,7 @@ public final class Constants {
     public final static int SwerveBackRightAbsolute = 20;
     
     // Drivetrain Properties
-    public final static double DriveWheelWidthMeters = 0.1016; // 0.1016 meters = 4 inches, 1 rev of motor = 2048 tics
+    public final static double DriveWheelWidthMeters = 0.092; // 0.1016 meters = 4 inches, 1 rev of motor = 2048 tics
     public final static double DriveWheelCircumferenceMeters = DriveWheelWidthMeters * Math.PI;
     public final static double SwerveModuleVelocityGearRatio = 7.80; // Assuming the Standard Gear Ratio; Same link as
                                                                      // below

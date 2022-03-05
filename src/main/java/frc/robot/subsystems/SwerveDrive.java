@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.SPI;
 
@@ -87,6 +88,8 @@ public class SwerveDrive extends SubsystemBase {
         m_moduleBL.getLocation());
     m_gyro = new AHRS(SPI.Port.kMXP);
     m_odometry = new SwerveDriveOdometry(m_kinematics, getRotation());
+    Robot.LogManager.addNumber("Swerve/X", () -> m_odometry.getPoseMeters().getX());
+    Robot.LogManager.addNumber("Swerve/Y", () -> m_odometry.getPoseMeters().getY());
 
     velocityP = 0.1;
     velocityI = 0;
