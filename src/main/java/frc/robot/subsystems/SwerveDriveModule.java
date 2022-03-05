@@ -83,6 +83,7 @@ public class SwerveDriveModule {
     }
 
     public void setTargetState(SwerveModuleState targetState) {
+        targetState = SwerveModuleState.optimize(targetState, Rotation2d.fromDegrees(getCurrentAngleDegrees()));
         m_targetVelocity = targetState.speedMetersPerSecond;
         m_targetAngle = closestTarget(getCurrentAngleDegrees(), targetState.angle.getDegrees());
         m_velocityController.set(TalonFXControlMode.Velocity, MPSToFalconVelocity(m_targetVelocity));
