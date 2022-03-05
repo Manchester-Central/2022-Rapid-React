@@ -35,6 +35,9 @@ public class Launcher extends SubsystemBase {
     m_ControllerB.config_kP(0, 0.05);
     m_ControllerA.config_kF(0, 0.05);
     m_ControllerB.config_kF(0, 0.05);
+    m_ControllerA.enableVoltageCompensation(true);
+    m_ControllerB.enableVoltageCompensation(true);
+
     Robot.LogManager.addNumber("Launcher/Speed2", () -> m_ControllerA.getSelectedSensorVelocity());
 
   }
@@ -62,6 +65,6 @@ public class Launcher extends SubsystemBase {
 
   public boolean isAtTargetSpeed(double targetRpm) {
     var currentRpm = m_ControllerA.getSelectedSensorVelocity();
-    return currentRpm > targetRpm * 0.95 && currentRpm < targetRpm * 1.05;
+    return currentRpm > targetRpm * 0.90 && currentRpm < targetRpm * 1.10;
   }
 }
