@@ -65,6 +65,6 @@ public final class Constants {
     
     // Launcher Settings
     public final static double DefaultLauncherLowSpeed = 4500.0;
-    public final static double DefaultLauncherHighSpeed = 9500.0;
+    public final static double DefaultLauncherHighSpeed = 9600.0;
 
 }

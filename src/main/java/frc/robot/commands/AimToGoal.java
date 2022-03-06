@@ -23,7 +23,7 @@ public class AimToGoal extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     m_swerveDrive = swerveDrive;
     m_camera = camera;
-    addRequirements(swerveDrive);
+    addRequirements(swerveDrive, camera);
   }
 
   // Called when the command is initially scheduled.
@@ -60,6 +60,7 @@ public class AimToGoal extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_camera.hasTarget() && Math.abs(m_camera.getXAngle()) < 0.5;
+    return false;
+    // return m_camera.hasTarget() && Math.abs(m_camera.getXAngle()) < 0.5;
   }
 }

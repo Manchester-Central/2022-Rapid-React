@@ -12,7 +12,7 @@ public class CameraDefault extends CommandBase {
   /** Creates a new CameraDefault. */
   public CameraDefault(Camera camera) {
     m_camera = camera;
-    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(camera);
   }
 
   // Called when the command is initially scheduled.

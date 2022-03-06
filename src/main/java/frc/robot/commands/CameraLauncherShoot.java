@@ -19,12 +19,13 @@ public class CameraLauncherShoot extends BaseLauncherShoot {
     super(launcher, feeder);
     m_camera = camera;
     m_flyWheelTable = flyWheel;
+    addRequirements(camera);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_camera.setPipeline(0);
+    m_camera.setPipeline(Camera.ComputerVision);
     var speed = m_flyWheelTable.getIdealTarget(-25).getSpeed();
     m_launcher.SetTargetRPM(speed);
     m_feeder.setFeederMode(FeederMode.DEFAULT);

@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AimToGoal;
+import frc.robot.commands.CameraDefault;
 import frc.robot.commands.EnableSlowDriverSpeed;
 import frc.robot.commands.ClimberDefault;
 import frc.robot.commands.DashboardSpeedLauncherShoot;
@@ -84,12 +85,17 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    m_autoBuilder.registerCommand("robotRelativeDrive", (ParsedCommand pc) -> new AutoRobotRelativeDrive(pc, m_swerveDrive));
-    m_autoBuilder.registerCommand("driverRelativeDrive", (ParsedCommand pc) -> new AutoDriverRelativeDrive(pc, m_swerveDrive));
-    m_autoBuilder.registerCommand("launch", (ParsedCommand pc) -> new CameraLauncherShoot(m_launcher, m_camera, m_feeder, m_flywheelTable));
-    m_autoBuilder.registerCommand("launchNoCamera", (ParsedCommand pc) -> SetSpeedLauncherShoot.CreateAutoCommand(pc, m_launcher, m_feeder));
+    m_autoBuilder.registerCommand("robotRelativeDrive",
+        (ParsedCommand pc) -> new AutoRobotRelativeDrive(pc, m_swerveDrive));
+    m_autoBuilder.registerCommand("driverRelativeDrive",
+        (ParsedCommand pc) -> new AutoDriverRelativeDrive(pc, m_swerveDrive));
+    m_autoBuilder.registerCommand("launch",
+        (ParsedCommand pc) -> new CameraLauncherShoot(m_launcher, m_camera, m_feeder, m_flywheelTable));
+    m_autoBuilder.registerCommand("launchNoCamera",
+        (ParsedCommand pc) -> SetSpeedLauncherShoot.CreateAutoCommand(pc, m_launcher, m_feeder));
     m_autoBuilder.registerCommand("startingPosition", (ParsedCommand pc) -> new StartingPosition(pc, m_swerveDrive));
-    m_autoBuilder.registerCommand("driveToPosition", (ParsedCommand pc) -> DriveToPosition.CreateAutoCommand(pc, m_swerveDrive));
+    m_autoBuilder.registerCommand("driveToPosition",
+        (ParsedCommand pc) -> DriveToPosition.CreateAutoCommand(pc, m_swerveDrive));
     m_autoBuilder.registerCommand("aimToGoal", (ParsedCommand pc) -> new AimToGoal(m_swerveDrive, m_camera));
   }
 
@@ -102,19 +108,21 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    
+
     Command driverRelativeDrive = new DriverRelativeDrive(m_swerveDrive, m_driver);
     Command robotRelativeDrive = new RobotRelativeDrive(m_swerveDrive, m_driver);
 
     // Default Commands
-    // m_swerveDrive.setDefaultCommand(new RunCommand(() -> {m_swerveDrive.stop();}, m_swerveDrive));
+    // m_swerveDrive.setDefaultCommand(new RunCommand(() -> {m_swerveDrive.stop();},
+    // m_swerveDrive));
     m_swerveDrive.setDefaultCommand(driverRelativeDrive);
     // m_swerveDrive.setDefaultCommand(robotRelativeDrive);
     m_climber.setDefaultCommand(new ClimberDefault(m_climber, m_operator));
     m_intake.setDefaultCommand(new IntakeDefault(m_intake));
     m_launcher.setDefaultCommand(new LauncherDefault(m_launcher));
     m_feeder.setDefaultCommand(new FeederDefault(m_feeder));
-    //m_feeder.setDefaultCommand(new RunCommand(() -> m_feeder.Stop(), m_feeder));
+    // m_feeder.setDefaultCommand(new RunCommand(() -> m_feeder.Stop(), m_feeder));
+    m_camera.setDefaultCommand(new CameraDefault(m_camera));
 
     // Drive Commands
     m_driver.getButtonSelect().whenPressed(robotRelativeDrive);
@@ -130,8 +138,10 @@ public class RobotContainer {
     m_driver.getButtonLB().whileHeld(() -> m_intake.MoveIntakeUp(), m_intake);
     m_driver.getButtonLT().whileHeld(new IntakeCommand(m_feeder, m_intake));
 
-    m_driver.getButtonRB().whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, Constants.DefaultLauncherHighSpeed));
-    m_driver.getButtonRT().whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, Constants.DefaultLauncherLowSpeed));
+    m_driver.getButtonRB()
+        .whileHeld(new CameraLauncherShoot(m_launcher, m_camera, m_feeder, m_flywheelTable));
+    m_driver.getButtonRT()
+        .whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, Constants.DefaultLauncherLowSpeed));
 
     m_driver.getPOVNorth().whileActiveOnce(new ZeroNavX(0, m_swerveDrive));
     m_driver.getPOVEast().whileActiveOnce(new ZeroNavX(90, m_swerveDrive));
@@ -141,13 +151,15 @@ public class RobotContainer {
 
     // Operator Commands
     m_operator.getButtonA().whileHeld(new IntakeCommand(m_feeder, m_intake));
-    m_operator.getButtonB().whileHeld(new RunCommand(() -> m_intake.ManualIntake(1.0), m_intake).alongWith(new SetFeederMode(m_feeder, FeederMode.BOTTOM_ONLY)));
+    m_operator.getButtonB().whileHeld(new RunCommand(() -> m_intake.ManualIntake(1.0), m_intake)
+        .alongWith(new SetFeederMode(m_feeder, FeederMode.BOTTOM_ONLY)));
     m_operator.getButtonX().whileHeld(new SetFeederMode(m_feeder, FeederMode.LAUNCH));
     m_operator.getButtonY().whileHeld(new Output(m_feeder, m_intake));
 
-    m_operator.getButtonRB().whileHeld(new RunCommand(() -> m_launcher.SetTargetRPM(Constants.DefaultLauncherHighSpeed), m_launcher));
-    m_operator.getButtonRT().whileHeld(new RunCommand(() -> m_launcher.SetTargetRPM(Constants.DefaultLauncherLowSpeed), m_launcher));
-    
+    m_operator.getButtonRB().whileHeld(new CameraLauncherShoot(m_launcher, m_camera, m_feeder, m_flywheelTable));
+    m_operator.getButtonRT()
+        .whileHeld(new RunCommand(() -> m_launcher.SetTargetRPM(Constants.DefaultLauncherLowSpeed), m_launcher));
+
     m_operator.getButtonLB().whileHeld(new RunCommand(() -> m_intake.MoveIntakeUp(), m_intake));
     m_operator.getButtonLT().whileHeld(new RunCommand(() -> m_intake.MoveIntakeDown(), m_intake));
 
@@ -155,6 +167,9 @@ public class RobotContainer {
     m_operator.getPOVEast().whileHeld(new RunCommand(() -> m_climber.MoveArmDown(), m_climber));
     m_operator.getPOVNorth().whileHeld(new RunCommand(() -> m_climber.ExtendToTop(), m_climber));
     m_operator.getPOVSouth().whileHeld(new RunCommand(() -> m_climber.ExtendToBottom(), m_climber));
+
+    m_operator.getButtonStart()
+        .whileHeld(new RunCommand(() -> m_launcher.SetTargetRPM(Constants.DefaultLauncherHighSpeed), m_launcher));
 
   }
 
