@@ -16,7 +16,7 @@ import frc.robot.subsystems.SwerveDrive;
 public class AimToGoal extends CommandBase {
   private SwerveDrive m_swerveDrive;
   private Camera m_camera;
-  private final Translation2d k_goalLocation = new Translation2d(8.0, 4.1); // TODO: Get real values
+  private final Translation2d k_goalLocation = new Translation2d(Constants.GoalX, Constants.GoalY);
 
   /** Creates a new AimToGoal. */
   public AimToGoal(SwerveDrive swerveDrive, Camera camera) {
