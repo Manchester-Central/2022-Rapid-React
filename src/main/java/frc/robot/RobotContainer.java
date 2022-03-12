@@ -108,6 +108,16 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    configureDriveCommands();
+    // configureTestCommands();
+  }
+
+  private void configureTestCommands() {
+    Command fieldRelative = new FieldRelativeDrive(m_swerveDrive, m_driver);
+    m_swerveDrive.setDefaultCommand(fieldRelative);
+  }
+
+  private void configureDriveCommands() {
 
     Command driverRelativeDrive = new DriverRelativeDrive(m_swerveDrive, m_driver);
     Command robotRelativeDrive = new RobotRelativeDrive(m_swerveDrive, m_driver);
