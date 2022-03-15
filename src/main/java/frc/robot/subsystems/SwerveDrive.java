@@ -108,6 +108,10 @@ public class SwerveDrive extends SubsystemBase {
       SmartDashboard.putNumber("Angle/I", angleI);
       SmartDashboard.putNumber("Angle/D", angleD);
     }
+
+    Robot.LogManager.addNumber("Gyro/AccelX", m_gyro::getRawAccelX);
+    Robot.LogManager.addNumber("Gyro/AccelY", m_gyro::getRawAccelY);
+    Robot.LogManager.addNumber("Gyro/AccelZ", m_gyro::getRawAccelZ);
   }
   
   public void updateOdometry(double x, double y, double angle) {

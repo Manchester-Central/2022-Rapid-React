@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.logging.LogManager;
+import frc.robot.logging.LoggedDatapoints;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -24,6 +25,7 @@ import frc.robot.logging.LogManager;
  */
 public class Robot extends TimedRobot {
   public static final LogManager LogManager = new LogManager(false);
+  public static final LoggedDatapoints LoggedDatapoints = new LoggedDatapoints();
   private final Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
