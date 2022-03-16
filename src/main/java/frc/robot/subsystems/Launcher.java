@@ -29,12 +29,17 @@ public class Launcher extends SubsystemBase {
     m_ControllerB.setNeutralMode(NeutralMode.Coast);
     m_ControllerA.setInverted(InvertType.InvertMotorOutput);
     m_ControllerB.setInverted(InvertType.None);
-    m_ControllerA.configPeakOutputReverse(0);
-    m_ControllerB.configPeakOutputReverse(0);
-    m_ControllerA.config_kP(0, 0.05);
-    m_ControllerB.config_kP(0, 0.05);
-    m_ControllerA.config_kF(0, 0.05);
-    m_ControllerB.config_kF(0, 0.05);
+    m_ControllerA.configPeakOutputReverse(0.0);
+    m_ControllerB.configPeakOutputReverse(0.0);
+    m_ControllerA.config_kP(0, 0.1);
+    m_ControllerB.config_kP(0, 0.1);
+    m_ControllerA.config_kI(0, 0.0001);
+    m_ControllerB.config_kI(0, 0.0001);
+    m_ControllerA.config_kD(0, 0.3);
+    m_ControllerB.config_kD(0, 0.3);
+    // k_f = (PERCENT_POWER X 1023) / OBSERVED_VELOCITY
+    m_ControllerA.config_kF(0, 0.059);
+    m_ControllerB.config_kF(0, 0.059);
     m_ControllerA.enableVoltageCompensation(true);
     m_ControllerB.enableVoltageCompensation(true);
 
