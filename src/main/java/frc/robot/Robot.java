@@ -24,7 +24,7 @@ import frc.robot.logging.LoggedDatapoints;
  * project.
  */
 public class Robot extends TimedRobot {
-  public static final LogManager LogManager = new LogManager(false);
+  public static final LogManager LogManager = new LogManager(true);
   public static final LoggedDatapoints LoggedDatapoints = new LoggedDatapoints();
   private final Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
   private Command m_autonomousCommand;
