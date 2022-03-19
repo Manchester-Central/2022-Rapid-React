@@ -19,6 +19,13 @@ public class Launcher extends SubsystemBase {
   private TalonFX m_ControllerA;
   private TalonFX m_ControllerB;
 
+  private double velocityP;
+  private double velocityI;
+  private double velocityD;
+  private double velocityF;
+
+  private boolean m_enableTuningPIDs = true;
+
   /** Creates a new Launcher. */
   public Launcher() {
     m_ControllerA = new TalonFX(Constants.LauncherA);
@@ -29,21 +36,32 @@ public class Launcher extends SubsystemBase {
     m_ControllerB.setNeutralMode(NeutralMode.Coast);
     m_ControllerA.setInverted(InvertType.InvertMotorOutput);
     m_ControllerB.setInverted(InvertType.None);
-    m_ControllerA.configPeakOutputReverse(0.0);
-    m_ControllerB.configPeakOutputReverse(0.0);
-    m_ControllerA.config_kP(0, 0.1);
-    m_ControllerB.config_kP(0, 0.1);
-    m_ControllerA.config_kI(0, 0.0001);
-    m_ControllerB.config_kI(0, 0.0001);
-    m_ControllerA.config_kD(0, 0.3);
-    m_ControllerB.config_kD(0, 0.3);
-    // k_f = (PERCENT_POWER X 1023) / OBSERVED_VELOCITY
-    m_ControllerA.config_kF(0, 0.059);
-    m_ControllerB.config_kF(0, 0.059);
+    m_ControllerA.configPeakOutputReverse(0);
+    m_ControllerB.configPeakOutputReverse(0);
+
+    velocityP = 0.1;
+    velocityI = 0.0001;
+    velocityD = 0.3;
+    velocityF = 0.059; // k_f = (PERCENT_POWER X 1023) / OBSERVED_VELOCITY
+
+    m_ControllerA.config_kP(0, velocityP);
+    m_ControllerB.config_kP(0, velocityP);
+    m_ControllerA.config_kI(0, velocityI);
+    m_ControllerB.config_kI(0, velocityI);
+    m_ControllerA.config_kD(0, velocityD);
+    m_ControllerB.config_kD(0, velocityD);
+    m_ControllerA.config_kF(0, velocityF);
+    m_ControllerB.config_kF(0, velocityF);
     m_ControllerA.enableVoltageCompensation(true);
     m_ControllerB.enableVoltageCompensation(true);
 
     Robot.LogManager.addNumber("Launcher/Speed2", () -> m_ControllerA.getSelectedSensorVelocity());
+
+    if (m_enableTuningPIDs) {
+      SmartDashboard.putNumber("Flywheel/P", velocityP);
+      SmartDashboard.putNumber("Flywheel/I", velocityI);
+      SmartDashboard.putNumber("Flywheel/D", velocityD);
+    }
 
   }
 
@@ -65,7 +83,29 @@ public class Launcher extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Launcher/Speed", m_ControllerA.getSelectedSensorVelocity(0));
-  
+    if (m_enableTuningPIDs) {
+      tunePIDs();
+    }
+  }
+
+  private void tunePIDs() {
+    double newVelocityP = SmartDashboard.getNumber("Velocity/P", velocityP);
+    double newVelocityI = SmartDashboard.getNumber("Velocity/I", velocityI);
+    double newVelocityD = SmartDashboard.getNumber("Velocity/D", velocityD);
+
+    if (newVelocityP != velocityP || newVelocityI != velocityI || newVelocityD != velocityD) {
+      velocityP = newVelocityP;
+      velocityI = newVelocityI;
+      velocityD = newVelocityD;
+      m_ControllerA.config_kP(0, velocityP);
+      m_ControllerB.config_kP(0, velocityP);
+      m_ControllerA.config_kI(0, velocityI);
+      m_ControllerB.config_kI(0, velocityI);
+      m_ControllerA.config_kD(0, velocityD);
+      m_ControllerB.config_kD(0, velocityD);
+      m_ControllerA.config_kF(0, velocityF);
+      m_ControllerB.config_kF(0, velocityF);
+    }
   }
 
   public boolean isAtTargetSpeed(double targetRpm) {
