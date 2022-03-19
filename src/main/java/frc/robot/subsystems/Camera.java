@@ -82,7 +82,7 @@ public class Camera extends SubsystemBase {
   }
 
   public double getDistance() {
-    var distance = (Constants.HeightOfGoal - Constants.CameraHeight) / Math.tan(Math.toRadians(getYAngle() + Constants.MountCameraAngle));
+    var distance = (Constants.HeightOfGoal - Constants.CameraHeight) / Math.tan(Math.toRadians(getYAngle() + Constants.MountCameraAngle)) + Constants.RadiusOfTopGoal;
     return distance;
   }
 

@@ -72,8 +72,9 @@ public final class Constants {
     public final static double GoalY = 4.1; // TODO: Get real values
 
     // Height
-    public final static double CameraHeight = 0.811; // TODO: Get real values
+    public final static double CameraHeight = 0.811;
     public final static double MountCameraAngle = 49.197; 
     public final static double HeightOfGoal = 2.6416; // 104 Inches
+    public final static double RadiusOfTopGoal = 0.6858;
 
 }

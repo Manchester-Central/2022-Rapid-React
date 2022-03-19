@@ -154,9 +154,9 @@ public class RobotContainer {
     m_driver.getButtonLT().whileHeld(new IntakeCommand(m_feeder, m_intake));
 
     m_driver.getButtonRB()
-        .whileHeld(new CameraLauncherShoot(m_launcher, m_camera, m_feeder, m_flywheelTable));
-    m_driver.getButtonRT()
         .whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, Constants.DefaultLauncherLowSpeed));
+    m_driver.getButtonRT()
+        .whileHeld(new CameraLauncherShoot(m_launcher, m_camera, m_feeder, m_flywheelTable));
 
     m_driver.getPOVNorth().whileActiveOnce(new ZeroNavX(0, m_swerveDrive));
     m_driver.getPOVEast().whileActiveOnce(new ZeroNavX(90, m_swerveDrive));
