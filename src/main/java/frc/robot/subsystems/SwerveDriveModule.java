@@ -172,6 +172,10 @@ public class SwerveDriveModule {
     }
 
     public void Stop() {
+        // Update these values to fix display issues in the simulator
+        m_targetVelocity = 0;
+        m_targetAngle = getCurrentAngleDegrees();
+
         setManual(0, 0);
     }
 

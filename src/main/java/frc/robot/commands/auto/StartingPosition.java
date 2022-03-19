@@ -18,7 +18,7 @@ public class StartingPosition extends BaseAutoCommand {
         super(parsedCommand);
         m_SwerveDrive = swerveDrive;
         m_x = AutoUtil.parseDouble(parsedCommand.getArgument("x"), 0.0);
-        m_y = AutoUtil.parseDouble(parsedCommand.getArgument("y"), 0.0);
+        m_y = -AutoUtil.parseDouble(parsedCommand.getArgument("y"), 0.0); // negative is workaround for coordinate issue
         m_angle = AutoUtil.parseDouble(parsedCommand.getArgument("angle"), 0.0);
     }
 

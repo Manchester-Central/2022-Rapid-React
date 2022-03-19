@@ -47,7 +47,7 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public Rotation2d getRotation() {
-    return Rotation2d.fromDegrees(m_gyro.getAngle());
+    return Rotation2d.fromDegrees(-m_gyro.getAngle());
 
   }
 
@@ -66,9 +66,7 @@ public class SwerveDrive extends SubsystemBase {
 
   /** Creates a new SwerveDrive. */
   public SwerveDrive() {
-    if (RobotBase.isSimulation()) {
-      SmartDashboard.putData("Field", m_field);
-    }
+    SmartDashboard.putData("Field", m_field);
     double width = 0.2957;
     double length = 0.32067;
     m_moduleFL = new SwerveDriveModule(length, -width, SwerveModulePosition.FrontLeft.name(),
@@ -228,14 +226,15 @@ public class SwerveDrive extends SubsystemBase {
     // This method will be called once per scheduler run
     m_odometry.update(getRotation(), getModuleStates());
     Pose2d pose = getPose();
-    m_moduleFL.updatePosition(pose);
-    m_moduleFR.updatePosition(pose);
-    m_moduleBR.updatePosition(pose);
-    m_moduleBL.updatePosition(pose);
+    Pose2d correctedPose = new Pose2d(pose.getX(), -pose.getY(), pose.getRotation());
+    m_moduleFL.updatePosition(correctedPose);
+    m_moduleFR.updatePosition(correctedPose);
+    m_moduleBR.updatePosition(correctedPose);
+    m_moduleBL.updatePosition(correctedPose);
     //pose = pose.transformBy(new Transform2d(new Translation2d(), Rotation2d.fromDegrees(90)));
-    m_field.setRobotPose(pose);
+    m_field.setRobotPose(correctedPose);
     SmartDashboard.putBoolean("Gyro/Calibrating", m_gyro.isCalibrating());
-    SmartDashboard.putNumber("Gyro/Angle", m_gyro.getAngle());
+    SmartDashboard.putNumber("Gyro/Angle", getRotation().getDegrees());
 
     if (m_enableTuningPIDs) {
       tunePIDs();
