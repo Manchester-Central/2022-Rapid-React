@@ -34,7 +34,7 @@ public class CameraLauncherShoot extends BaseLauncherShoot {
   @Override
   protected double getTargetSpeed() {
     if (m_camera.hasTarget()) {
-      var distance = m_camera.getDistance();
+      var distance = m_camera.getYAngle();
       return m_flyWheelTable.getIdealTarget(distance).getSpeed();
     }
     return DoNotLaunchSpeed;

@@ -8,11 +8,13 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.logging.LogManager;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Add your docs here.
@@ -80,7 +82,17 @@ public class Camera extends SubsystemBase {
   }
 
   public double getDistance() {
-    return  getYAngle();
+    var distance = (Constants.HeightOfGoal - Constants.CameraHeight) / Math.tan(Math.toRadians(getYAngle() + Constants.MountCameraAngle)) + Constants.RadiusOfTopGoal;
+    return distance;
+  }
+
+  public void periodic() {
+    var distance = -1.0;
+    if (hasTarget()) {
+      distance = getDistance();
+    }
+    SmartDashboard.putNumber("DistanceFromGoal", distance);
+
   }
 
 }

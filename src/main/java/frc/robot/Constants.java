@@ -64,11 +64,17 @@ public final class Constants {
     public final static int ExtenderLimitSwitch = 0;
     
     // Launcher Settings
-    public final static double DefaultLauncherLowSpeed = 4500.0;
+    public final static double DefaultLauncherLowSpeed = 4200.0;
     public final static double DefaultLauncherHighSpeed = 9600.0;
 
     // Target position on field
     public final static double GoalX = 8.0; // TODO: Get real values
     public final static double GoalY = 4.1; // TODO: Get real values
+
+    // Height
+    public final static double CameraHeight = 0.811;
+    public final static double MountCameraAngle = 49.197; 
+    public final static double HeightOfGoal = 2.6416; // 104 Inches
+    public final static double RadiusOfTopGoal = 0.6858;
 
 }

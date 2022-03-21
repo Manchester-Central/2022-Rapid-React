@@ -44,4 +44,8 @@ public class TableData {
         return speed;
     }
 
+    @Override
+    public String toString() {
+        return "distance=" + distance + ", speed = " + speed;
+    }
 }

@@ -115,6 +115,11 @@ public class RobotContainer {
   private void configureDebugCommands() {
     Command fieldRelative = new FieldRelativeDrive(m_swerveDrive, m_driver);
     m_swerveDrive.setDefaultCommand(fieldRelative);
+    m_launcher.setDefaultCommand(new LauncherDefault(m_launcher));
+    m_driver.getButtonA().whileHeld(new RunCommand(() -> m_launcher.SetTargetRPM(5000), m_launcher));
+    m_driver.getButtonX().whileHeld(new RunCommand(() -> m_launcher.SetTargetRPM(10000), m_launcher));
+    m_driver.getButtonY().whileHeld(new RunCommand(() -> m_launcher.SetTargetRPM(15000), m_launcher));
+    m_driver.getButtonB().whileHeld(new RunCommand(() -> m_launcher.ManualLaunch(0.25), m_launcher));
   }
 
   private void configureMatchCommands() {
@@ -149,9 +154,9 @@ public class RobotContainer {
     m_driver.getButtonLT().whileHeld(new IntakeCommand(m_feeder, m_intake));
 
     m_driver.getButtonRB()
-        .whileHeld(new CameraLauncherShoot(m_launcher, m_camera, m_feeder, m_flywheelTable));
-    m_driver.getButtonRT()
         .whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, Constants.DefaultLauncherLowSpeed));
+    m_driver.getButtonRT()
+        .whileHeld(new CameraLauncherShoot(m_launcher, m_camera, m_feeder, m_flywheelTable));
 
     m_driver.getPOVNorth().whileActiveOnce(new ZeroNavX(0, m_swerveDrive));
     m_driver.getPOVEast().whileActiveOnce(new ZeroNavX(90, m_swerveDrive));
