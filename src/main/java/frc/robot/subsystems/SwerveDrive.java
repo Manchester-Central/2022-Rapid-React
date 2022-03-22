@@ -8,6 +8,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -41,6 +42,19 @@ public class SwerveDrive extends SubsystemBase {
   private double angleP;
   private double angleI;
   private double angleD;
+
+  private double translationP;
+  private double translationI;
+  private double translationD;
+
+  private double rotationP;
+  private double rotationI;
+  private double rotationD;
+
+  private PIDController m_xTranslationPID;
+  private PIDController m_yTranslationPID;
+  private PIDController m_rotationPID;
+
 
   public enum SwerveModulePosition {
     FrontLeft, FrontRight, BackLeft, BackRight
@@ -98,6 +112,20 @@ public class SwerveDrive extends SubsystemBase {
     updateVelocityPIDConstants(velocityP, velocityI, velocityD);
     updateAnglePIDConstants(angleP, angleI, angleD);
 
+    translationP = 0.1;
+    translationI = 0.0;
+    translationD = 0.0;
+    m_xTranslationPID = new PIDController(translationP, translationI, translationD);
+    m_yTranslationPID = new PIDController(translationP, translationI, translationD);
+    m_xTranslationPID.setTolerance(0.01);
+    m_yTranslationPID.setTolerance(0.01);
+
+    rotationP = 0.1;
+    rotationI = 0.0;
+    rotationD = 0.0;
+    m_rotationPID = new PIDController(rotationP, rotationI, rotationD);
+    m_rotationPID.setTolerance(0.5); 
+
     if (m_enableTuningPIDs) {
       SmartDashboard.putNumber("Velocity/P", velocityP);
       SmartDashboard.putNumber("Velocity/I", velocityI);
@@ -105,6 +133,12 @@ public class SwerveDrive extends SubsystemBase {
       SmartDashboard.putNumber("Angle/P", angleP);
       SmartDashboard.putNumber("Angle/I", angleI);
       SmartDashboard.putNumber("Angle/D", angleD);
+      SmartDashboard.putNumber("Translation/P", translationP);
+      SmartDashboard.putNumber("Translation/I", translationI);
+      SmartDashboard.putNumber("Translation/D", translationD);
+      SmartDashboard.putNumber("Rotation/P", rotationP);
+      SmartDashboard.putNumber("Rotation/I", rotationI);
+      SmartDashboard.putNumber("Rotation/D", rotationD);
     }
 
     Robot.LogManager.addNumber("Gyro/AccelX", m_gyro::getRawAccelX);
@@ -264,6 +298,29 @@ public class SwerveDrive extends SubsystemBase {
       angleD = newAngleD;
       updateAnglePIDConstants(angleP, angleI, angleD);
     }
+
+    double newTranslationP = SmartDashboard.getNumber("Translation/P", translationP);
+    double newTranslationI = SmartDashboard.getNumber("Translation/I", translationI);
+    double newTranslationD = SmartDashboard.getNumber("Translation/D", translationD);
+
+    if (newTranslationP != translationP || newTranslationI != translationI || newTranslationD != translationD) {
+      translationP = newTranslationP;
+      translationI = newTranslationI;
+      translationD = newTranslationD;
+      m_xTranslationPID.setPID(translationP, translationI, translationD);
+      m_yTranslationPID.setPID(translationP, translationI, translationD);
+    }
+
+    double newRotationP = SmartDashboard.getNumber("Rotation/P", rotationP);
+    double newRotationI = SmartDashboard.getNumber("Rotation/I", rotationI);
+    double newRotationD = SmartDashboard.getNumber("Rotation/D", rotationD);
+
+    if (newRotationP != rotationP || newRotationI != rotationI || newRotationD != rotationD) {
+      rotationP = newRotationP;
+      rotationI = newRotationI;
+      rotationD = newRotationD;
+      m_rotationPID.setPID(rotationP, rotationI, rotationD); 
+    }
   }
 
   private void updateVelocityPIDConstants(double P, double I, double D) {
@@ -287,6 +344,31 @@ public class SwerveDrive extends SubsystemBase {
     var currentYaw = m_gyro.getYaw();
     setSimulationAngle( 
         currentYaw + new Rotation2d(speeds.omegaRadiansPerSecond / Constants.RobotUpdate_hz).getDegrees());
+  }
+
+  public void setTargetPose(Pose2d targetPose) {
+    m_xTranslationPID.setSetpoint(targetPose.getX());
+    m_yTranslationPID.setSetpoint(targetPose.getY());
+    m_rotationPID.setSetpoint(AngleUtil.closestTarget(getRotation().getDegrees(), targetPose.getRotation().getDegrees()));
+  }
+
+  public void driveToPosition() {
+    var currentPose = getPose();
+    var vx = m_xTranslationPID.calculate(currentPose.getX());
+    var vy = m_yTranslationPID.calculate(currentPose.getY());
+    var theta = m_rotationPID.calculate(currentPose.getRotation().getDegrees());
+    var speeds = ChassisSpeeds.fromFieldRelativeSpeeds(vx * Constants.MaxMPS, vy * Constants.MaxMPS, theta * Constants.MaxORPS, getRotation());
+    move(speeds);
+  }
+
+  public boolean isAtTargetPose() {
+    return m_xTranslationPID.atSetpoint() && m_yTranslationPID.atSetpoint() && m_rotationPID.atSetpoint();
+  }
+
+  public void deleteDriveToPositionError() {
+    m_xTranslationPID.reset();
+    m_yTranslationPID.reset();
+    m_rotationPID.reset();
   }
 
 }
