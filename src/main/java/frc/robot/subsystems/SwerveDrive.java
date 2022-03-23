@@ -4,10 +4,12 @@
 
 package frc.robot.subsystems;
 
+import com.chaos131.pid.PIDTuner;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -26,7 +28,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.SPI;
 
 public class SwerveDrive extends SubsystemBase {
-  private final boolean m_enableTuningPIDs = false;
+  private final boolean m_enableTuningPIDs = true;
   private Field2d m_field = new Field2d();
   private SwerveDriveModule m_moduleFL;
   private SwerveDriveModule m_moduleFR;
@@ -43,18 +45,12 @@ public class SwerveDrive extends SubsystemBase {
   private double angleI;
   private double angleD;
 
-  private double translationP;
-  private double translationI;
-  private double translationD;
-
-  private double rotationP;
-  private double rotationI;
-  private double rotationD;
-
   private PIDController m_xTranslationPID;
   private PIDController m_yTranslationPID;
   private PIDController m_rotationPID;
-
+  private PIDTuner m_xTranslationPIDTuner;
+  private PIDTuner m_yTranslationPIDTuner;
+  private PIDTuner m_rotationPIDTuner;
 
   public enum SwerveModulePosition {
     FrontLeft, FrontRight, BackLeft, BackRight
@@ -76,7 +72,7 @@ public class SwerveDrive extends SubsystemBase {
     int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
     SimDouble SimAngle = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "Yaw"));
     SimAngle.set(angle);
-  }  
+  }
 
   /** Creates a new SwerveDrive. */
   public SwerveDrive() {
@@ -112,19 +108,25 @@ public class SwerveDrive extends SubsystemBase {
     updateVelocityPIDConstants(velocityP, velocityI, velocityD);
     updateAnglePIDConstants(angleP, angleI, angleD);
 
-    translationP = 0.1;
-    translationI = 0.0;
-    translationD = 0.0;
+    double translationP = 1.0;
+    double translationI = 0.0;
+    double translationD = 0.0;
     m_xTranslationPID = new PIDController(translationP, translationI, translationD);
     m_yTranslationPID = new PIDController(translationP, translationI, translationD);
     m_xTranslationPID.setTolerance(0.01);
     m_yTranslationPID.setTolerance(0.01);
+    m_xTranslationPIDTuner = new PIDTuner("Swerve/xTranslation", m_enableTuningPIDs, m_xTranslationPID);
+    m_yTranslationPIDTuner = new PIDTuner("Swerve/yTranslation", m_enableTuningPIDs, m_yTranslationPID);
 
-    rotationP = 0.1;
-    rotationI = 0.0;
-    rotationD = 0.0;
+    double rotationP = 0.01;
+    double rotationI = 0.0;
+    double rotationD = 0.0;
     m_rotationPID = new PIDController(rotationP, rotationI, rotationD);
-    m_rotationPID.setTolerance(0.5); 
+    m_rotationPIDTuner = new PIDTuner("Swerve/Rotation", m_enableTuningPIDs, m_rotationPID);
+    m_rotationPID.setTolerance(0.5);
+    if (RobotBase.isSimulation()) {
+      m_rotationPID.enableContinuousInput(-180, 180);
+    }
 
     if (m_enableTuningPIDs) {
       SmartDashboard.putNumber("Velocity/P", velocityP);
@@ -133,24 +135,17 @@ public class SwerveDrive extends SubsystemBase {
       SmartDashboard.putNumber("Angle/P", angleP);
       SmartDashboard.putNumber("Angle/I", angleI);
       SmartDashboard.putNumber("Angle/D", angleD);
-      SmartDashboard.putNumber("Translation/P", translationP);
-      SmartDashboard.putNumber("Translation/I", translationI);
-      SmartDashboard.putNumber("Translation/D", translationD);
-      SmartDashboard.putNumber("Rotation/P", rotationP);
-      SmartDashboard.putNumber("Rotation/I", rotationI);
-      SmartDashboard.putNumber("Rotation/D", rotationD);
     }
 
     Robot.LogManager.addNumber("Gyro/AccelX", m_gyro::getRawAccelX);
     Robot.LogManager.addNumber("Gyro/AccelY", m_gyro::getRawAccelY);
     Robot.LogManager.addNumber("Gyro/AccelZ", m_gyro::getRawAccelZ);
   }
-  
+
   public void updateOdometry(double x, double y, double angle) {
     updateGyroAdjustmentAngle(angle);
     m_odometry.resetPosition(new Pose2d(x, y, getRotation()), getRotation());
   }
-
 
   public void stop() {
     m_moduleFR.Stop();
@@ -265,11 +260,15 @@ public class SwerveDrive extends SubsystemBase {
     m_moduleFR.updatePosition(correctedPose);
     m_moduleBR.updatePosition(correctedPose);
     m_moduleBL.updatePosition(correctedPose);
-    //pose = pose.transformBy(new Transform2d(new Translation2d(), Rotation2d.fromDegrees(90)));
+    // pose = pose.transformBy(new Transform2d(new Translation2d(),
+    // Rotation2d.fromDegrees(90)));
     m_field.setRobotPose(correctedPose);
     SmartDashboard.putBoolean("Gyro/Calibrating", m_gyro.isCalibrating());
     SmartDashboard.putNumber("Gyro/Angle", getRotation().getDegrees());
 
+    m_xTranslationPIDTuner.tune();
+    m_yTranslationPIDTuner.tune();
+    m_rotationPIDTuner.tune();
     if (m_enableTuningPIDs) {
       tunePIDs();
     }
@@ -299,28 +298,6 @@ public class SwerveDrive extends SubsystemBase {
       updateAnglePIDConstants(angleP, angleI, angleD);
     }
 
-    double newTranslationP = SmartDashboard.getNumber("Translation/P", translationP);
-    double newTranslationI = SmartDashboard.getNumber("Translation/I", translationI);
-    double newTranslationD = SmartDashboard.getNumber("Translation/D", translationD);
-
-    if (newTranslationP != translationP || newTranslationI != translationI || newTranslationD != translationD) {
-      translationP = newTranslationP;
-      translationI = newTranslationI;
-      translationD = newTranslationD;
-      m_xTranslationPID.setPID(translationP, translationI, translationD);
-      m_yTranslationPID.setPID(translationP, translationI, translationD);
-    }
-
-    double newRotationP = SmartDashboard.getNumber("Rotation/P", rotationP);
-    double newRotationI = SmartDashboard.getNumber("Rotation/I", rotationI);
-    double newRotationD = SmartDashboard.getNumber("Rotation/D", rotationD);
-
-    if (newRotationP != rotationP || newRotationI != rotationI || newRotationD != rotationD) {
-      rotationP = newRotationP;
-      rotationI = newRotationI;
-      rotationD = newRotationD;
-      m_rotationPID.setPID(rotationP, rotationI, rotationD); 
-    }
   }
 
   private void updateVelocityPIDConstants(double P, double I, double D) {
@@ -342,22 +319,24 @@ public class SwerveDrive extends SubsystemBase {
     super.simulationPeriodic();
     ChassisSpeeds speeds = m_kinematics.toChassisSpeeds(getModuleStates());
     var currentYaw = m_gyro.getYaw();
-    setSimulationAngle( 
-        currentYaw + new Rotation2d(speeds.omegaRadiansPerSecond / Constants.RobotUpdate_hz).getDegrees());
+    setSimulationAngle(
+        currentYaw - new Rotation2d(speeds.omegaRadiansPerSecond / Constants.RobotUpdate_hz).getDegrees());
   }
 
   public void setTargetPose(Pose2d targetPose) {
     m_xTranslationPID.setSetpoint(targetPose.getX());
     m_yTranslationPID.setSetpoint(targetPose.getY());
-    m_rotationPID.setSetpoint(AngleUtil.closestTarget(getRotation().getDegrees(), targetPose.getRotation().getDegrees()));
+    m_rotationPID
+        .setSetpoint(AngleUtil.closestTarget(getRotation().getDegrees(), targetPose.getRotation().getDegrees()));
   }
 
   public void driveToPosition() {
     var currentPose = getPose();
-    var vx = m_xTranslationPID.calculate(currentPose.getX());
-    var vy = m_yTranslationPID.calculate(currentPose.getY());
-    var theta = m_rotationPID.calculate(currentPose.getRotation().getDegrees());
-    var speeds = ChassisSpeeds.fromFieldRelativeSpeeds(vx * Constants.MaxMPS, vy * Constants.MaxMPS, theta * Constants.MaxORPS, getRotation());
+    var vx = MathUtil.clamp(m_xTranslationPID.calculate(currentPose.getX()), -1, 1);
+    var vy = MathUtil.clamp(m_yTranslationPID.calculate(currentPose.getY()), -1, 1);
+    var theta = MathUtil.clamp(m_rotationPID.calculate(currentPose.getRotation().getDegrees()), -1, 1);
+    var speeds = ChassisSpeeds.fromFieldRelativeSpeeds(vx * Constants.MaxMPS, vy * Constants.MaxMPS,
+        theta * Constants.MaxORPS, getRotation());
     move(speeds);
   }
 

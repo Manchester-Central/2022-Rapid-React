@@ -26,7 +26,7 @@ public class DriveToPosition extends CommandBase {
     m_x = x;
     m_y = -y; // negative is workaround for coordinate issue
     m_thetaDegrees = thetaDegrees;
-    m_targetPose = new Pose2d(x, y, Rotation2d.fromDegrees(thetaDegrees));
+    m_targetPose = new Pose2d(m_x, m_y, Rotation2d.fromDegrees(m_thetaDegrees));
   }
   
   public static DriveToPosition CreateAutoCommand(ParsedCommand pc, SwerveDrive swerveDrive) {
