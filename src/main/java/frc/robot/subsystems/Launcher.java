@@ -11,12 +11,16 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
 
 public class Launcher extends SubsystemBase {
+  private DoubleSolenoid m_solenoid;
   private TalonFX m_ControllerA;
   private TalonFX m_ControllerB;
 
@@ -29,6 +33,8 @@ public class Launcher extends SubsystemBase {
 
   /** Creates a new Launcher. */
   public Launcher() {
+    m_solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.LauncherSolenoidForward,
+        Constants.LauncherSolenoidReverse);
     m_ControllerA = new TalonFX(Constants.LauncherA);
     m_ControllerB = new TalonFX(Constants.LauncherB);
     m_ControllerA.configOpenloopRamp(0.2);
@@ -94,6 +100,15 @@ public class Launcher extends SubsystemBase {
     if (m_enableTuningPIDs) {
       tunePIDs();
     }
+
+  }
+
+  public void MoveHoodUp() {
+    m_solenoid.set(Value.kForward);
+  }
+
+  public void MoveHoodDown() {
+    m_solenoid.set(Value.kReverse);
   }
 
   private void tunePIDs() {
@@ -102,7 +117,8 @@ public class Launcher extends SubsystemBase {
     double newVelocityD = SmartDashboard.getNumber("Flywheel/D", velocityD);
     double newVelocityF = SmartDashboard.getNumber("Flywheel/F", velocityF);
 
-    if (newVelocityP != velocityP || newVelocityI != velocityI || newVelocityD != velocityD || newVelocityF != velocityF) {
+    if (newVelocityP != velocityP || newVelocityI != velocityI || newVelocityD != velocityD
+        || newVelocityF != velocityF) {
       velocityP = newVelocityP;
       velocityI = newVelocityI;
       velocityD = newVelocityD;
