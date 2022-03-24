@@ -4,7 +4,8 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.chaos131.pid.PIDTuner;
+import com.chaos131.pid.PIDUpdate;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
@@ -20,12 +21,7 @@ public class Launcher extends SubsystemBase {
   private TalonFX m_ControllerA;
   private TalonFX m_ControllerB;
 
-  private double velocityP;
-  private double velocityI;
-  private double velocityD;
-  private double velocityF;
-
-  private boolean m_enableTuningPIDs = true;
+  private PIDTuner m_pidTuner;
 
   /** Creates a new Launcher. */
   public Launcher() {
@@ -42,32 +38,16 @@ public class Launcher extends SubsystemBase {
     m_ControllerA.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);
     m_ControllerB.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);
 
-    velocityP = 0.075;
-    velocityI = 0.0003;
-    velocityD = 0.0;
-    velocityF = 0.023; // k_f = (PERCENT_POWER X 1023) / OBSERVED_VELOCITY
+    double velocityP = 0.075;
+    double velocityI = 0.0003;
+    double velocityD = 0.0;
+    double velocityF = 0.023; // k_f = (PERCENT_POWER X 1023) / OBSERVED_VELOCITY
+    m_pidTuner = new PIDTuner("Launcher", Robot.EnablePIDTuning, velocityP, velocityI, velocityD, velocityF, this::updatePIDF);
 
-    m_ControllerA.config_kP(0, velocityP);
-    m_ControllerB.config_kP(0, velocityP);
-    m_ControllerA.config_kI(0, velocityI);
-    m_ControllerB.config_kI(0, velocityI);
-    m_ControllerA.config_kD(0, velocityD);
-    m_ControllerB.config_kD(0, velocityD);
-    m_ControllerA.config_kF(0, velocityF);
-    m_ControllerB.config_kF(0, velocityF);
     m_ControllerA.enableVoltageCompensation(true);
     m_ControllerB.enableVoltageCompensation(true);
 
     Robot.LogManager.addNumber("Launcher/Speed2", () -> m_ControllerA.getSelectedSensorVelocity());
-
-    if (m_enableTuningPIDs) {
-      SmartDashboard.putNumber("Flywheel/P", velocityP);
-      SmartDashboard.putNumber("Flywheel/I", velocityI);
-      SmartDashboard.putNumber("Flywheel/D", velocityD);
-      SmartDashboard.putNumber("Flywheel/F", velocityF);
-
-    }
-
   }
 
   public void ManualLaunch(double power) {
@@ -91,31 +71,18 @@ public class Launcher extends SubsystemBase {
     SmartDashboard.putNumber("Launcher/TargetSpeed", m_ControllerA.getClosedLoopTarget(0));
     SmartDashboard.putNumber("Launcher/Error", m_ControllerA.getClosedLoopError(0));
     SmartDashboard.putNumber("Launcher/Power", m_ControllerA.getMotorOutputPercent());
-    if (m_enableTuningPIDs) {
-      tunePIDs();
-    }
+    m_pidTuner.tune();
   }
 
-  private void tunePIDs() {
-    double newVelocityP = SmartDashboard.getNumber("Flywheel/P", velocityP);
-    double newVelocityI = SmartDashboard.getNumber("Flywheel/I", velocityI);
-    double newVelocityD = SmartDashboard.getNumber("Flywheel/D", velocityD);
-    double newVelocityF = SmartDashboard.getNumber("Flywheel/F", velocityF);
-
-    if (newVelocityP != velocityP || newVelocityI != velocityI || newVelocityD != velocityD || newVelocityF != velocityF) {
-      velocityP = newVelocityP;
-      velocityI = newVelocityI;
-      velocityD = newVelocityD;
-      velocityF = newVelocityF;
-      m_ControllerA.config_kP(0, velocityP);
-      m_ControllerB.config_kP(0, velocityP);
-      m_ControllerA.config_kI(0, velocityI);
-      m_ControllerB.config_kI(0, velocityI);
-      m_ControllerA.config_kD(0, velocityD);
-      m_ControllerB.config_kD(0, velocityD);
-      m_ControllerA.config_kF(0, velocityF);
-      m_ControllerB.config_kF(0, velocityF);
-    }
+  private void updatePIDF(PIDUpdate update) {
+    m_ControllerA.config_kP(0, update.P);
+    m_ControllerB.config_kP(0, update.P);
+    m_ControllerA.config_kI(0, update.I);
+    m_ControllerB.config_kI(0, update.I);
+    m_ControllerA.config_kD(0, update.D);
+    m_ControllerB.config_kD(0, update.D);
+    m_ControllerA.config_kF(0, update.F);
+    m_ControllerB.config_kF(0, update.F);
   }
 
   public boolean isAtTargetSpeed(double targetRpm) {

@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.chaos131.pid.PIDTuner;
+import com.chaos131.pid.PIDUpdate;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.hal.SimDouble;
@@ -13,8 +14,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -28,7 +27,6 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.SPI;
 
 public class SwerveDrive extends SubsystemBase {
-  private final boolean m_enableTuningPIDs = true;
   private Field2d m_field = new Field2d();
   private SwerveDriveModule m_moduleFL;
   private SwerveDriveModule m_moduleFR;
@@ -38,19 +36,15 @@ public class SwerveDrive extends SubsystemBase {
   private SwerveDriveOdometry m_odometry;
   private AHRS m_gyro;
 
-  private double velocityP;
-  private double velocityI;
-  private double velocityD;
-  private double angleP;
-  private double angleI;
-  private double angleD;
-
   private PIDController m_xTranslationPID;
   private PIDController m_yTranslationPID;
   private PIDController m_rotationPID;
+
   private PIDTuner m_xTranslationPIDTuner;
   private PIDTuner m_yTranslationPIDTuner;
   private PIDTuner m_rotationPIDTuner;
+  private PIDTuner m_moduleVelocityPIDTuner;
+  private PIDTuner m_moduleAnglePIDTuner;
 
   public enum SwerveModulePosition {
     FrontLeft, FrontRight, BackLeft, BackRight
@@ -99,14 +93,15 @@ public class SwerveDrive extends SubsystemBase {
     Robot.LogManager.addNumber("Swerve/X", () -> m_odometry.getPoseMeters().getX());
     Robot.LogManager.addNumber("Swerve/Y", () -> m_odometry.getPoseMeters().getY());
 
-    velocityP = 0.1;
-    velocityI = 0;
-    velocityD = 0;
-    angleP = 0.2;
-    angleI = 0;
-    angleD = 0;
-    updateVelocityPIDConstants(velocityP, velocityI, velocityD);
-    updateAnglePIDConstants(angleP, angleI, angleD);
+    double velocityP = 0.1;
+    double velocityI = 0;
+    double velocityD = 0;
+    // `this::updateVelocityPIDConstants` is basically shorthand for `(PIDUpdate update) -> updateVelocityPIDConstants(update)`
+    m_moduleVelocityPIDTuner = new PIDTuner("Swerve/ModuleVelocity", Robot.EnablePIDTuning, velocityP, velocityI, velocityD, this::updateVelocityPIDConstants);
+    double angleP = 0.2;
+    double angleI = 0;
+    double angleD = 0;
+    m_moduleAnglePIDTuner = new PIDTuner("Swerve/ModuleAngle", Robot.EnablePIDTuning, angleP, angleI, angleD, this::updateAnglePIDConstants);
 
     double translationP = 1.0;
     double translationI = 0.0;
@@ -115,26 +110,17 @@ public class SwerveDrive extends SubsystemBase {
     m_yTranslationPID = new PIDController(translationP, translationI, translationD);
     m_xTranslationPID.setTolerance(0.01);
     m_yTranslationPID.setTolerance(0.01);
-    m_xTranslationPIDTuner = new PIDTuner("Swerve/xTranslation", m_enableTuningPIDs, m_xTranslationPID);
-    m_yTranslationPIDTuner = new PIDTuner("Swerve/yTranslation", m_enableTuningPIDs, m_yTranslationPID);
+    m_xTranslationPIDTuner = new PIDTuner("Swerve/xTranslation", Robot.EnablePIDTuning, m_xTranslationPID);
+    m_yTranslationPIDTuner = new PIDTuner("Swerve/yTranslation", Robot.EnablePIDTuning, m_yTranslationPID);
 
     double rotationP = 0.01;
     double rotationI = 0.0;
     double rotationD = 0.0;
     m_rotationPID = new PIDController(rotationP, rotationI, rotationD);
-    m_rotationPIDTuner = new PIDTuner("Swerve/Rotation", m_enableTuningPIDs, m_rotationPID);
+    m_rotationPIDTuner = new PIDTuner("Swerve/Rotation", Robot.EnablePIDTuning, m_rotationPID);
     m_rotationPID.setTolerance(0.5);
     if (RobotBase.isSimulation()) {
       m_rotationPID.enableContinuousInput(-180, 180);
-    }
-
-    if (m_enableTuningPIDs) {
-      SmartDashboard.putNumber("Velocity/P", velocityP);
-      SmartDashboard.putNumber("Velocity/I", velocityI);
-      SmartDashboard.putNumber("Velocity/D", velocityD);
-      SmartDashboard.putNumber("Angle/P", angleP);
-      SmartDashboard.putNumber("Angle/I", angleI);
-      SmartDashboard.putNumber("Angle/D", angleD);
     }
 
     Robot.LogManager.addNumber("Gyro/AccelX", m_gyro::getRawAccelX);
@@ -269,49 +255,22 @@ public class SwerveDrive extends SubsystemBase {
     m_xTranslationPIDTuner.tune();
     m_yTranslationPIDTuner.tune();
     m_rotationPIDTuner.tune();
-    if (m_enableTuningPIDs) {
-      tunePIDs();
-    }
+    m_moduleVelocityPIDTuner.tune();
+    m_moduleAnglePIDTuner.tune();
   }
 
-  private void tunePIDs() {
-    double newVelocityP = SmartDashboard.getNumber("Velocity/P", velocityP);
-    double newVelocityI = SmartDashboard.getNumber("Velocity/I", velocityI);
-    double newVelocityD = SmartDashboard.getNumber("Velocity/D", velocityD);
-
-    if (newVelocityP != velocityP || newVelocityI != velocityI || newVelocityD != velocityD) {
-      velocityP = newVelocityP;
-      velocityI = newVelocityI;
-      velocityD = newVelocityD;
-      updateVelocityPIDConstants(velocityP, velocityI, velocityD);
-
-    }
-
-    double newAngleP = SmartDashboard.getNumber("Angle/P", angleP);
-    double newAngleI = SmartDashboard.getNumber("Angle/I", angleI);
-    double newAngleD = SmartDashboard.getNumber("Angle/D", angleD);
-
-    if (newAngleP != angleP || newAngleI != angleI || newAngleD != angleD) {
-      angleP = newAngleP;
-      angleI = newAngleI;
-      angleD = newAngleD;
-      updateAnglePIDConstants(angleP, angleI, angleD);
-    }
-
+  private void updateVelocityPIDConstants(PIDUpdate update) {
+    m_moduleFL.UpdateVelocityPIDConstants(update);
+    m_moduleFR.UpdateVelocityPIDConstants(update);
+    m_moduleBR.UpdateVelocityPIDConstants(update);
+    m_moduleBL.UpdateVelocityPIDConstants(update);
   }
 
-  private void updateVelocityPIDConstants(double P, double I, double D) {
-    m_moduleFL.UpdateVelocityPIDConstants(P, I, D);
-    m_moduleFR.UpdateVelocityPIDConstants(P, I, D);
-    m_moduleBR.UpdateVelocityPIDConstants(P, I, D);
-    m_moduleBL.UpdateVelocityPIDConstants(P, I, D);
-  }
-
-  private void updateAnglePIDConstants(double P, double I, double D) {
-    m_moduleFL.UpdateAnglePIDConstants(P, I, D);
-    m_moduleFR.UpdateAnglePIDConstants(P, I, D);
-    m_moduleBR.UpdateAnglePIDConstants(P, I, D);
-    m_moduleBL.UpdateAnglePIDConstants(P, I, D);
+  private void updateAnglePIDConstants(PIDUpdate update) {
+    m_moduleFL.UpdateAnglePIDConstants(update);
+    m_moduleFR.UpdateAnglePIDConstants(update);
+    m_moduleBR.UpdateAnglePIDConstants(update);
+    m_moduleBL.UpdateAnglePIDConstants(update);
   }
 
   @Override
