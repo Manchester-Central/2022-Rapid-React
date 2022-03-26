@@ -43,6 +43,8 @@ public class Launcher extends SubsystemBase {
     m_ControllerB.configPeakOutputReverse(0);
     m_ControllerA.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);
     m_ControllerB.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);
+    m_ControllerA.configVelocityMeasurementWindow(1);
+    m_ControllerB.configVelocityMeasurementWindow(1);
 
     double velocityP = 0.075;
     double velocityI = 0.0003;

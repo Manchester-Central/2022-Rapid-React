@@ -70,7 +70,7 @@ public final class Constants {
     public final static int ExtenderLimitSwitch = 3;
     
     // Launcher Settings
-    public final static double DefaultLauncherLowSpeed = 4200.0;
+    public final static double DefaultLauncherLowSpeed = 2300.0;
     public final static double DefaultLauncherHighSpeed = 9600.0;
 
     // Target position on field

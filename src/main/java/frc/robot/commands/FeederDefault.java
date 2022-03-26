@@ -65,7 +65,7 @@ public class FeederDefault extends CommandBase {
   }
 
   public void launchMode() {
-    m_feeder.Both();
+    m_feeder.ManualFeed(1.0, 1.0);
   }
 
   public void outputMode() {
