@@ -44,7 +44,7 @@ public class SwerveDriveModule {
         m_angleController.configAllowableClosedloopError(0, DegreesToFalconAngle(0.5)); //TODO Reduce after tuning PID
         m_velocityController.setNeutralMode(NeutralMode.Coast);
         m_angleController.setNeutralMode(NeutralMode.Brake);
-        m_velocityController.configClosedloopRamp(0.05);
+        m_velocityController.configClosedloopRamp(0.65);
         m_name = name;
         m_absoluteEncoder = new CANCoder(absoluteEncoderPort);
         m_absoluteAngleOffset = absoluteAngleOffset;

@@ -306,7 +306,7 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public double getTargetOmega() {
-    return MathUtil.clamp(m_rotationPID.calculate(getPose().getRotation().getDegrees()), -1, 1) * Constants.MaxORPS;
+    return -MathUtil.clamp(m_rotationPID.calculate(getPose().getRotation().getDegrees()), -1, 1) * Constants.MaxORPS;
   }
 
   public void driveToPosition() {
