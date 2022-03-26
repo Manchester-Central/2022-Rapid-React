@@ -182,10 +182,9 @@ public class RobotContainer {
     m_operator.getPOVEast().whileHeld(new RunCommand(() -> m_climber.MoveArmDown(), m_climber));
     m_operator.getPOVNorth().whileHeld(new RunCommand(() -> m_climber.ExtendToTop(), m_climber));
     m_operator.getPOVSouth().whileHeld(new RunCommand(() -> m_climber.ExtendToBottom(), m_climber));
-
-    m_operator.getButtonStart()
-        .whileHeld(new RunCommand(() -> m_launcher.SetTargetRPM(Constants.DefaultLauncherHighSpeed), m_launcher));
-
+  
+    m_operator.getButtonStart().whileHeld(new RunCommand(() -> m_launcher.MoveHoodUp(), m_launcher));
+    m_operator.getButtonSelect().whileHeld(new RunCommand(() -> m_launcher.MoveHoodDown(), m_launcher));
   }
 
   /**
