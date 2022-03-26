@@ -55,17 +55,17 @@ public final class Constants {
     // Pneumatic Connections
     public final static int ClimberSolenoidLeftForward = 9;
     public final static int ClimberSolenoidLeftReverse = 7;
-    public final static int ClimberSolenoidRightForward = 5; //confirming number
-    public final static int ClimberSolenoidRightReverse = 4; //confirming number
+    public final static int ClimberSolenoidRightForward = 10;
+    public final static int ClimberSolenoidRightReverse = 5;
     public final static int IntakeSolenoidForward = 8;
     public final static int IntakeSolenoidReverse = 6;
-    public static final int LauncherSolenoidForward = 3; //confirming number
-    public static final int LauncherSolenoidReverse = 2; //confirming number
+    public static final int LauncherSolenoidForward = 11; 
+    public static final int LauncherSolenoidReverse = 4; 
 
     //DIO
     public final static int FeederBeamSensorTop = 1;
     public final static int FeederBeamSensorMiddle = 2;
-    public final static int ExtenderLimitSwitch = 0;
+    public final static int ExtenderLimitSwitch = 3;
     
     // Launcher Settings
     public final static double DefaultLauncherLowSpeed = 4200.0;
