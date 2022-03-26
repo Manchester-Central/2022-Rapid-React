@@ -25,7 +25,7 @@ public abstract class BaseRelativeDrive extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public final void initialize() {}
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.chaos131.pid.PIDUpdate;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -43,7 +44,7 @@ public class SwerveDriveModule {
         m_angleController.configAllowableClosedloopError(0, DegreesToFalconAngle(0.5)); //TODO Reduce after tuning PID
         m_velocityController.setNeutralMode(NeutralMode.Coast);
         m_angleController.setNeutralMode(NeutralMode.Brake);
-        m_velocityController.configClosedloopRamp(0.05);
+        m_velocityController.configClosedloopRamp(0.65);
         m_name = name;
         m_absoluteEncoder = new CANCoder(absoluteEncoderPort);
         m_absoluteAngleOffset = absoluteAngleOffset;
@@ -85,7 +86,7 @@ public class SwerveDriveModule {
     public void setTargetState(SwerveModuleState targetState) {
         targetState = SwerveModuleState.optimize(targetState, Rotation2d.fromDegrees(getCurrentAngleDegrees()));
         m_targetVelocity = targetState.speedMetersPerSecond;
-        m_targetAngle = closestTarget(getCurrentAngleDegrees(), targetState.angle.getDegrees());
+        m_targetAngle = AngleUtil.closestTarget(getCurrentAngleDegrees(), targetState.angle.getDegrees());
         m_velocityController.set(TalonFXControlMode.Velocity, MPSToFalconVelocity(m_targetVelocity));
         m_angleController.set(TalonFXControlMode.Position, DegreesToFalconAngle(m_targetAngle));
     }
@@ -93,21 +94,6 @@ public class SwerveDriveModule {
     public void setManual(double velocityControllerPower, double angleControllerPower) {
         m_velocityController.set(TalonFXControlMode.PercentOutput, velocityControllerPower);
         m_angleController.set(TalonFXControlMode.PercentOutput, angleControllerPower);
-    }
-
-    public double closestTarget(double currentAngle, double targetAngle) {
-        targetAngle = targetAngle + (Math.floor(currentAngle / 360) * 360);
-        double otherAngle = targetAngle + 360;
-        if (targetAngle > currentAngle) {
-            otherAngle = targetAngle - 360;
-        }
-        double distanceNegative = Math.abs(targetAngle - currentAngle);
-        double distancePositive = Math.abs(otherAngle - currentAngle);
-        if (distanceNegative < distancePositive) {
-            return targetAngle;
-        } else {
-            return otherAngle;
-        }
     }
 
     public Translation2d getLocation() {
@@ -154,16 +140,16 @@ public class SwerveDriveModule {
         return wheelRotations * 360;
     }
 
-    public void UpdateVelocityPIDConstants(double P, double I, double D) {
-        m_velocityController.config_kP(0, P);
-        m_velocityController.config_kI(0, I);
-        m_velocityController.config_kD(0, D);
+    public void UpdateVelocityPIDConstants(PIDUpdate update) {
+        m_velocityController.config_kP(0, update.P);
+        m_velocityController.config_kI(0, update.I);
+        m_velocityController.config_kD(0, update.D);
     }
 
-    public void UpdateAnglePIDConstants(double P, double I, double D) {
-        m_angleController.config_kP(0, P);
-        m_angleController.config_kI(0, I);
-        m_angleController.config_kD(0, D);
+    public void UpdateAnglePIDConstants(PIDUpdate update) {
+        m_angleController.config_kP(0, update.P);
+        m_angleController.config_kI(0, update.I);
+        m_angleController.config_kD(0, update.D);
     }
 
     public void ResetEncoders() {
