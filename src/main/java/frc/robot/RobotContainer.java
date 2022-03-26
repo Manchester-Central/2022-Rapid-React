@@ -119,8 +119,8 @@ public class RobotContainer {
     m_feeder.setDefaultCommand(new FeederDefault(m_feeder));
     m_camera.setDefaultCommand(new CameraDefault(m_camera));
 
-    // configureMatchCommands();
-    configureDebugCommands();
+    configureMatchCommands();
+    // configureDebugCommands();
 
   }
 
