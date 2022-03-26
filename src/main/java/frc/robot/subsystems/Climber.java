@@ -21,7 +21,8 @@ import frc.robot.Constants;
 public class Climber extends SubsystemBase {
   private DigitalInput m_limitSwitch;
   private TalonFX m_extensionController;
-  private DoubleSolenoid m_solenoid;
+  private DoubleSolenoid m_solenoidLeft;
+  private DoubleSolenoid m_solenoidRight;
   private double m_downPositionCounts;
   private boolean m_seenBottom;
 
@@ -29,7 +30,8 @@ public class Climber extends SubsystemBase {
   public Climber() {
     m_extensionController = new TalonFX(Constants.ClimberExtension);
     m_extensionController.setNeutralMode(NeutralMode.Brake);
-    m_solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.ClimberSolenoidForward, Constants.ClimberSolenoidReverse);
+    m_solenoidLeft = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.ClimberSolenoidLeftForward, Constants.ClimberSolenoidLeftReverse);
+    m_solenoidRight = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.ClimberSolenoidRightForward, Constants.ClimberSolenoidRightReverse);
     m_limitSwitch = new DigitalInput(Constants.ExtenderLimitSwitch);
     m_extensionController.config_kP(0, 0.1);
   }
@@ -52,16 +54,21 @@ public class Climber extends SubsystemBase {
   }
 
   public void MoveArmUp() {
-    m_solenoid.set(Value.kForward);
+    m_solenoidLeft.set(Value.kForward);
+    m_solenoidRight.set(Value.kForward);
   }
 
   public void MoveArmDown() {
-    m_solenoid.set(Value.kReverse);
+    m_solenoidLeft.set(Value.kReverse);
+    m_solenoidRight.set(Value.kReverse);
   }
 
   public void ReleaseArm() {
-    m_solenoid.set(Value.kOff);
+    m_solenoidLeft.set(Value.kOff);
+    m_solenoidRight.set(Value.kOff);
+    
   }
+  
 
   public void ExtendToTop() {
     if(m_seenBottom) {
