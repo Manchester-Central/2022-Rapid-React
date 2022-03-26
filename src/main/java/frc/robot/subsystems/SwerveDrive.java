@@ -282,20 +282,38 @@ public class SwerveDrive extends SubsystemBase {
         currentYaw - new Rotation2d(speeds.omegaRadiansPerSecond / Constants.RobotUpdate_hz).getDegrees());
   }
 
-  public void setTargetPose(Pose2d targetPose) {
-    m_xTranslationPID.setSetpoint(targetPose.getX());
-    m_yTranslationPID.setSetpoint(targetPose.getY());
+  public void setTargetPosition(double x, double y) {
+    m_xTranslationPID.setSetpoint(x);
+    m_yTranslationPID.setSetpoint(y);
+  }
+
+  public void setTargetAngle(Rotation2d targetAngle) {
     m_rotationPID
-        .setSetpoint(AngleUtil.closestTarget(getRotation().getDegrees(), targetPose.getRotation().getDegrees()));
+        .setSetpoint(AngleUtil.closestTarget(getRotation().getDegrees(), targetAngle.getDegrees()));
+  }
+
+  public void setTargetPose(Pose2d targetPose) {
+    setTargetPosition(targetPose.getX(), targetPose.getY());
+    setTargetAngle(targetPose.getRotation());
+  }
+
+  public double getTargetVx() {
+    return MathUtil.clamp(m_xTranslationPID.calculate(getPose().getX()), -1, 1) * Constants.MaxMPS;
+  }
+
+  public double getTargetVy() {
+    return MathUtil.clamp(m_yTranslationPID.calculate(getPose().getY()), -1, 1) * Constants.MaxMPS;
+  }
+
+  public double getTargetOmega() {
+    return MathUtil.clamp(m_rotationPID.calculate(getPose().getRotation().getDegrees()), -1, 1) * Constants.MaxORPS;
   }
 
   public void driveToPosition() {
-    var currentPose = getPose();
-    var vx = MathUtil.clamp(m_xTranslationPID.calculate(currentPose.getX()), -1, 1);
-    var vy = MathUtil.clamp(m_yTranslationPID.calculate(currentPose.getY()), -1, 1);
-    var theta = MathUtil.clamp(m_rotationPID.calculate(currentPose.getRotation().getDegrees()), -1, 1);
-    var speeds = ChassisSpeeds.fromFieldRelativeSpeeds(vx * Constants.MaxMPS, vy * Constants.MaxMPS,
-        theta * Constants.MaxORPS, getRotation());
+    var vx = getTargetVx();
+    var vy = getTargetVy();
+    var Omega = getTargetOmega();
+    var speeds = ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, Omega, getRotation());
     move(speeds);
   }
 

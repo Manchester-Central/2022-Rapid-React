@@ -24,6 +24,7 @@ import frc.robot.commands.DriveOverDistance;
 import frc.robot.commands.DriveOverTime;
 import frc.robot.commands.DriveToPosition;
 import frc.robot.commands.DriverRelativeDrive;
+import frc.robot.commands.DriverRelativeDriveWithAim;
 import frc.robot.commands.FieldRelativeDrive;
 import frc.robot.commands.HandBrake;
 import frc.robot.commands.IntakeCommand;
@@ -108,36 +109,30 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    configureMatchCommands();
-    // configureDebugCommands();
+    Command driverRelativeDrive = new DriverRelativeDrive(m_swerveDrive, m_driver);
+
+    // Default Commands
+    m_swerveDrive.setDefaultCommand(driverRelativeDrive);
+    m_climber.setDefaultCommand(new ClimberDefault(m_climber, m_operator));
+    m_intake.setDefaultCommand(new IntakeDefault(m_intake));
+    m_launcher.setDefaultCommand(new LauncherDefault(m_launcher));
+    m_feeder.setDefaultCommand(new FeederDefault(m_feeder));
+    m_camera.setDefaultCommand(new CameraDefault(m_camera));
+
+    // configureMatchCommands();
+    configureDebugCommands();
+
   }
 
   private void configureDebugCommands() {
-    Command fieldRelative = new FieldRelativeDrive(m_swerveDrive, m_driver);
-    m_swerveDrive.setDefaultCommand(fieldRelative);
-    m_launcher.setDefaultCommand(new LauncherDefault(m_launcher));
-    m_driver.getButtonA().whileHeld(new RunCommand(() -> m_launcher.SetTargetRPM(5000), m_launcher));
-    m_driver.getButtonX().whileHeld(new RunCommand(() -> m_launcher.SetTargetRPM(10000), m_launcher));
-    m_driver.getButtonY().whileHeld(new RunCommand(() -> m_launcher.SetTargetRPM(15000), m_launcher));
-    m_driver.getButtonB().whileHeld(new RunCommand(() -> m_launcher.ManualLaunch(0.25), m_launcher));
+    m_driver.getButtonB().whileHeld(new AimToGoal(m_swerveDrive, m_camera));
+    m_driver.getButtonRightStick().whileHeld(new DriverRelativeDriveWithAim(m_swerveDrive, m_driver, m_camera));
   }
 
   private void configureMatchCommands() {
 
     Command driverRelativeDrive = new DriverRelativeDrive(m_swerveDrive, m_driver);
     Command robotRelativeDrive = new RobotRelativeDrive(m_swerveDrive, m_driver);
-
-    // Default Commands
-    // m_swerveDrive.setDefaultCommand(new RunCommand(() -> {m_swerveDrive.stop();},
-    // m_swerveDrive));
-    m_swerveDrive.setDefaultCommand(driverRelativeDrive);
-    // m_swerveDrive.setDefaultCommand(robotRelativeDrive);
-    m_climber.setDefaultCommand(new ClimberDefault(m_climber, m_operator));
-    m_intake.setDefaultCommand(new IntakeDefault(m_intake));
-    m_launcher.setDefaultCommand(new LauncherDefault(m_launcher));
-    m_feeder.setDefaultCommand(new FeederDefault(m_feeder));
-    // m_feeder.setDefaultCommand(new RunCommand(() -> m_feeder.Stop(), m_feeder));
-    m_camera.setDefaultCommand(new CameraDefault(m_camera));
 
     // Drive Commands
     m_driver.getButtonSelect().whenPressed(robotRelativeDrive);

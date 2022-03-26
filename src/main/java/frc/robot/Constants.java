@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -69,7 +71,8 @@ public final class Constants {
 
     // Target position on field
     public final static double GoalX = 8.0; // TODO: Get real values
-    public final static double GoalY = 4.1; // TODO: Get real values
+    public final static double GoalY = -4.1; // TODO: Get real values
+    public final static Translation2d GoalLocation = new Translation2d(GoalX, GoalY);
 
     // Height
     public final static double CameraHeight = 0.811;
