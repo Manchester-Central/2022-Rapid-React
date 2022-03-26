@@ -53,10 +53,10 @@ public final class Constants {
     public static final double MaxORPS = 8.75;
 
     // Pneumatic Connections
-    public final static int ClimberSolenoidLeftForward = 9;
-    public final static int ClimberSolenoidLeftReverse = 7;
-    public final static int ClimberSolenoidRightForward = 10;
-    public final static int ClimberSolenoidRightReverse = 5;
+    public final static int ClimberSolenoidLeftForward = 10;
+    public final static int ClimberSolenoidLeftReverse = 5;
+    public final static int ClimberSolenoidRightForward = 9;
+    public final static int ClimberSolenoidRightReverse = 7;
     public final static int IntakeSolenoidForward = 8;
     public final static int IntakeSolenoidReverse = 6;
     public static final int LauncherSolenoidForward = 11; 
