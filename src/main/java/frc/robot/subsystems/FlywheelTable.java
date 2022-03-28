@@ -50,18 +50,19 @@ public class FlywheelTable {
                 // System.out.println(row);
                 data = row.split(",");
 
-                if (data.length == 2) {
+                if (data.length == 3) {
 
                     // converts String array to double array
                     doubleData = Arrays.stream(data).mapToDouble(Double::parseDouble).toArray();
 
                     double distance = doubleData[0];
                     double speed = doubleData[1];
+                    double hoodUp = doubleData[2];
 
-                    addData(new TableData(distance, speed));
+                    addData(new TableData(distance, speed, hoodUp != 0.0));
 
                 } else {
-                    System.out.println("ERROR: Flywheel Table data less than 2 values at " + row);
+                    System.out.println("ERROR: Flywheel Table data less than 3 values at " + row);
                 }
             }
 
@@ -116,6 +117,7 @@ public class FlywheelTable {
 
         double idealSpeed = getInterpolatedValue(getDistance(topIndex), getDistance(botIndex), getSpeed(topIndex), getSpeed(botIndex), distance);
 
-        return new TableData(distance, idealSpeed);
+        boolean hoodUp = getTableData(topIndex).getHoodUp();
+        return new TableData(distance, idealSpeed, hoodUp);
     }
 }
