@@ -149,7 +149,7 @@ public class RobotContainer {
     m_driver.getButtonLT().whileHeld(new IntakeCommand(m_feeder, m_intake));
 
     m_driver.getButtonRB()
-        .whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, Constants.DefaultLauncherLowSpeed));
+        .whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, Constants.DefaultLauncherHighSpeed, true));
     m_driver.getButtonRT()
         .whileHeld(new CameraLauncherShoot(m_launcher, m_camera, m_feeder, m_flywheelTable));
 
@@ -168,7 +168,7 @@ public class RobotContainer {
 
     m_operator.getButtonRB().whileHeld(new CameraLauncherShoot(m_launcher, m_camera, m_feeder, m_flywheelTable));
     m_operator.getButtonRT()
-        .whileHeld(new RunCommand(() -> m_launcher.SetTargetRPM(Constants.DefaultLauncherLowSpeed), m_launcher));
+        .whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, Constants.DefaultLauncherLowSpeed, false));
 
     m_operator.getButtonLB().whileHeld(new RunCommand(() -> m_intake.MoveIntakeUp(), m_intake));
     m_operator.getButtonLT().whileHeld(new RunCommand(() -> m_intake.MoveIntakeDown(), m_intake));
