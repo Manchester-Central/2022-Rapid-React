@@ -149,7 +149,7 @@ public class RobotContainer {
     m_driver.getButtonLT().whileHeld(new IntakeCommand(m_feeder, m_intake));
 
     m_driver.getButtonRB()
-        .whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, Constants.DefaultLauncherHighSpeed, true));
+        .whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, Constants.DefaultLauncherHighSpeed, FeederMode.LAUNCH_HIGH_BUMPER));
     m_driver.getButtonRT()
         .whileHeld(new CameraLauncherShoot(m_launcher, m_camera, m_feeder, m_flywheelTable));
 
@@ -163,12 +163,12 @@ public class RobotContainer {
     m_operator.getButtonA().whileHeld(new IntakeCommand(m_feeder, m_intake));
     m_operator.getButtonB().whileHeld(new RunCommand(() -> m_intake.ManualIntake(1.0), m_intake)
         .alongWith(new SetFeederMode(m_feeder, FeederMode.BOTTOM_ONLY)));
-    m_operator.getButtonX().whileHeld(new SetFeederMode(m_feeder, FeederMode.LAUNCH));
+    m_operator.getButtonX().whileHeld(new SetFeederMode(m_feeder, FeederMode.LAUNCH_CAMERA));
     m_operator.getButtonY().whileHeld(new Output(m_feeder, m_intake));
 
     m_operator.getButtonRB().whileHeld(new CameraLauncherShoot(m_launcher, m_camera, m_feeder, m_flywheelTable));
     m_operator.getButtonRT()
-        .whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, Constants.DefaultLauncherLowSpeed, false));
+        .whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, Constants.DefaultLauncherLowSpeed, FeederMode.LAUNCH_LOW_BUMPER));
 
     m_operator.getButtonLB().whileHeld(new RunCommand(() -> m_intake.MoveIntakeUp(), m_intake));
     m_operator.getButtonLT().whileHeld(new RunCommand(() -> m_intake.MoveIntakeDown(), m_intake));

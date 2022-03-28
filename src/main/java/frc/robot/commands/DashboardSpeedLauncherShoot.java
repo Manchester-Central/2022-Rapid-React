@@ -10,12 +10,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Launcher;
+import frc.robot.subsystems.Feeder.FeederMode;
 
 public class DashboardSpeedLauncherShoot extends BaseLauncherShoot {
 
   /** Creates a new LauncherShoot. */
   public DashboardSpeedLauncherShoot(Launcher launcher, Feeder feeder) {
-    super(launcher, feeder);
+    super(launcher, feeder, FeederMode.LAUNCH_HIGH_BUMPER);
     SmartDashboard.putNumber("DashboardLauncherSpeed", Constants.DefaultLauncherLowSpeed);
   }
 

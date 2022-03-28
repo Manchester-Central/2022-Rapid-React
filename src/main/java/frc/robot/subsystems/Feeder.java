@@ -21,7 +21,7 @@ public class Feeder extends SubsystemBase {
   private double k_intakeSpeed = 0.2;
 
   public enum FeederMode {
-    DEFAULT, INTAKE, LAUNCH, OUTPUT, BOTTOM_ONLY
+    DEFAULT, INTAKE, LAUNCH_LOW_BUMPER, LAUNCH_HIGH_BUMPER, LAUNCH_CAMERA, OUTPUT, BOTTOM_ONLY
   } 
 
   private FeederMode m_feederMode = FeederMode.DEFAULT;
