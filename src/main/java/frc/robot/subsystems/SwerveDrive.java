@@ -51,7 +51,7 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public Rotation2d getRotation() {
-    return Rotation2d.fromDegrees(-m_gyro.getAngle());
+    return Rotation2d.fromDegrees(AngleUtil.clampAngle(-m_gyro.getAngle()));
 
   }
 
@@ -113,15 +113,13 @@ public class SwerveDrive extends SubsystemBase {
     m_xTranslationPIDTuner = new PIDTuner("Swerve/xTranslation", Robot.EnablePIDTuning, m_xTranslationPID);
     m_yTranslationPIDTuner = new PIDTuner("Swerve/yTranslation", Robot.EnablePIDTuning, m_yTranslationPID);
 
-    double rotationP = 0.004;
-    double rotationI = 0.0;
+    double rotationP = 0.017;
+    double rotationI = 0.0001;
     double rotationD = 0.0;
     m_rotationPID = new PIDController(rotationP, rotationI, rotationD);
     m_rotationPIDTuner = new PIDTuner("Swerve/Rotation", Robot.EnablePIDTuning, m_rotationPID);
     m_rotationPID.setTolerance(0.5);
-    if (RobotBase.isSimulation()) {
-      m_rotationPID.enableContinuousInput(-180, 180);
-    }
+    m_rotationPID.enableContinuousInput(-180, 180);
 
     Robot.LogManager.addNumber("Gyro/AccelX", m_gyro::getRawAccelX);
     Robot.LogManager.addNumber("Gyro/AccelY", m_gyro::getRawAccelY);
@@ -288,8 +286,7 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public void setTargetAngle(Rotation2d targetAngle) {
-    m_rotationPID
-        .setSetpoint(AngleUtil.closestTarget(getRotation().getDegrees(), targetAngle.getDegrees()));
+    m_rotationPID.setSetpoint(targetAngle.getDegrees());
   }
 
   public void setTargetPose(Pose2d targetPose) {
@@ -306,7 +303,10 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public double getTargetOmega() {
-    return -MathUtil.clamp(m_rotationPID.calculate(getPose().getRotation().getDegrees()), -1, 1) * Constants.MaxORPS;
+    SmartDashboard.putNumber("aim/setPoint", m_rotationPID.getSetpoint());
+    SmartDashboard.putNumber("aim/PIDCalculate", m_rotationPID.calculate(getRotation().getDegrees()));
+    // return MathUtil.clamp(m_rotationPID.calculate(getPose().getRotation().getDegrees()), -1, 1) * Constants.MaxORPS;
+    return -MathUtil.clamp(m_rotationPID.calculate(getRotation().getDegrees()), -1, 1) * Constants.MaxORPS;
   }
 
   public void driveToPosition() {

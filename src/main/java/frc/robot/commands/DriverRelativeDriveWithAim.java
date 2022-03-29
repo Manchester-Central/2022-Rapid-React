@@ -21,17 +21,20 @@ public class DriverRelativeDriveWithAim extends BaseRelativeDrive {
 
   @Override
   public void initialize() {
-      super.initialize();
-      m_camera.setPipeline(Camera.ComputerVision);
+    super.initialize();
+    m_camera.setPipeline(Camera.ComputerVision);
+    m_drive.deleteDriveToPositionError();
   }
 
   @Override
   public void moveRobot(double sidewaySpeed, double forwardSpeed, double omegaSpeed) {
-    var currentPose = m_drive.getPose();
-    var currentRotation = m_drive.getRotation();
-    var rotation = AngleUtil.GetEstimatedAngleToGoal(m_camera, currentPose, currentRotation);
-    m_drive.setTargetAngle(rotation);
-    omegaSpeed = m_drive.getTargetOmega();
+    if (m_camera.hasTarget()) {
+      var currentPose = m_drive.getPose();
+      var currentRotation = m_drive.getRotation();
+      var rotation = AngleUtil.GetEstimatedAngleToGoal(m_camera, currentPose, currentRotation);
+      m_drive.setTargetAngle(rotation);
+      omegaSpeed = m_drive.getTargetOmega();
+    }
     m_drive.moveDriverRelative(-sidewaySpeed, forwardSpeed, omegaSpeed);
   }
 }
