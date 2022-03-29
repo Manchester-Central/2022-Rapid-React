@@ -9,6 +9,7 @@ import edu.wpi.first.math.estimator.AngleStatistics;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.AngleUtil;
@@ -33,6 +34,7 @@ public class AimToGoal extends CommandBase {
   @Override
   public void initialize() {
     m_camera.setPipeline(Camera.ComputerVision);
+    m_swerveDrive.deleteDriveToPositionError();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -44,6 +46,7 @@ public class AimToGoal extends CommandBase {
     var rotation = AngleUtil.GetEstimatedAngleToGoal(m_camera, currentPose, currentRotation);
     m_swerveDrive.setTargetAngle(rotation);
     OmegaSpeed = m_swerveDrive.getTargetOmega();
+    SmartDashboard.putNumber("aim/omega", OmegaSpeed);
     m_swerveDrive.moveRobotRelative(0, 0, OmegaSpeed);
   }
 
