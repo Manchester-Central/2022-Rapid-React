@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.DriverRelativeDriveWithAimSimple;
 import frc.robot.logging.LogManager;
 import frc.robot.logging.LoggedDatapoints;
 
@@ -99,6 +100,7 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     LogManager.update();
+    DriverRelativeDriveWithAimSimple.pidTuner.tune();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
