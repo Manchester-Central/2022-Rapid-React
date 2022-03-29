@@ -113,8 +113,8 @@ public class SwerveDrive extends SubsystemBase {
     m_xTranslationPIDTuner = new PIDTuner("Swerve/xTranslation", Robot.EnablePIDTuning, m_xTranslationPID);
     m_yTranslationPIDTuner = new PIDTuner("Swerve/yTranslation", Robot.EnablePIDTuning, m_yTranslationPID);
 
-    double rotationP = 0.004;
-    double rotationI = 0.0;
+    double rotationP = 0.017;
+    double rotationI = 0.0001;
     double rotationD = 0.0;
     m_rotationPID = new PIDController(rotationP, rotationI, rotationD);
     m_rotationPIDTuner = new PIDTuner("Swerve/Rotation", Robot.EnablePIDTuning, m_rotationPID);
@@ -286,7 +286,7 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public void setTargetAngle(Rotation2d targetAngle) {
-    m_rotationPID.setSetpoint(getRotation().getDegrees());
+    m_rotationPID.setSetpoint(targetAngle.getDegrees());
   }
 
   public void setTargetPose(Pose2d targetPose) {
@@ -303,7 +303,10 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public double getTargetOmega() {
-    return -MathUtil.clamp(m_rotationPID.calculate(getPose().getRotation().getDegrees()), -1, 1) * Constants.MaxORPS;
+    SmartDashboard.putNumber("aim/setPoint", m_rotationPID.getSetpoint());
+    SmartDashboard.putNumber("aim/PIDCalculate", m_rotationPID.calculate(getRotation().getDegrees()));
+    // return MathUtil.clamp(m_rotationPID.calculate(getPose().getRotation().getDegrees()), -1, 1) * Constants.MaxORPS;
+    return -MathUtil.clamp(m_rotationPID.calculate(getRotation().getDegrees()), -1, 1) * Constants.MaxORPS;
   }
 
   public void driveToPosition() {
