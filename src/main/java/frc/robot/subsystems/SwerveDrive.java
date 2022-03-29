@@ -113,7 +113,7 @@ public class SwerveDrive extends SubsystemBase {
     m_xTranslationPIDTuner = new PIDTuner("Swerve/xTranslation", Robot.EnablePIDTuning, m_xTranslationPID);
     m_yTranslationPIDTuner = new PIDTuner("Swerve/yTranslation", Robot.EnablePIDTuning, m_yTranslationPID);
 
-    double rotationP = 0.01;
+    double rotationP = 0.004;
     double rotationI = 0.0;
     double rotationD = 0.0;
     m_rotationPID = new PIDController(rotationP, rotationI, rotationD);
