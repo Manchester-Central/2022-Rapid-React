@@ -31,6 +31,9 @@ public class SetSpeedLauncherShoot extends BaseLauncherShoot {
     if(m_setHoodUp) {
       m_launcher.MoveHoodUp();
     }
+    else {
+      m_launcher.MoveHoodDown();
+    }
   }
   
   public static SetSpeedLauncherShoot CreateAutoCommand(ParsedCommand pc, Launcher launcher, Feeder feeder) {
