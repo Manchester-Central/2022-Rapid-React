@@ -35,7 +35,15 @@ public class CameraLauncherShoot extends BaseLauncherShoot {
   protected double getTargetSpeed() {
     if (m_camera.hasTarget()) {
       var distance = m_camera.getYAngle();
-      return m_flyWheelTable.getIdealTarget(distance).getSpeed();
+      var target = m_flyWheelTable.getIdealTarget(distance);
+
+      if (target.getHoodUp()) {
+        m_launcher.MoveHoodUp();
+      } else {
+        m_launcher.MoveHoodDown();
+      }
+
+      return target.getSpeed();
     }
     return DoNotLaunchSpeed;
   }
