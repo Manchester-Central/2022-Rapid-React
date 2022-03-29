@@ -13,11 +13,13 @@ public abstract class BaseLauncherShoot extends CommandBase {
   protected Launcher m_launcher;
   protected Feeder m_feeder;
   protected final double DoNotLaunchSpeed = -1.0;
+  protected FeederMode m_feederMode;
 
   /** Creates a new LauncherShoot. */
-  public BaseLauncherShoot(Launcher launcher, Feeder feeder) {
+  public BaseLauncherShoot(Launcher launcher, Feeder feeder, FeederMode feedermode) {
     m_launcher = launcher;
     m_feeder = feeder;
+    m_feederMode = feedermode;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_launcher); // remove feeder as requirement. See PR #75
   }
@@ -36,7 +38,7 @@ public abstract class BaseLauncherShoot extends CommandBase {
       m_launcher.SetTargetRPM(speed);
 
       if (m_launcher.isAtTargetSpeed(speed)) {
-        m_feeder.setFeederMode(FeederMode.LAUNCH);
+        m_feeder.setFeederMode(m_feederMode);
       } else {
         m_feeder.setFeederMode(FeederMode.DEFAULT);
       }

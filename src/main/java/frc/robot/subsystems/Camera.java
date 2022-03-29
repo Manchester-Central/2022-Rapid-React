@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Camera extends SubsystemBase {
 
   NetworkTableEntry tv, tx, ty, ta, ts, tl, tshort, tlong, thor, tvert, getpipe, camtran, pipeline, ledMode;
-  public static final double ComputerVision = 0; 
+  public static final double ComputerVision = 8; //TODO convert back to 0 
   public static final double HumanVision = 1;
 
   public Camera() {

@@ -16,7 +16,7 @@ public class CameraLauncherShoot extends BaseLauncherShoot {
 
   /** Creates a new LauncherShoot. */
   public CameraLauncherShoot(Launcher launcher, Camera camera, Feeder feeder, FlywheelTable flyWheel) {
-    super(launcher, feeder);
+    super(launcher, feeder, FeederMode.LAUNCH_CAMERA);
     m_camera = camera;
     m_flyWheelTable = flyWheel;
     addRequirements(camera);

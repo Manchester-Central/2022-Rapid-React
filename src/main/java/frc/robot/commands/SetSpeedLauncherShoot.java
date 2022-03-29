@@ -10,16 +10,19 @@ import frc.robot.Constants;
 import frc.robot.commands.auto.AutoUtil;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Launcher;
+import frc.robot.subsystems.Feeder.FeederMode;
 
 public class SetSpeedLauncherShoot extends BaseLauncherShoot {
   private double m_manualSpeed;
   private boolean m_setHoodUp;
+  private FeederMode m_feederMode;
 
   /** Creates a new LauncherShoot. */
-  public SetSpeedLauncherShoot(Launcher launcher, Feeder feeder, double manualSpeed, boolean setHoodUp) {
-    super(launcher, feeder);
+  public SetSpeedLauncherShoot(Launcher launcher, Feeder feeder, double manualSpeed, FeederMode feederMode) {
+    super(launcher, feeder, feederMode);
     m_manualSpeed = manualSpeed;
-    m_setHoodUp = setHoodUp;
+    m_setHoodUp = feederMode == FeederMode.LAUNCH_HIGH_BUMPER;
+    m_feederMode = feederMode;
   }
 
   @Override
@@ -32,7 +35,7 @@ public class SetSpeedLauncherShoot extends BaseLauncherShoot {
   
   public static SetSpeedLauncherShoot CreateAutoCommand(ParsedCommand pc, Launcher launcher, Feeder feeder) {
     var speed = AutoUtil.parseDouble(pc.getArgument("speed"), Constants.DefaultLauncherLowSpeed);
-    return new SetSpeedLauncherShoot(launcher, feeder, speed, false);
+    return new SetSpeedLauncherShoot(launcher, feeder, speed, FeederMode.LAUNCH_CAMERA);
   }
 
   @Override

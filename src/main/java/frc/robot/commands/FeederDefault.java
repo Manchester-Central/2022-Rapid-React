@@ -34,8 +34,14 @@ public class FeederDefault extends CommandBase {
       case INTAKE:
         intakeMode();
         break;
-      case LAUNCH:
-        launchMode();
+      case LAUNCH_LOW_BUMPER:
+        launchMode(1.0);
+        break;
+      case LAUNCH_HIGH_BUMPER:
+        launchMode(0.25);
+        break;
+      case LAUNCH_CAMERA:
+        launchMode(0.25);
         break;
       case OUTPUT:
         outputMode();
@@ -64,8 +70,8 @@ public class FeederDefault extends CommandBase {
     }
   }
 
-  public void launchMode() {
-    m_feeder.ManualFeed(1.0, 1.0);
+  public void launchMode(double power) {
+    m_feeder.ManualFeed(power, power);
   }
 
   public void outputMode() {

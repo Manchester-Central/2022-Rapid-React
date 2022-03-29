@@ -14,13 +14,15 @@ import java.util.Comparator;
  */
 public class TableData {
 
-    private double distance;
-    private double speed;
+    private double m_distance;
+    private double m_speed;
+    private boolean m_hoodUp;
 
-    public TableData(double dist, double spd) {
+    public TableData(double distance, double speed, boolean hoodUp) {
 
-        distance = dist;
-        speed = spd;
+        m_distance = distance;
+        m_speed = speed;
+        m_hoodUp = hoodUp;
 
     }
 
@@ -37,15 +39,19 @@ public class TableData {
     }
 
     public double getDistance() {
-        return distance;
+        return m_distance;
     }
 
     public double getSpeed() {
-        return speed;
+        return m_speed;
+    }
+    
+    public boolean getHoodUp() {
+        return m_hoodUp;
     }
 
     @Override
     public String toString() {
-        return "distance=" + distance + ", speed = " + speed;
+        return "distance=" + m_distance + ", speed = " + m_speed;
     }
 }
