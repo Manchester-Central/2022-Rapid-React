@@ -30,6 +30,7 @@ import frc.robot.commands.FieldRelativeDrive;
 import frc.robot.commands.HandBrake;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.IntakeDefault;
+import frc.robot.commands.IntakeWithOnlyFeeder;
 import frc.robot.commands.LauncherDefault;
 import frc.robot.commands.CameraLauncherShoot;
 import frc.robot.commands.Output;
@@ -146,7 +147,7 @@ public class RobotContainer {
     // m_driver.getButtonB().whenPressed(new EnableSlowDriverSpeed(false));
     m_driver.getButtonY().whileHeld(new DashboardSpeedLauncherShoot(m_launcher, m_feeder));
 
-    m_driver.getButtonLB().whileHeld(() -> m_intake.MoveIntakeUp(), m_intake);
+    m_driver.getButtonLB().whileHeld(new IntakeWithOnlyFeeder(m_feeder));
     m_driver.getButtonLT().whileHeld(new IntakeCommand(m_feeder, m_intake));
 
     m_driver.getButtonRB()
@@ -171,8 +172,8 @@ public class RobotContainer {
     m_operator.getButtonRT()
         .whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, Constants.DefaultLauncherLowSpeed, FeederMode.LAUNCH_LOW_BUMPER));
 
-    m_operator.getButtonLB().whileHeld(new RunCommand(() -> m_intake.MoveIntakeUp(), m_intake));
-    m_operator.getButtonLT().whileHeld(new RunCommand(() -> m_intake.MoveIntakeDown(), m_intake));
+    m_operator.getButtonLB().whileHeld(new IntakeWithOnlyFeeder(m_feeder));
+    m_operator.getButtonLT().whileHeld(new IntakeCommand(m_feeder, m_intake));
 
     m_operator.getPOVWest().whileHeld(new RunCommand(() -> m_climber.MoveArmUp(), m_climber));
     m_operator.getPOVEast().whileHeld(new RunCommand(() -> m_climber.MoveArmDown(), m_climber));
