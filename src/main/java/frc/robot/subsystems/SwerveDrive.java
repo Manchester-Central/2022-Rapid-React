@@ -39,10 +39,12 @@ public class SwerveDrive extends SubsystemBase {
   private PIDController m_xTranslationPID;
   private PIDController m_yTranslationPID;
   private PIDController m_rotationPID;
+  private PIDController m_rotationAutoPID;
 
   private PIDTuner m_xTranslationPIDTuner;
   private PIDTuner m_yTranslationPIDTuner;
   private PIDTuner m_rotationPIDTuner;
+  private PIDTuner m_rotationAutoPIDTuner;
   private PIDTuner m_moduleVelocityPIDTuner;
   private PIDTuner m_moduleAnglePIDTuner;
 
@@ -118,8 +120,16 @@ public class SwerveDrive extends SubsystemBase {
     double rotationD = 0.0;
     m_rotationPID = new PIDController(rotationP, rotationI, rotationD);
     m_rotationPIDTuner = new PIDTuner("Swerve/Rotation", Robot.EnablePIDTuning, m_rotationPID);
-    m_rotationPID.setTolerance(0.5);
+    m_rotationPID.setTolerance(3.0);
     m_rotationPID.enableContinuousInput(-180, 180);
+
+    double rotationAutoP = 0.01;
+    double rotationAutoI = 0.0001;
+    double rotationAutoD = 0.0;
+    m_rotationAutoPID = new PIDController(rotationAutoP, rotationAutoI, rotationAutoD);
+    m_rotationAutoPIDTuner = new PIDTuner("Swerve/RotationAuto", Robot.EnablePIDTuning, m_rotationAutoPID);
+    m_rotationAutoPID.setTolerance(3.0);
+    m_rotationAutoPID.enableContinuousInput(-180, 180);
 
     Robot.LogManager.addNumber("Gyro/AccelX", m_gyro::getRawAccelX);
     Robot.LogManager.addNumber("Gyro/AccelY", m_gyro::getRawAccelY);
@@ -253,6 +263,7 @@ public class SwerveDrive extends SubsystemBase {
     m_xTranslationPIDTuner.tune();
     m_yTranslationPIDTuner.tune();
     m_rotationPIDTuner.tune();
+    m_rotationAutoPIDTuner.tune();
     m_moduleVelocityPIDTuner.tune();
     m_moduleAnglePIDTuner.tune();
   }
@@ -289,9 +300,13 @@ public class SwerveDrive extends SubsystemBase {
     m_rotationPID.setSetpoint(targetAngle.getDegrees());
   }
 
+  public boolean isAtTargetAngle() {
+    return m_rotationPID.atSetpoint();
+  }
+
   public void setTargetPose(Pose2d targetPose) {
     setTargetPosition(targetPose.getX(), targetPose.getY());
-    setTargetAngle(targetPose.getRotation());
+    m_rotationAutoPID.setSetpoint(targetPose.getRotation().getDegrees());
   }
 
   public double getTargetVx() {
@@ -303,28 +318,30 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public double getTargetOmega() {
-    SmartDashboard.putNumber("aim/setPoint", m_rotationPID.getSetpoint());
-    SmartDashboard.putNumber("aim/PIDCalculate", m_rotationPID.calculate(getRotation().getDegrees()));
-    // return MathUtil.clamp(m_rotationPID.calculate(getPose().getRotation().getDegrees()), -1, 1) * Constants.MaxORPS;
     return -MathUtil.clamp(m_rotationPID.calculate(getRotation().getDegrees()), -1, 1) * Constants.MaxORPS;
+  }
+
+  public double getTargetOmegaAuto() {
+    return -MathUtil.clamp(m_rotationAutoPID.calculate(getRotation().getDegrees()), -1, 1) * Constants.MaxORPS;
   }
 
   public void driveToPosition() {
     var vx = getTargetVx();
     var vy = getTargetVy();
-    var Omega = getTargetOmega();
+    var Omega = getTargetOmegaAuto();
     var speeds = ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, Omega, getRotation());
     move(speeds);
   }
 
   public boolean isAtTargetPose() {
-    return m_xTranslationPID.atSetpoint() && m_yTranslationPID.atSetpoint() && m_rotationPID.atSetpoint();
+    return m_xTranslationPID.atSetpoint() && m_yTranslationPID.atSetpoint() && m_rotationAutoPID.atSetpoint();
   }
 
   public void deleteDriveToPositionError() {
     m_xTranslationPID.reset();
     m_yTranslationPID.reset();
     m_rotationPID.reset();
+    m_rotationAutoPID.reset();
   }
 
 }

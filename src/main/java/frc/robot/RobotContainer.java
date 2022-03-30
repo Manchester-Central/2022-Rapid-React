@@ -24,6 +24,7 @@ import frc.robot.commands.DriveOverDistance;
 import frc.robot.commands.DriveOverTime;
 import frc.robot.commands.DriveToPosition;
 import frc.robot.commands.DriverRelativeDrive;
+import frc.robot.commands.DriverRelativeDriveAimAndLaunch;
 import frc.robot.commands.DriverRelativeDriveWithAim;
 import frc.robot.commands.FieldRelativeDrive;
 import frc.robot.commands.HandBrake;
@@ -151,7 +152,7 @@ public class RobotContainer {
     m_driver.getButtonRB()
         .whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, Constants.DefaultLauncherHighSpeed, FeederMode.LAUNCH_HIGH_BUMPER));
     m_driver.getButtonRT()
-        .whileHeld(new CameraLauncherShoot(m_launcher, m_camera, m_feeder, m_flywheelTable));
+        .whileHeld(new DriverRelativeDriveAimAndLaunch(m_swerveDrive, m_driver, m_camera, m_launcher, m_flywheelTable, m_feeder));
 
     m_driver.getPOVNorth().whileActiveOnce(new ZeroNavX(0, m_swerveDrive));
     m_driver.getPOVEast().whileActiveOnce(new ZeroNavX(90, m_swerveDrive));
