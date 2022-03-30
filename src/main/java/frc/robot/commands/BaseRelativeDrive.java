@@ -15,9 +15,15 @@ public abstract class BaseRelativeDrive extends CommandBase {
 
   protected SwerveDrive m_drive;
   private Gamepad m_controller;
+  private boolean m_alwaysMove;
 
   /** Creates a new BaseRelativeDrive. */
   public BaseRelativeDrive(SwerveDrive drive, Gamepad controller) {
+    this(drive, controller, false);
+  }
+
+  public BaseRelativeDrive(SwerveDrive drive, Gamepad controller, boolean alwaysMove) {
+    m_alwaysMove = alwaysMove;
     m_controller = controller;
     m_drive = drive;
     addRequirements(drive);
@@ -29,12 +35,12 @@ public abstract class BaseRelativeDrive extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public final void execute() {
+  public void execute() {
     var leftX = m_controller.getLeftX();
     var leftY = m_controller.getLeftY();
     var rightX = m_controller.getRightX();
     var multiplier = IsSlowMode ? 0.5 : 1.0;
-    if(leftX == 0.0 && leftY == 0.0 && rightX == 0.0) {
+    if(leftX == 0.0 && leftY == 0.0 && rightX == 0.0 && !m_alwaysMove) {
       //m_drive.adjustToDefaultPosition();
       m_drive.stop();
     } else {
@@ -48,7 +54,7 @@ public abstract class BaseRelativeDrive extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public final void end(boolean interrupted) {
+  public void end(boolean interrupted) {
     m_drive.stop();
   }
 

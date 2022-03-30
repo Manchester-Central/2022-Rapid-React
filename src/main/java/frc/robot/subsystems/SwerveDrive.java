@@ -118,7 +118,7 @@ public class SwerveDrive extends SubsystemBase {
     double rotationD = 0.0;
     m_rotationPID = new PIDController(rotationP, rotationI, rotationD);
     m_rotationPIDTuner = new PIDTuner("Swerve/Rotation", Robot.EnablePIDTuning, m_rotationPID);
-    m_rotationPID.setTolerance(0.5);
+    m_rotationPID.setTolerance(3.0);
     m_rotationPID.enableContinuousInput(-180, 180);
 
     Robot.LogManager.addNumber("Gyro/AccelX", m_gyro::getRawAccelX);
@@ -287,6 +287,10 @@ public class SwerveDrive extends SubsystemBase {
 
   public void setTargetAngle(Rotation2d targetAngle) {
     m_rotationPID.setSetpoint(targetAngle.getDegrees());
+  }
+
+  public boolean isAtTargetAngle() {
+    return m_rotationPID.atSetpoint();
   }
 
   public void setTargetPose(Pose2d targetPose) {
