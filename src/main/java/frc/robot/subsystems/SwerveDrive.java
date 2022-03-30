@@ -329,8 +329,7 @@ public class SwerveDrive extends SubsystemBase {
     var vx = getTargetVx();
     var vy = getTargetVy();
     var Omega = getTargetOmegaAuto();
-    var speeds = ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, Omega, getRotation());
-    move(speeds);
+    moveDriverRelative(vx, vy, Omega);
   }
 
   public boolean isAtTargetPose() {
