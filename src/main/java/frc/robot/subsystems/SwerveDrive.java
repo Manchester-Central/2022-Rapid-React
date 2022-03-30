@@ -53,7 +53,7 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public Rotation2d getRotation() {
-    return Rotation2d.fromDegrees(AngleUtil.clampAngle(-m_gyro.getAngle()));
+    return Rotation2d.fromDegrees(AngleUtil.clampAngle(m_gyro.getAngle()));
 
   }
 
@@ -75,21 +75,48 @@ public class SwerveDrive extends SubsystemBase {
     SmartDashboard.putData("Field", m_field);
     double width = 0.2957;
     double length = 0.32067;
-    m_moduleFL = new SwerveDriveModule(length, -width, SwerveModulePosition.FrontLeft.name(),
-        Constants.SwerveFrontLeftVelocity,
-        Constants.SwerveFrontLeftAngle, Constants.SwerveFrontLeftAbsolute, -110.5);
-    m_moduleFR = new SwerveDriveModule(length, width, SwerveModulePosition.FrontRight.name(),
-        Constants.SwerveFrontRightVelocity,
-        Constants.SwerveFrontRightAngle, Constants.SwerveFrontRightAbsolute, 173.0);
-    m_moduleBL = new SwerveDriveModule(-length, -width, SwerveModulePosition.BackLeft.name(),
-        Constants.SwerveBackLeftVelocity,
-        Constants.SwerveBackLeftAngle, Constants.SwerveBackLeftAbsolute, 236.6);
-    m_moduleBR = new SwerveDriveModule(-length, width, SwerveModulePosition.BackRight.name(),
-        Constants.SwerveBackRightVelocity,
-        Constants.SwerveBackRightAngle, Constants.SwerveBackRightAbsolute, -15.7);
-    m_kinematics = new SwerveDriveKinematics(m_moduleFL.getLocation(), m_moduleFR.getLocation(),
-        m_moduleBR.getLocation(),
-        m_moduleBL.getLocation());
+    m_moduleFL = new SwerveDriveModule(
+      length,
+      width,
+      SwerveModulePosition.FrontLeft.name(),
+      Constants.SwerveFrontLeftVelocity,
+      Constants.SwerveFrontLeftAngle,
+      Constants.SwerveFrontLeftAbsolute,
+      -110.5
+    );
+    m_moduleFR = new SwerveDriveModule(
+      length, 
+      -width, 
+      SwerveModulePosition.FrontRight.name(),
+      Constants.SwerveFrontRightVelocity,
+      Constants.SwerveFrontRightAngle, 
+      Constants.SwerveFrontRightAbsolute, 
+      173.0
+    );
+    m_moduleBL = new SwerveDriveModule(
+      -length,
+      width,
+      SwerveModulePosition.BackLeft.name(),
+      Constants.SwerveBackLeftVelocity,
+      Constants.SwerveBackLeftAngle, 
+      Constants.SwerveBackLeftAbsolute, 
+      236.6
+    );
+    m_moduleBR = new SwerveDriveModule(
+      -length, 
+      -width, 
+      SwerveModulePosition.BackRight.name(),
+      Constants.SwerveBackRightVelocity,
+      Constants.SwerveBackRightAngle, 
+      Constants.SwerveBackRightAbsolute, 
+      -15.7
+    );
+    m_kinematics = new SwerveDriveKinematics(
+      m_moduleFL.getLocation(),
+      m_moduleFR.getLocation(),
+      m_moduleBR.getLocation(),
+      m_moduleBL.getLocation()
+    );
     m_gyro = new AHRS(SPI.Port.kMXP);
     m_odometry = new SwerveDriveOdometry(m_kinematics, getRotation());
     Robot.LogManager.addNumber("Swerve/X", () -> m_odometry.getPoseMeters().getX());
@@ -171,13 +198,13 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public void moveFieldRelative(double sidewaysSpeed, double forwardSpeed, double theta) {
-    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(sidewaysSpeed, forwardSpeed, theta, getRotation().times(-1));
+    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(sidewaysSpeed, forwardSpeed, theta, getRotation());
     move(speeds);
   }
 
   public void moveDriverRelative(double sidewaysSpeed, double forwardSpeed, double theta) {
-    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(forwardSpeed, sidewaysSpeed * -1, theta,
-        getRotation().times(-1));
+    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(forwardSpeed, sidewaysSpeed, theta,
+        getRotation());
     move(speeds);
   }
 
@@ -233,6 +260,13 @@ public class SwerveDrive extends SubsystemBase {
     }
   }
 
+  public void setSwerveModuleStates(SwerveModuleState frontLeftState, SwerveModuleState frontRightState, SwerveModuleState backRightState, SwerveModuleState backLeftState) {
+    m_moduleFL.setTargetState(frontLeftState);
+    m_moduleFR.setTargetState(frontRightState);
+    m_moduleBR.setTargetState(backRightState);
+    m_moduleBL.setTargetState(backLeftState);
+  }
+
   public Pose2d getPose() {
     return m_odometry.getPoseMeters();
   }
@@ -249,7 +283,8 @@ public class SwerveDrive extends SubsystemBase {
     // This method will be called once per scheduler run
     m_odometry.update(getRotation(), getModuleStates());
     Pose2d pose = getPose();
-    Pose2d correctedPose = new Pose2d(pose.getX(), -pose.getY(), pose.getRotation());
+    //Pose2d correctedPose = new Pose2d(pose.getX(), -pose.getY(), pose.getRotation());
+    Pose2d correctedPose = pose;
     m_moduleFL.updatePosition(correctedPose);
     m_moduleFR.updatePosition(correctedPose);
     m_moduleBR.updatePosition(correctedPose);
@@ -288,7 +323,7 @@ public class SwerveDrive extends SubsystemBase {
     ChassisSpeeds speeds = m_kinematics.toChassisSpeeds(getModuleStates());
     var currentYaw = m_gyro.getYaw();
     setSimulationAngle(
-        currentYaw - new Rotation2d(speeds.omegaRadiansPerSecond / Constants.RobotUpdate_hz).getDegrees());
+        currentYaw + new Rotation2d(speeds.omegaRadiansPerSecond / Constants.RobotUpdate_hz).getDegrees());
   }
 
   public void setTargetPosition(double x, double y) {
@@ -318,11 +353,11 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public double getTargetOmega() {
-    return -MathUtil.clamp(m_rotationPID.calculate(getRotation().getDegrees()), -1, 1) * Constants.MaxORPS;
+    return MathUtil.clamp(m_rotationPID.calculate(getRotation().getDegrees()), -1, 1) * Constants.MaxORPS;
   }
 
   public double getTargetOmegaAuto() {
-    return -MathUtil.clamp(m_rotationAutoPID.calculate(getRotation().getDegrees()), -1, 1) * Constants.MaxORPS;
+    return MathUtil.clamp(m_rotationAutoPID.calculate(getRotation().getDegrees()), -1, 1) * Constants.MaxORPS;
   }
 
   public void driveToPosition() {

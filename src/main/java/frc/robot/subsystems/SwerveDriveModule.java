@@ -84,7 +84,7 @@ public class SwerveDriveModule {
     }
 
     public void setTargetState(SwerveModuleState targetState) {
-        targetState = SwerveModuleState.optimize(targetState, Rotation2d.fromDegrees(getCurrentAngleDegrees()));
+        //targetState = SwerveModuleState.optimize(targetState, Rotation2d.fromDegrees(getCurrentAngleDegrees()));
         m_targetVelocity = targetState.speedMetersPerSecond;
         m_targetAngle = AngleUtil.closestTarget(getCurrentAngleDegrees(), targetState.angle.getDegrees());
         m_velocityController.set(TalonFXControlMode.Velocity, MPSToFalconVelocity(m_targetVelocity));
@@ -130,14 +130,14 @@ public class SwerveDriveModule {
 
         // Convert to # of counts
 
-        return motorRotations * Constants.TalonCountsPerRevolution;
+        return -motorRotations * Constants.TalonCountsPerRevolution;
 
     }
 
     private double FalconAngleToDegrees(double FalconAngle) {
         var motorRotations = FalconAngle / Constants.TalonCountsPerRevolution;
         var wheelRotations = motorRotations / Constants.SwerveModuleAngleGearRatio;
-        return wheelRotations * 360;
+        return -wheelRotations * 360;
     }
 
     public void UpdateVelocityPIDConstants(PIDUpdate update) {
@@ -166,8 +166,8 @@ public class SwerveDriveModule {
     }
 
     private double GetAbsoluteEncoderAngle() {
-        return 360 - m_absoluteEncoder.getAbsolutePosition() + m_absoluteAngleOffset;
-
+        //return 360 - m_absoluteEncoder.getAbsolutePosition() + m_absoluteAngleOffset;
+        return m_absoluteEncoder.getAbsolutePosition() + m_absoluteAngleOffset;
     }
 
 }

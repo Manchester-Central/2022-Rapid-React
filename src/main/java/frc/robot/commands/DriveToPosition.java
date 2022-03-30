@@ -24,7 +24,7 @@ public class DriveToPosition extends CommandBase {
     addRequirements(drive);
     m_drive = drive;
     m_x = x;
-    m_y = -y; // negative is workaround for coordinate issue
+    m_y = y;
     m_thetaDegrees = thetaDegrees;
     m_targetPose = new Pose2d(m_x, m_y, Rotation2d.fromDegrees(m_thetaDegrees));
   }
