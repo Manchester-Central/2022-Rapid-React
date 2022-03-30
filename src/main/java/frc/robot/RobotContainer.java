@@ -11,6 +11,7 @@ import com.chaos131.auto.ParsedCommand;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -38,6 +39,7 @@ import frc.robot.commands.RobotRelativeDrive;
 import frc.robot.commands.SetSpeedLauncherShoot;
 import frc.robot.commands.SetFeederMode;
 import frc.robot.commands.SwerveModuleTest;
+import frc.robot.commands.SwerveModuleTestDashboard;
 import frc.robot.commands.SwerveMotorTest;
 import frc.robot.commands.ZeroNavX;
 import frc.robot.commands.auto.AutoDriverRelativeDrive;
@@ -181,6 +183,11 @@ public class RobotContainer {
   
     m_operator.getButtonStart().whileHeld(new RunCommand(() -> m_launcher.MoveHoodUp(), m_launcher));
     m_operator.getButtonSelect().whileHeld(new RunCommand(() -> m_launcher.MoveHoodDown(), m_launcher));
+
+    SmartDashboard.putData("FrontLeftTest", new SwerveModuleTestDashboard(m_swerveDrive, SwerveModulePosition.FrontLeft));
+    SmartDashboard.putData("FrontRightTest", new SwerveModuleTestDashboard(m_swerveDrive, SwerveModulePosition.FrontRight));
+    SmartDashboard.putData("BackRightTest", new SwerveModuleTestDashboard(m_swerveDrive, SwerveModulePosition.BackRight));
+    SmartDashboard.putData("BackLeftTest", new SwerveModuleTestDashboard(m_swerveDrive, SwerveModulePosition.BackLeft));
   }
 
   /**

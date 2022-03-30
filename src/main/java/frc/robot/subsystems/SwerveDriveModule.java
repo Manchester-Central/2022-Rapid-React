@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.chaos131.pid.PIDUpdate;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 
@@ -44,6 +45,7 @@ public class SwerveDriveModule {
         m_angleController.configAllowableClosedloopError(0, DegreesToFalconAngle(0.5)); //TODO Reduce after tuning PID
         m_velocityController.setNeutralMode(NeutralMode.Coast);
         m_angleController.setNeutralMode(NeutralMode.Brake);
+        m_angleController.setInverted(TalonFXInvertType.Clockwise);
         m_velocityController.configClosedloopRamp(0.65);
         m_name = name;
         m_absoluteEncoder = new CANCoder(absoluteEncoderPort);
@@ -84,7 +86,7 @@ public class SwerveDriveModule {
     }
 
     public void setTargetState(SwerveModuleState targetState) {
-        targetState = SwerveModuleState.optimize(targetState, Rotation2d.fromDegrees(getCurrentAngleDegrees()));
+        //targetState = SwerveModuleState.optimize(targetState, Rotation2d.fromDegrees(getCurrentAngleDegrees()));
         m_targetVelocity = targetState.speedMetersPerSecond;
         m_targetAngle = AngleUtil.closestTarget(getCurrentAngleDegrees(), targetState.angle.getDegrees());
         m_velocityController.set(TalonFXControlMode.Velocity, MPSToFalconVelocity(m_targetVelocity));
@@ -130,14 +132,14 @@ public class SwerveDriveModule {
 
         // Convert to # of counts
 
-        return motorRotations * Constants.TalonCountsPerRevolution;
+        return -motorRotations * Constants.TalonCountsPerRevolution;
 
     }
 
     private double FalconAngleToDegrees(double FalconAngle) {
         var motorRotations = FalconAngle / Constants.TalonCountsPerRevolution;
         var wheelRotations = motorRotations / Constants.SwerveModuleAngleGearRatio;
-        return wheelRotations * 360;
+        return -wheelRotations * 360;
     }
 
     public void UpdateVelocityPIDConstants(PIDUpdate update) {
@@ -166,8 +168,8 @@ public class SwerveDriveModule {
     }
 
     private double GetAbsoluteEncoderAngle() {
-        return 360 - m_absoluteEncoder.getAbsolutePosition() + m_absoluteAngleOffset;
-
+        //return 360 - m_absoluteEncoder.getAbsolutePosition() + m_absoluteAngleOffset;
+        return m_absoluteEncoder.getAbsolutePosition() - m_absoluteAngleOffset;
     }
 
 }
