@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.chaos131.pid.PIDUpdate;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 
@@ -44,6 +45,7 @@ public class SwerveDriveModule {
         m_angleController.configAllowableClosedloopError(0, DegreesToFalconAngle(0.5)); //TODO Reduce after tuning PID
         m_velocityController.setNeutralMode(NeutralMode.Coast);
         m_angleController.setNeutralMode(NeutralMode.Brake);
+        m_angleController.setInverted(TalonFXInvertType.Clockwise);
         m_velocityController.configClosedloopRamp(0.65);
         m_name = name;
         m_absoluteEncoder = new CANCoder(absoluteEncoderPort);
@@ -167,7 +169,7 @@ public class SwerveDriveModule {
 
     private double GetAbsoluteEncoderAngle() {
         //return 360 - m_absoluteEncoder.getAbsolutePosition() + m_absoluteAngleOffset;
-        return m_absoluteEncoder.getAbsolutePosition() + m_absoluteAngleOffset;
+        return m_absoluteEncoder.getAbsolutePosition() - m_absoluteAngleOffset;
     }
 
 }
