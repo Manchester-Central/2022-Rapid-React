@@ -110,8 +110,8 @@ public class SwerveDrive extends SubsystemBase {
     double translationD = 0.0;
     m_xTranslationPID = new PIDController(translationP, translationI, translationD);
     m_yTranslationPID = new PIDController(translationP, translationI, translationD);
-    m_xTranslationPID.setTolerance(0.01);
-    m_yTranslationPID.setTolerance(0.01);
+    m_xTranslationPID.setTolerance(0.03);
+    m_yTranslationPID.setTolerance(0.03);
     m_xTranslationPIDTuner = new PIDTuner("Swerve/xTranslation", Robot.EnablePIDTuning, m_xTranslationPID);
     m_yTranslationPIDTuner = new PIDTuner("Swerve/yTranslation", Robot.EnablePIDTuning, m_yTranslationPID);
 
@@ -249,7 +249,7 @@ public class SwerveDrive extends SubsystemBase {
     // This method will be called once per scheduler run
     m_odometry.update(getRotation(), getModuleStates());
     Pose2d pose = getPose();
-    Pose2d correctedPose = new Pose2d(pose.getX(), -pose.getY(), pose.getRotation());
+    Pose2d correctedPose = new Pose2d(pose.getX(), pose.getY(), pose.getRotation());
     m_moduleFL.updatePosition(correctedPose);
     m_moduleFR.updatePosition(correctedPose);
     m_moduleBR.updatePosition(correctedPose);
@@ -329,8 +329,7 @@ public class SwerveDrive extends SubsystemBase {
     var vx = getTargetVx();
     var vy = getTargetVy();
     var Omega = getTargetOmegaAuto();
-    var speeds = ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, Omega, getRotation());
-    move(speeds);
+    moveDriverRelative(vy, vx, Omega);
   }
 
   public boolean isAtTargetPose() {

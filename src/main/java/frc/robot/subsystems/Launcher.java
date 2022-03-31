@@ -77,8 +77,6 @@ public class Launcher extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Launcher/Speed", m_ControllerA.getSelectedSensorVelocity(0));
     SmartDashboard.putNumber("Launcher/TargetSpeed", m_ControllerA.getClosedLoopTarget(0));
-    SmartDashboard.putNumber("Launcher/Error", m_ControllerA.getClosedLoopError(0));
-    SmartDashboard.putNumber("Launcher/Power", m_ControllerA.getMotorOutputPercent());
     m_pidTuner.tune();
   }
 
