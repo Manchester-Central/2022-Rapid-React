@@ -6,8 +6,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
 
 /** Add your docs here. */
 public class AngleUtil {
@@ -33,9 +31,6 @@ public class AngleUtil {
             var aimCurrentAngle = currentAngle;
             var targetAngle = Rotation2d.fromDegrees(aimXAngle).plus(aimCurrentAngle).getDegrees();
             targetAngle = AngleUtil.clampAngle(targetAngle);
-            SmartDashboard.putNumber("aim/xAdjust", aimXAngle);
-            SmartDashboard.putNumber("aim/currentAngle", aimCurrentAngle.getDegrees());
-            SmartDashboard.putNumber("aim/targetAngle", targetAngle);
             return Rotation2d.fromDegrees(targetAngle);
         }
         /*
