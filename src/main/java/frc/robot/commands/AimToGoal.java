@@ -4,18 +4,12 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.estimator.AngleStatistics;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.AngleUtil;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.SwerveDrive;
-import frc.robot.subsystems.SwerveDrive.SwerveModulePosition;
 
 public class AimToGoal extends CommandBase {
   private SwerveDrive m_swerveDrive;
@@ -46,7 +40,6 @@ public class AimToGoal extends CommandBase {
     var rotation = AngleUtil.GetEstimatedAngleToGoal(m_camera, currentPose, currentRotation);
     m_swerveDrive.setTargetAngle(rotation);
     OmegaSpeed = m_swerveDrive.getTargetOmega();
-    SmartDashboard.putNumber("aim/omega", OmegaSpeed);
     m_swerveDrive.moveRobotRelative(0, 0, OmegaSpeed);
   }
 
