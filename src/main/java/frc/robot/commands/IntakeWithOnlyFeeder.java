@@ -6,44 +6,31 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Feeder;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Feeder.FeederMode;
 
-public class IntakeCommand extends CommandBase {
+public class IntakeWithOnlyFeeder extends CommandBase {
   private Feeder m_feeder;
-  private Intake m_intake;
 
-  /** Creates a new Output. */
-  public IntakeCommand(Feeder feeder, Intake intake) {
+  /** Creates a new IntakeWithOnlyFeeder. */
+  public IntakeWithOnlyFeeder(Feeder feeder) {
     m_feeder = feeder;
-    m_intake = intake;
-    addRequirements(m_intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_intake.MoveIntakeDown();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     m_feeder.setFeederMode(FeederMode.INTAKE);
-    if (m_feeder.IsBallAtTopFeeder() && m_feeder.IsBallAtMiddleFeeder()) {
-      m_intake.ManualIntake(0);
-      m_intake.MoveIntakeUp();
-    } else {
-      m_intake.ManualIntake(1);
-      m_intake.MoveIntakeDown();
-    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_feeder.setFeederMode(FeederMode.DEFAULT);
-    m_intake.ManualIntake(0);
   }
 
   // Returns true when the command should end.

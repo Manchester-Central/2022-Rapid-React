@@ -30,6 +30,7 @@ public class IntakeDefault extends CommandBase {
       m_intake.ManualIntake(1.0);
     }
     else {
+      m_intake.MoveIntakeUp();
       m_intake.ManualIntake(0);
     }
     //m_intake.MoveIntakeDown();
