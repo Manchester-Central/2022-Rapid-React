@@ -46,6 +46,7 @@ public class Camera extends SubsystemBase {
     ledMode.setDouble(0);
     Robot.LogManager.addNumber("Camera/TY", () -> getYAngle());
 
+    setPipeline(HumanVision);
   }
 
   /***
