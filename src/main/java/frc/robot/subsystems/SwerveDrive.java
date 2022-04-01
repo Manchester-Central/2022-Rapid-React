@@ -136,6 +136,20 @@ public class SwerveDrive extends SubsystemBase {
     Robot.LogManager.addNumber("Gyro/AccelZ", m_gyro::getRawAccelZ);
   }
 
+  public void autoInit() {
+    m_moduleFR.autoInit();
+    m_moduleFL.autoInit();
+    m_moduleBR.autoInit();
+    m_moduleBL.autoInit();
+  }
+
+  public void teleopInit() {
+    m_moduleFR.teleopInit();
+    m_moduleFL.teleopInit();
+    m_moduleBR.teleopInit();
+    m_moduleBL.teleopInit();
+  }
+
   public void updateOdometry(double x, double y, double angle) {
     updateGyroAdjustmentAngle(angle);
     m_odometry.resetPosition(new Pose2d(x, y, getRotation()), getRotation());
