@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /** Add your docs here. */
@@ -43,9 +44,16 @@ public class LoggingThread extends Thread {
         int unflushed = 0;
         timestampNow();
         try {
+            var matchName = "Test";
+            var event = DriverStation.getEventName();
+            if (!event.isBlank()) {
+                var matchType = DriverStation.getMatchType().name();
+                var matchNumber = DriverStation.getMatchNumber();
+                matchName = event + "-" + matchType + matchNumber;
+            }
             var simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH-mm-ss.SSSZ");
             var dateString = simpleDateFormat.format(m_timestamp);
-            var filePath = "logs/log-" + dateString + ".csv";
+            var filePath = "logs/" + matchName + "-" + dateString + ".csv";
             if (RobotBase.isReal()) {
                 // Save data to USB
                 filePath = "/U/" + filePath;

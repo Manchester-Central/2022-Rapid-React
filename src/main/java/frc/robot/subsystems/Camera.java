@@ -7,14 +7,14 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Robot;
-import frc.robot.logging.LogManager;
+import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Robot;
 
 /**
  * Add your docs here.
@@ -25,6 +25,9 @@ public class Camera extends SubsystemBase {
   NetworkTableEntry tv, tx, ty, ta, ts, tl, tshort, tlong, thor, tvert, getpipe, camtran, pipeline, ledMode;
   public static final double ComputerVision = 8;
   public static final double HumanVision = 1;
+
+  private MedianFilter m_yAngleFilter;
+  private double m_filteredYAngle = Double.NaN;
 
   public Camera() {
 
@@ -41,10 +44,13 @@ public class Camera extends SubsystemBase {
     camtran = table.getEntry("camtran");
     getpipe = table.getEntry("getpipe");
 
+    m_yAngleFilter = new MedianFilter(10);
+
     pipeline = table.getEntry("pipeline");
     ledMode = table.getEntry("ledMode");
     ledMode.setDouble(0);
     Robot.LogManager.addNumber("Camera/TY", () -> getYAngle());
+    Robot.LogManager.addNumber("Camera/TY Filtered", () -> m_filteredYAngle);
 
     setPipeline(HumanVision);
   }
@@ -63,7 +69,11 @@ public class Camera extends SubsystemBase {
   }
 
   public double getYAngle() {
-    return ty.getDouble(0.0);
+    return ((double) Math.round(ty.getDouble(0.0) * 100)) / 100;
+  }
+
+  public double getYAngleFiltered() {
+    return m_filteredYAngle;
   }
 
   public boolean hasTarget() {
@@ -91,6 +101,10 @@ public class Camera extends SubsystemBase {
     var distance = -1.0;
     if (hasTarget()) {
       distance = getDistance();
+      m_filteredYAngle = m_yAngleFilter.calculate(getYAngle());
+    } else {
+      m_yAngleFilter.reset();
+      m_filteredYAngle = Double.NaN;
     }
     SmartDashboard.putNumber("DistanceFromGoal", distance);
 

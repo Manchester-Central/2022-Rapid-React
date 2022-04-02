@@ -63,7 +63,7 @@ public class DriverRelativeDriveAimAndLaunch extends BaseRelativeDrive {
 
   protected double getTargetSpeed() {
     if (m_camera.hasTarget()) {
-      var distance = m_camera.getYAngle();
+      var distance = m_camera.getYAngleFiltered();
       var target = m_flywheelTable.getIdealTarget(distance);
 
       if (target.getHoodUp()) {
