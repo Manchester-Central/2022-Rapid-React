@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -44,7 +45,7 @@ public class SwerveDriveModule {
         m_angleController.configAllowableClosedloopError(0, DegreesToFalconAngle(0.5)); //TODO Reduce after tuning PID
         m_velocityController.setNeutralMode(NeutralMode.Coast);
         m_angleController.setNeutralMode(NeutralMode.Brake);
-        m_velocityController.configClosedloopRamp(0.65);
+        teleopInit();
         m_name = name;
         m_absoluteEncoder = new CANCoder(absoluteEncoderPort);
         m_absoluteAngleOffset = absoluteAngleOffset;
@@ -58,6 +59,14 @@ public class SwerveDriveModule {
         Robot.LogManager.addNumber(m_name + "/AbsoluteAngleDegrees", () -> GetAbsoluteEncoderAngle());
         Robot.LogManager.addNumber(m_name + "/DriveShaftSpeed", () -> m_velocityController.getSelectedSensorVelocity());
 
+    }
+
+    public void autoInit() {
+        m_velocityController.configClosedloopRamp(0.65);
+    }
+
+    public void teleopInit() {
+        m_velocityController.configClosedloopRamp(0.05);
     }
 
     public void updatePosition(Pose2d robotPose) {
@@ -80,7 +89,10 @@ public class SwerveDriveModule {
     }
 
     public SwerveModuleState getState() {
-        return new SwerveModuleState(getCurrentVelocityMPS(), Rotation2d.fromDegrees(getCurrentAngleDegrees()).times(-1));
+        if(DriverStation.isAutonomous()) {
+            return new SwerveModuleState(getCurrentVelocityMPS(), Rotation2d.fromDegrees(getCurrentAngleDegrees()).times(-1));
+        }
+        return new SwerveModuleState(getCurrentVelocityMPS(), Rotation2d.fromDegrees(getCurrentAngleDegrees()));
     }
 
     public void setTargetState(SwerveModuleState targetState) {
