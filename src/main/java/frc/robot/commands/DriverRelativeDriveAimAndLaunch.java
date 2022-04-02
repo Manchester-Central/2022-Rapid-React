@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import com.chaos131.gamepads.Gamepad;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.AngleUtil;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Feeder;
@@ -65,6 +66,11 @@ public class DriverRelativeDriveAimAndLaunch extends BaseRelativeDrive {
     if (m_camera.hasTarget()) {
       var distance = m_camera.getYAngle();
       var target = m_flywheelTable.getIdealTarget(distance);
+      var speed = target.getSpeed();
+
+      if (DriverStation.isAutonomous()) {
+        speed += 150;
+      }
 
       if (target.getHoodUp()) {
         m_launcher.MoveHoodUp();
@@ -72,7 +78,7 @@ public class DriverRelativeDriveAimAndLaunch extends BaseRelativeDrive {
         m_launcher.MoveHoodDown();
       }
 
-      return target.getSpeed();
+      return speed;
     }
     return 0;
   }
