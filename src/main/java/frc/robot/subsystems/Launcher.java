@@ -56,6 +56,7 @@ public class Launcher extends SubsystemBase {
     m_ControllerB.enableVoltageCompensation(true);
 
     Robot.LogManager.addNumber("Launcher/Speed2", () -> m_ControllerA.getSelectedSensorVelocity());
+    Robot.LogManager.addNumber("Launcher/TargetSpeed2", () -> m_ControllerA.getSelectedSensorVelocity());
   }
 
   public void ManualLaunch(double power) {
