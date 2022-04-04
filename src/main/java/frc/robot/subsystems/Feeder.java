@@ -57,13 +57,13 @@ public class Feeder extends SubsystemBase {
   }
 
   public void Both() {
-    m_upperFeeder.set(TalonFXControlMode.PercentOutput, 0.15);
-    m_lowerFeeder.set(TalonFXControlMode.PercentOutput, 1.0);
+    m_upperFeeder.set(TalonFXControlMode.PercentOutput, 0.0);
+    m_lowerFeeder.set(TalonFXControlMode.PercentOutput, 0.3);
   }
 
   public void Bottom() {
     m_upperFeeder.set(TalonFXControlMode.PercentOutput, 0.0);
-    m_lowerFeeder.set(TalonFXControlMode.PercentOutput, 0.5);
+    m_lowerFeeder.set(TalonFXControlMode.PercentOutput, 0.3);
   }
 
   public boolean IsBallAtTopFeeder() {
