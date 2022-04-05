@@ -45,15 +45,17 @@ public class Launcher extends SubsystemBase {
     m_ControllerB.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);
     m_ControllerA.configVelocityMeasurementWindow(1);
     m_ControllerB.configVelocityMeasurementWindow(1);
+    m_ControllerA.configVoltageCompSaturation(12.4);
+    m_ControllerB.configVoltageCompSaturation(12.4);
+
+    m_ControllerA.enableVoltageCompensation(true);
+    m_ControllerB.enableVoltageCompensation(true);
 
     double velocityP = 0.075;
     double velocityI = 0.0003;
     double velocityD = 0.0;
     double velocityF = 0.023; // k_f = (PERCENT_POWER X 1023) / OBSERVED_VELOCITY
     m_pidTuner = new PIDTuner("Launcher", Robot.EnablePIDTuning, velocityP, velocityI, velocityD, velocityF, this::updatePIDF);
-
-    m_ControllerA.enableVoltageCompensation(true);
-    m_ControllerB.enableVoltageCompensation(true);
 
     Robot.LogManager.addNumber("Launcher/Speed2", () -> m_ControllerA.getSelectedSensorVelocity());
   }
