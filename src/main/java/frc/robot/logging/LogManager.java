@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import frc.robot.Robot;
 
 /** Add your docs here. */
 public class LogManager {
@@ -29,7 +30,7 @@ public class LogManager {
         m_loggingThread = new LoggingThread();
         m_shuffleboardTab = Shuffleboard.getTab("Logging");
         m_willLogShuffleBoard = willLogShuffleBoard;
-        addNumber("timeMs", () -> RobotController.getFPGATime() / 1000);
+        addNumber("timeMs", () -> Robot.getCurrentTimeMs());
     }
 
     public void addBoolean(String title, BooleanSupplier valueSupplier) {

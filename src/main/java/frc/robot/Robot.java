@@ -73,9 +73,13 @@ public class Robot extends TimedRobot {
   }
 
   protected void loopFunc() {
-    long loopStart = RobotController.getFPGATime();
+    long loopStart = getCurrentTimeMs();
     super.loopFunc();
-    m_lastLoop_ms = (RobotController.getFPGATime() - loopStart) / 1000;
+    m_lastLoop_ms = (getCurrentTimeMs() - loopStart);
+  }
+
+  public static long getCurrentTimeMs() {
+    return RobotController.getFPGATime() / 1000;
   }
 
   /**
