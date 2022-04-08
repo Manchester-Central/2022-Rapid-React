@@ -25,7 +25,7 @@ import frc.robot.logging.LoggedDatapoints;
  * project.
  */
 public class Robot extends TimedRobot {
-  public static final LogManager LogManager = new LogManager(false);
+  public static final LogManager LogManager = new LogManager(true);
   public static final LoggedDatapoints LoggedDatapoints = new LoggedDatapoints();
   public static final boolean EnablePIDTuning = false;
   private final Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
@@ -141,7 +141,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     m_robotContainer.m_swerveDrive.teleopInit();
-    m_robotContainer.m_swerveDrive.updateOdometry(0, 0, m_robotContainer.m_swerveDrive.getRotation().getDegrees());
+    // m_robotContainer.m_swerveDrive.updateOdometry(0, 0, m_robotContainer.m_swerveDrive.getRotation().getDegrees());
   }
 
   /** This function is called periodically during operator control. */

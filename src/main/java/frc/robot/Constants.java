@@ -52,7 +52,7 @@ public final class Constants {
     // Absolute max meters per second = 3.8
     public static final double MaxMPS = 3.8;
     // Absolute max omega radians per second = 8.75
-    public static final double MaxORPS = 8.75;
+    public static final double MaxORPS = 6.75;//was 8.75 for auto
 
     // Pneumatic Connections
     public final static int ClimberSolenoidLeftForward = 10;
