@@ -339,9 +339,9 @@ public class SwerveDrive extends SubsystemBase {
     return -MathUtil.clamp(m_rotationAutoPID.calculate(getRotation().getDegrees()), -1, 1) * Constants.MaxORPS;
   }
 
-  public void driveToPosition() {
-    var vx = getTargetVx();
-    var vy = getTargetVy();
+  public void driveToPosition(double maxMps) {
+    var vx = MathUtil.clamp(getTargetVx(), -maxMps, maxMps);
+    var vy = MathUtil.clamp(getTargetVy(), -maxMps, maxMps);
     var Omega = getTargetOmegaAuto();
     moveDriverRelative(vy, vx, Omega);
   }

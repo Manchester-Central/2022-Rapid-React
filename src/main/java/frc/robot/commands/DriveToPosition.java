@@ -10,22 +10,24 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.commands.auto.AutoUtil;
 import frc.robot.subsystems.SwerveDrive;
 
 public class DriveToPosition extends CommandBase { 
   SwerveDrive m_drive;
-  double m_x, m_y, m_thetaDegrees;
+  double m_x, m_y, m_thetaDegrees, m_maxMps;
   Pose2d m_targetPose;
 
   /** Creates a new DriveToPosition. */
-  public DriveToPosition(SwerveDrive drive, double x, double y, double thetaDegrees) {
+  public DriveToPosition(SwerveDrive drive, double x, double y, double thetaDegrees, double maxMps) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drive);
     m_drive = drive;
     m_x = x;
     m_y = y; // negative is workaround for coordinate issue
     m_thetaDegrees = thetaDegrees;
+    m_maxMps = maxMps;
     m_targetPose = new Pose2d(m_x, m_y, Rotation2d.fromDegrees(m_thetaDegrees));
   }
   
@@ -33,9 +35,9 @@ public class DriveToPosition extends CommandBase {
     var x = AutoUtil.parseDouble(pc.getArgument("x"), 0.0);
     var y = AutoUtil.parseDouble(pc.getArgument("y"), 0.0);
     var angle = AutoUtil.parseDouble(pc.getArgument("angle"), 0.0);
-    return new DriveToPosition(swerveDrive, x, y, angle);
+    var maxMps = AutoUtil.parseDouble(pc.getArgument("maxMps"), Constants.MaxMPS);
+    return new DriveToPosition(swerveDrive, x, y, angle, maxMps);
   }
-
 
   // Called when the command is initially scheduled.
   @Override
@@ -48,7 +50,7 @@ public class DriveToPosition extends CommandBase {
   @Override
   public void execute() {
     // In memory of the old code RIP 😥, Josh made do it
-    m_drive.driveToPosition();
+    m_drive.driveToPosition(m_maxMps);
   }
 
   // Called once the command ends or is interrupted.
