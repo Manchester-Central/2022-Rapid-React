@@ -28,7 +28,7 @@ public class AimToGoal extends CommandBase {
   @Override
   public void initialize() {
     m_camera.setPipeline(Camera.ComputerVision);
-    m_swerveDrive.deleteDriveToPositionError();
+    m_swerveDrive.resetDriveToPosition();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

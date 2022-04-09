@@ -23,7 +23,7 @@ public class DriverRelativeDriveWithAim extends BaseRelativeDrive {
   public void initialize() {
     super.initialize();
     m_camera.setPipeline(Camera.ComputerVision);
-    m_drive.deleteDriveToPositionError();
+    m_drive.resetDriveToPosition();
   }
 
   @Override
