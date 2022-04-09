@@ -7,6 +7,7 @@ package frc.robot.commands;
 import com.chaos131.gamepads.Gamepad;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.Constants;
 import frc.robot.subsystems.AngleUtil;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Feeder;
@@ -34,6 +35,7 @@ public class DriverRelativeDriveAimAndLaunch extends BaseRelativeDrive {
   @Override
   public void initialize() {
     super.initialize();
+    FeederDefault.DefaultCameraLaunchSpeed = Constants.DefaultFeederLaunchSpeed;
     m_camera.setPipeline(Camera.ComputerVision);
     m_drive.deleteDriveToPositionError();
     m_feeder.setFeederMode(FeederMode.DEFAULT);
@@ -77,6 +79,9 @@ public class DriverRelativeDriveAimAndLaunch extends BaseRelativeDrive {
       } else {
         m_launcher.MoveHoodDown();
       }
+
+      m_launcher.setLauncherTolerance(target.getLauncherTolerance());
+      FeederDefault.DefaultCameraLaunchSpeed = target.getFeederSpeed();
 
       return speed;
     }

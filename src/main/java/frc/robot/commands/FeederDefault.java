@@ -6,10 +6,13 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Feeder;
 
 public class FeederDefault extends CommandBase {
   private Feeder m_feeder;
+
+  public static double DefaultCameraLaunchSpeed = Constants.DefaultFeederLaunchSpeed;
 
   /** Creates a new FeederDefault. */
   public FeederDefault(Feeder feeder) {
@@ -38,10 +41,10 @@ public class FeederDefault extends CommandBase {
         launchMode(1.0);
         break;
       case LAUNCH_HIGH_BUMPER:
-        launchMode(0.25);
+        launchMode(0.15);
         break;
       case LAUNCH_CAMERA:
-        launchMode(0.25);
+        launchMode(DefaultCameraLaunchSpeed);
         break;
       case OUTPUT:
         outputMode();
