@@ -141,7 +141,6 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     m_robotContainer.m_swerveDrive.teleopInit();
-    m_robotContainer.m_swerveDrive.updateOdometry(0, 0, m_robotContainer.m_swerveDrive.getRotation().getDegrees());
   }
 
   /** This function is called periodically during operator control. */
