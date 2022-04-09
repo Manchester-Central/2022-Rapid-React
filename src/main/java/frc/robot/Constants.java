@@ -72,7 +72,8 @@ public final class Constants {
     // Launcher Settings
     public final static double DefaultLauncherLowSpeed = 2300.0;
     public final static double DefaultLauncherHighSpeed = 7000.0;
-    public final static double DefaultLauncherTolerance = 100.0;
+    public final static double DefaultLauncherTolerance = 300.0;
+    public final static double DefaultLauncherToleranceLowBumper = 600.0;
     public final static double DefaultFeederLaunchSpeed = 0.25;
 
     // Target position on field

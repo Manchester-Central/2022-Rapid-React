@@ -18,10 +18,16 @@ public class DashboardSpeedLauncherShoot extends BaseLauncherShoot {
   public DashboardSpeedLauncherShoot(Launcher launcher, Feeder feeder) {
     super(launcher, feeder, FeederMode.LAUNCH_HIGH_BUMPER);
     SmartDashboard.putNumber("DashboardLauncherSpeed", Constants.DefaultLauncherLowSpeed);
+    SmartDashboard.putNumber("DashboardLauncherTolerance", Constants.DefaultLauncherTolerance);
+    SmartDashboard.putNumber("DashboardFeederSpeed", Constants.DefaultFeederLaunchSpeed);
   }
 
   @Override
   protected double getTargetSpeed() {
+    var launcherTolerance = SmartDashboard.getNumber("DashboardLauncherTolerance", 0);
+    m_launcher.setLauncherTolerance(launcherTolerance);
+    var feederSpeed = SmartDashboard.getNumber("DashboardFeederSpeed", 0);
+    FeederDefault.DefaultCameraLaunchSpeed = feederSpeed;
     return SmartDashboard.getNumber("DashboardLauncherSpeed", 0);
   }
 }
