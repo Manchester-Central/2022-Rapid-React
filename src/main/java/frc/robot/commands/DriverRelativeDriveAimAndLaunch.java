@@ -37,7 +37,7 @@ public class DriverRelativeDriveAimAndLaunch extends BaseRelativeDrive {
     super.initialize();
     FeederDefault.DefaultCameraLaunchSpeed = Constants.DefaultFeederLaunchSpeed;
     m_camera.setPipeline(Camera.ComputerVision);
-    m_drive.deleteDriveToPositionError();
+    m_drive.resetDriveToPosition();
     m_feeder.setFeederMode(FeederMode.DEFAULT);
     var speed = m_flywheelTable.getIdealTarget(-25).getSpeed();
     m_launcher.SetTargetRPM(speed);
@@ -70,10 +70,10 @@ public class DriverRelativeDriveAimAndLaunch extends BaseRelativeDrive {
       var target = m_flywheelTable.getIdealTarget(distance);
       var speed = target.getSpeed();
 
-      if (DriverStation.isAutonomous()) {
+      /* if (DriverStation.isAutonomous()) {
         speed += 150;
       }
-
+      */
       if (target.getHoodUp()) {
         m_launcher.MoveHoodUp();
       } else {

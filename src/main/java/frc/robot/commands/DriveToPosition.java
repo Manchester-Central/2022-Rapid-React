@@ -16,11 +16,11 @@ import frc.robot.subsystems.SwerveDrive;
 
 public class DriveToPosition extends CommandBase { 
   SwerveDrive m_drive;
-  double m_x, m_y, m_thetaDegrees, m_maxMps;
+  double m_x, m_y, m_thetaDegrees, m_maxMps, m_translationTolerance;
   Pose2d m_targetPose;
 
   /** Creates a new DriveToPosition. */
-  public DriveToPosition(SwerveDrive drive, double x, double y, double thetaDegrees, double maxMps) {
+  public DriveToPosition(SwerveDrive drive, double x, double y, double thetaDegrees, double maxMps, double translationTolerance) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drive);
     m_drive = drive;
@@ -29,6 +29,7 @@ public class DriveToPosition extends CommandBase {
     m_thetaDegrees = thetaDegrees;
     m_maxMps = maxMps;
     m_targetPose = new Pose2d(m_x, m_y, Rotation2d.fromDegrees(m_thetaDegrees));
+    m_translationTolerance = translationTolerance;
   }
   
   public static DriveToPosition CreateAutoCommand(ParsedCommand pc, SwerveDrive swerveDrive) {
@@ -36,14 +37,16 @@ public class DriveToPosition extends CommandBase {
     var y = AutoUtil.parseDouble(pc.getArgument("y"), 0.0);
     var angle = AutoUtil.parseDouble(pc.getArgument("angle"), 0.0);
     var maxMps = AutoUtil.parseDouble(pc.getArgument("maxMps"), Constants.MaxMPS);
-    return new DriveToPosition(swerveDrive, x, y, angle, maxMps);
+    var translationTolerance = AutoUtil.parseDouble(pc.getArgument("translationTolerance"), Constants.DriveToPositionTolerance);
+    return new DriveToPosition(swerveDrive, x, y, angle, maxMps, translationTolerance);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     m_drive.setTargetPose(m_targetPose);
-    m_drive.deleteDriveToPositionError();
+    m_drive.resetDriveToPosition();
+    m_drive.setDriveTranslationTolerance(m_translationTolerance);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -56,7 +59,7 @@ public class DriveToPosition extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drive.deleteDriveToPositionError();
+    m_drive.resetDriveToPosition();
     m_drive.stop();
   }
 

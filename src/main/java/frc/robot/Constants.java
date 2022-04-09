@@ -81,6 +81,9 @@ public final class Constants {
     public final static double GoalY = -4.1; // TODO: Get real values
     public final static Translation2d GoalLocation = new Translation2d(GoalX, GoalY);
 
+    // Drive to Position Tolerance
+    public final static double DriveToPositionTolerance = 0.03;
+
     // Height
     public final static double CameraHeight = 0.811;
     public final static double MountCameraAngle = 49.197; 
