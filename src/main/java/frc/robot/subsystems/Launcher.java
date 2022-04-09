@@ -27,6 +27,8 @@ public class Launcher extends SubsystemBase {
 
   private PIDTuner m_pidTuner;
 
+  private double m_speedTolerance = Constants.DefaultLauncherTolerance;
+
   /** Creates a new Launcher. */
   public Launcher() {
     m_solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.LauncherSolenoidForward,
@@ -99,8 +101,12 @@ public class Launcher extends SubsystemBase {
     m_solenoid.set(Value.kReverse);
   }
 
+  public void setLauncherTolerance(double tolerance) {
+    m_speedTolerance = tolerance;
+  }
+
   public boolean isAtTargetSpeed(double targetRpm) {
     var currentRpm = m_ControllerA.getSelectedSensorVelocity();
-    return currentRpm > targetRpm * 0.95 && currentRpm < targetRpm * 1.05;
+    return currentRpm > targetRpm - m_speedTolerance && currentRpm < targetRpm + m_speedTolerance;
   }
 }

@@ -24,7 +24,7 @@ public class FlywheelTable {
 
     String row;
     BufferedReader csvReader;
-    final String PATH = "FlywheelTable.csv";
+    public static final String PATH = "FlywheelTable.csv";
     String[] data;
     double[] doubleData;
 
@@ -32,16 +32,22 @@ public class FlywheelTable {
     ArrayList<TableData> flyTable = new ArrayList<TableData>();
 
     public FlywheelTable() {
-        readCSV( Filesystem.getDeployDirectory().toPath().resolve(PATH));
+        readCSV();
+    }
+
+    public boolean readCSV() {
+        return readCSV(Filesystem.getDeployDirectory().toPath().resolve(PATH));
     }
 
     // parses data from .csv into doubles for addData()
-    public void readCSV(Path path) { // change return type
+    public boolean readCSV(Path path) { // change return type
+        flyTable.clear();
         try {
             // System.out.println(realPath.toString());
             csvReader = new BufferedReader(new FileReader(path.toString()));
         } catch (FileNotFoundException ie) {
             ie.printStackTrace();
+            return false;
         }
 
         try {
@@ -49,30 +55,18 @@ public class FlywheelTable {
             while ((row = csvReader.readLine()) != null) {
                 // System.out.println(row);
                 data = row.split(",");
-
-                if (data.length == 3) {
-
-                    // converts String array to double array
-                    doubleData = Arrays.stream(data).mapToDouble(Double::parseDouble).toArray();
-
-                    double distance = doubleData[0];
-                    double speed = doubleData[1];
-                    double hoodUp = doubleData[2];
-
-                    addData(new TableData(distance, speed, hoodUp != 0.0));
-
-                } else {
-                    System.out.println("ERROR: Flywheel Table data less than 3 values at " + row);
-                }
+                addData(TableData.FromCSV(data));
             }
 
             flyTable.sort(TableData.getComparator());
             for (TableData data : flyTable) {
                 System.out.println(data.getDistance() + " " + data.getSpeed());
             }
+            return true;
 
-        } catch (IOException ie) {
+        } catch (Exception ie) {
             ie.printStackTrace();
+            return false;
         }
     }
 
@@ -117,7 +111,13 @@ public class FlywheelTable {
 
         double idealSpeed = getInterpolatedValue(getDistance(topIndex), getDistance(botIndex), getSpeed(topIndex), getSpeed(botIndex), distance);
 
-        boolean hoodUp = getTableData(topIndex).getHoodUp();
-        return new TableData(distance, idealSpeed, hoodUp);
+        var topTableData = getTableData(topIndex);
+        return new TableData(
+            distance,
+            idealSpeed,
+            topTableData.getHoodUp(),
+            topTableData.getLauncherTolerance(),
+            topTableData.getFeederSpeed()
+        );
     }
 }
