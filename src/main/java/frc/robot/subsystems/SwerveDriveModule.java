@@ -89,10 +89,7 @@ public class SwerveDriveModule {
     }
 
     public SwerveModuleState getState() {
-        if(DriverStation.isAutonomous()) {
-            return new SwerveModuleState(getCurrentVelocityMPS(), Rotation2d.fromDegrees(getCurrentAngleDegrees()).times(-1));
-        }
-        return new SwerveModuleState(getCurrentVelocityMPS(), Rotation2d.fromDegrees(getCurrentAngleDegrees()));
+        return new SwerveModuleState(getCurrentVelocityMPS(), Rotation2d.fromDegrees(getCurrentAngleDegrees()).times(-1));
     }
 
     public void setTargetState(SwerveModuleState targetState) {
