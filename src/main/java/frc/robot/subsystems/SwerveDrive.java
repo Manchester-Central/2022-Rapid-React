@@ -47,6 +47,8 @@ public class SwerveDrive extends SubsystemBase {
   private PIDTuner m_rotationAutoPIDTuner;
   private PIDTuner m_moduleVelocityPIDTuner;
   private PIDTuner m_moduleAnglePIDTuner;
+  
+  private double m_driveToPositionTolerance = Constants.DriveToPositionTolerance;
 
   public enum SwerveModulePosition {
     FrontLeft, FrontRight, BackLeft, BackRight
@@ -347,7 +349,9 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public boolean isAtTargetPose() {
-    return m_xTranslationPID.atSetpoint() && m_yTranslationPID.atSetpoint() && m_rotationAutoPID.atSetpoint();
+    var isXTolerable = Math.abs(m_xTranslationPID.getPositionError()) <= m_driveToPositionTolerance;
+    var isYTolerable = Math.abs(m_yTranslationPID.getPositionError()) <= m_driveToPositionTolerance;
+    return isXTolerable && isYTolerable && m_rotationAutoPID.atSetpoint();
   }
 
   public void resetDriveToPosition() {
@@ -355,13 +359,11 @@ public class SwerveDrive extends SubsystemBase {
     m_yTranslationPID.reset();
     m_rotationPID.reset();
     m_rotationAutoPID.reset();
-    m_xTranslationPID.setTolerance(Constants.DriveToPositionTolerance);
-    m_yTranslationPID.setTolerance(Constants.DriveToPositionTolerance);
+    setDriveTranslationTolerance(Constants.DriveToPositionTolerance);
   }
 
   public void setDriveTranslationTolerance(double tolerance) {
-    m_xTranslationPID.setTolerance(tolerance);
-    m_yTranslationPID.setTolerance(tolerance);
+    m_driveToPositionTolerance = tolerance;
   }
 
 }
