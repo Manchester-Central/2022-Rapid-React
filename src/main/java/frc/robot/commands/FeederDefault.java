@@ -41,7 +41,7 @@ public class FeederDefault extends CommandBase {
         launchMode(1.0);
         break;
       case LAUNCH_HIGH_BUMPER:
-        launchMode(0.15);
+        launchMode(0.25);
         break;
       case LAUNCH_CAMERA:
         launchMode(DefaultCameraLaunchSpeed);
