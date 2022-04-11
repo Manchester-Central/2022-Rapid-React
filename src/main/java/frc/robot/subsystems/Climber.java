@@ -20,6 +20,7 @@ import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
   private DigitalInput m_limitSwitch;
+  private DigitalInput m_limitSwitch2;
   private TalonFX m_extensionController;
   private DoubleSolenoid m_solenoidLeft;
   private DoubleSolenoid m_solenoidRight;
@@ -33,6 +34,7 @@ public class Climber extends SubsystemBase {
     m_solenoidLeft = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.ClimberSolenoidLeftForward, Constants.ClimberSolenoidLeftReverse);
     m_solenoidRight = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.ClimberSolenoidRightForward, Constants.ClimberSolenoidRightReverse);
     m_limitSwitch = new DigitalInput(Constants.ExtenderLimitSwitch);
+    m_limitSwitch2 = new DigitalInput(Constants.ExtenderLimitSwitch2);
     m_extensionController.config_kP(0, 0.1);
   }
 
@@ -41,7 +43,7 @@ public class Climber extends SubsystemBase {
   }
 
   public boolean isCLimberAtBottom() {
-    return !m_limitSwitch.get();
+    return !m_limitSwitch.get() || !m_limitSwitch2.get();
   }
 
   public void ManualExtend(double power) {
