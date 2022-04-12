@@ -60,7 +60,7 @@ public abstract class BaseRelativeDrive extends CommandBase {
 
   // Returns true when the command should end.
   @Override
-  public final boolean isFinished() {
+  public boolean isFinished() {
     return false;
   }
 
