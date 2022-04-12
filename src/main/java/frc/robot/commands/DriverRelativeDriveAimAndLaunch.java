@@ -20,7 +20,7 @@ public class DriverRelativeDriveAimAndLaunch extends BaseRelativeDrive {
   private Camera m_camera;
   private FlywheelTable m_flywheelTable;
   private Launcher m_launcher;
-  private Feeder m_feeder;
+  protected Feeder m_feeder;
 
   public DriverRelativeDriveAimAndLaunch(SwerveDrive drive, Gamepad controller, Camera camera, Launcher launcher,
       FlywheelTable flywheelTable, Feeder feeder) {
@@ -91,7 +91,7 @@ public class DriverRelativeDriveAimAndLaunch extends BaseRelativeDrive {
   @Override
   public void end(boolean interrupted) {
     super.end(interrupted);
-    m_launcher.coast();
+    m_launcher.spinUpSpeed();
     m_feeder.setFeederMode(FeederMode.DEFAULT);
   }
 }
