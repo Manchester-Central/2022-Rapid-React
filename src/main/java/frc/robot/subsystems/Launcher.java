@@ -13,7 +13,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -70,6 +72,16 @@ public class Launcher extends SubsystemBase {
   public void SetTargetRPM(double rpm) {
     m_ControllerA.set(TalonFXControlMode.Velocity, rpm);
     m_ControllerB.set(TalonFXControlMode.Velocity, rpm);
+  }
+
+  public void spinUpSpeed() {
+    if (DriverStation.isAutonomous()) {
+      m_ControllerA.set(TalonFXControlMode.Velocity, Constants.DefaultLauncherSpinUpAuto);
+      m_ControllerB.set(TalonFXControlMode.Velocity, Constants.DefaultLauncherSpinUpAuto);
+    } else {
+      m_ControllerA.set(TalonFXControlMode.Velocity, Constants.DefaultLauncherSpinUpTeleop);
+      m_ControllerB.set(TalonFXControlMode.Velocity, Constants.DefaultLauncherSpinUpTeleop);
+    }
   }
 
   public void coast() {

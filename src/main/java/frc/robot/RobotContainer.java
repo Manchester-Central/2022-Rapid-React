@@ -192,6 +192,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoBuilder.createAutoCommand();
+    var spinUpLauncherStart = new InstantCommand(() -> m_launcher.spinUpSpeed(), m_launcher);
+    return spinUpLauncherStart.andThen(m_autoBuilder.createAutoCommand());
   }
 }

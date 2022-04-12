@@ -75,6 +75,8 @@ public final class Constants {
     public final static double DefaultLauncherTolerance = 300.0;
     public final static double DefaultLauncherToleranceLowBumper = 600.0;
     public final static double DefaultFeederLaunchSpeed = 0.25;
+    public final static double DefaultLauncherSpinUpTeleop = DefaultLauncherLowSpeed;
+    public final static double DefaultLauncherSpinUpAuto = 5000;
 
     // Target position on field
     public final static double GoalX = 8.0; // TODO: Get real values

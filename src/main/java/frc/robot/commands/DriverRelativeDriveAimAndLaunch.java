@@ -91,7 +91,7 @@ public class DriverRelativeDriveAimAndLaunch extends BaseRelativeDrive {
   @Override
   public void end(boolean interrupted) {
     super.end(interrupted);
-    m_launcher.coast();
+    m_launcher.spinUpSpeed();
     m_feeder.setFeederMode(FeederMode.DEFAULT);
   }
 }
