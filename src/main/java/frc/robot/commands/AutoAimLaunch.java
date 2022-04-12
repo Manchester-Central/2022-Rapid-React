@@ -39,6 +39,6 @@ public class AutoAimLaunch extends DriverRelativeDriveAimAndLaunch {
       m_lastBallSeenTime = Robot.getCurrentTimeMs();
     }
     var elapsedTime = Robot.getCurrentTimeMs() - m_lastBallSeenTime;
-    return !detectsBall && elapsedTime > 500;
+    return !detectsBall && elapsedTime > 100;
   }
 }
