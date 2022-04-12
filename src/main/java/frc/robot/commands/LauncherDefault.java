@@ -22,12 +22,12 @@ public class LauncherDefault extends CommandBase {
   @Override
   public void initialize() {
     m_launcher.setLauncherTolerance(Constants.DefaultLauncherTolerance);
+    m_launcher.spinUpSpeed();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_launcher.coast();
   }
 
   // Called once the command ends or is interrupted.
