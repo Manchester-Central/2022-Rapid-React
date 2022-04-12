@@ -52,7 +52,7 @@ public final class Constants {
     // Absolute max meters per second = 3.8
     public static final double MaxMPS = 3.8;
     // Absolute max omega radians per second = 8.75
-    public static final double MaxORPS = 8.75;
+    public static final double MaxORPS = 6.75;//was 8.75 for auto
 
     // Pneumatic Connections
     public final static int ClimberSolenoidLeftForward = 10;
@@ -68,15 +68,24 @@ public final class Constants {
     public final static int FeederBeamSensorTop = 1;
     public final static int FeederBeamSensorMiddle = 2;
     public final static int ExtenderLimitSwitch = 3;
+    public final static int ExtenderLimitSwitch2 = 4; //TODO TBD
     
     // Launcher Settings
     public final static double DefaultLauncherLowSpeed = 2300.0;
     public final static double DefaultLauncherHighSpeed = 7000.0;
+    public final static double DefaultLauncherTolerance = 300.0;
+    public final static double DefaultLauncherToleranceLowBumper = 600.0;
+    public final static double DefaultFeederLaunchSpeed = 0.25;
+    public final static double DefaultLauncherSpinUpTeleop = DefaultLauncherLowSpeed;
+    public final static double DefaultLauncherSpinUpAuto = 5000;
 
     // Target position on field
     public final static double GoalX = 8.0; // TODO: Get real values
     public final static double GoalY = -4.1; // TODO: Get real values
     public final static Translation2d GoalLocation = new Translation2d(GoalX, GoalY);
+
+    // Drive to Position Tolerance
+    public final static double DriveToPositionTolerance = 0.03;
 
     // Height
     public final static double CameraHeight = 0.811;

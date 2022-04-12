@@ -153,7 +153,7 @@ public class RobotContainer {
     m_driver.getButtonLT().whileHeld(new IntakeCommand(m_feeder, m_intake));
 
     m_driver.getButtonRB()
-        .whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, Constants.DefaultLauncherHighSpeed, FeederMode.LAUNCH_HIGH_BUMPER));
+        .whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, Constants.DefaultLauncherHighSpeed, FeederMode.LAUNCH_HIGH_BUMPER, Constants.DefaultLauncherTolerance));
     m_driver.getButtonRT()
         .whileHeld(new DriverRelativeDriveAimAndLaunch(m_swerveDrive, m_driver, m_camera, m_launcher, m_flywheelTable, m_feeder));
 
@@ -172,7 +172,7 @@ public class RobotContainer {
 
     m_operator.getButtonRB().whileHeld(new CameraLauncherShoot(m_launcher, m_camera, m_feeder, m_flywheelTable));
     m_operator.getButtonRT()
-        .whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, Constants.DefaultLauncherLowSpeed, FeederMode.LAUNCH_LOW_BUMPER));
+        .whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, Constants.DefaultLauncherLowSpeed, FeederMode.LAUNCH_LOW_BUMPER, Constants.DefaultLauncherToleranceLowBumper));
 
     m_operator.getButtonLB().whileHeld(new IntakeWithOnlyFeeder(m_feeder));
     m_operator.getButtonLT().whileHeld(new IntakeCommand(m_feeder, m_intake));
@@ -193,6 +193,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoBuilder.createAutoCommand();
+    var spinUpLauncherStart = new InstantCommand(() -> m_launcher.spinUpSpeed(), m_launcher);
+    return spinUpLauncherStart.andThen(m_autoBuilder.createAutoCommand());
   }
 }

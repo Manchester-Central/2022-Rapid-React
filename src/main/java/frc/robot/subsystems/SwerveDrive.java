@@ -110,8 +110,8 @@ public class SwerveDrive extends SubsystemBase {
     double translationD = 0.0;
     m_xTranslationPID = new PIDController(translationP, translationI, translationD);
     m_yTranslationPID = new PIDController(translationP, translationI, translationD);
-    m_xTranslationPID.setTolerance(0.03);
-    m_yTranslationPID.setTolerance(0.03);
+    m_xTranslationPID.setTolerance(Constants.DriveToPositionTolerance);
+    m_yTranslationPID.setTolerance(Constants.DriveToPositionTolerance);
     m_xTranslationPIDTuner = new PIDTuner("Swerve/xTranslation", Robot.EnablePIDTuning, m_xTranslationPID);
     m_yTranslationPIDTuner = new PIDTuner("Swerve/yTranslation", Robot.EnablePIDTuning, m_yTranslationPID);
 
@@ -339,9 +339,9 @@ public class SwerveDrive extends SubsystemBase {
     return -MathUtil.clamp(m_rotationAutoPID.calculate(getRotation().getDegrees()), -1, 1) * Constants.MaxORPS;
   }
 
-  public void driveToPosition() {
-    var vx = getTargetVx();
-    var vy = getTargetVy();
+  public void driveToPosition(double maxMps) {
+    var vx = MathUtil.clamp(getTargetVx(), -maxMps, maxMps);
+    var vy = MathUtil.clamp(getTargetVy(), -maxMps, maxMps);
     var Omega = getTargetOmegaAuto();
     moveDriverRelative(vy, vx, Omega);
   }
@@ -350,11 +350,18 @@ public class SwerveDrive extends SubsystemBase {
     return m_xTranslationPID.atSetpoint() && m_yTranslationPID.atSetpoint() && m_rotationAutoPID.atSetpoint();
   }
 
-  public void deleteDriveToPositionError() {
+  public void resetDriveToPosition() {
     m_xTranslationPID.reset();
     m_yTranslationPID.reset();
     m_rotationPID.reset();
     m_rotationAutoPID.reset();
+    m_xTranslationPID.setTolerance(Constants.DriveToPositionTolerance);
+    m_yTranslationPID.setTolerance(Constants.DriveToPositionTolerance);
+  }
+
+  public void setDriveTranslationTolerance(double tolerance) {
+    m_xTranslationPID.setTolerance(tolerance);
+    m_yTranslationPID.setTolerance(tolerance);
   }
 
 }

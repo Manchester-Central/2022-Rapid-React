@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Launcher;
 
 public class LauncherDefault extends CommandBase {
@@ -19,12 +20,14 @@ public class LauncherDefault extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_launcher.setLauncherTolerance(Constants.DefaultLauncherTolerance);
+    m_launcher.spinUpSpeed();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_launcher.coast();
   }
 
   // Called once the command ends or is interrupted.

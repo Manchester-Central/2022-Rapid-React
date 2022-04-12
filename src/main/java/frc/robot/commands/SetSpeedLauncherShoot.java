@@ -16,11 +16,13 @@ public class SetSpeedLauncherShoot extends BaseLauncherShoot {
   private double m_manualSpeed;
   private boolean m_setHoodUp;
   private FeederMode m_feederMode;
+  private double m_launcherTolerance;
 
   /** Creates a new LauncherShoot. */
-  public SetSpeedLauncherShoot(Launcher launcher, Feeder feeder, double manualSpeed, FeederMode feederMode) {
+  public SetSpeedLauncherShoot(Launcher launcher, Feeder feeder, double manualSpeed, FeederMode feederMode, double launcherTolerance) {
     super(launcher, feeder, feederMode);
     m_manualSpeed = manualSpeed;
+    m_launcherTolerance = launcherTolerance;
     m_setHoodUp = feederMode == FeederMode.LAUNCH_HIGH_BUMPER;
     m_feederMode = feederMode;
   }
@@ -34,11 +36,12 @@ public class SetSpeedLauncherShoot extends BaseLauncherShoot {
     else {
       m_launcher.MoveHoodDown();
     }
+    m_launcher.setLauncherTolerance(m_launcherTolerance);
   }
   
   public static SetSpeedLauncherShoot CreateAutoCommand(ParsedCommand pc, Launcher launcher, Feeder feeder) {
     var speed = AutoUtil.parseDouble(pc.getArgument("speed"), Constants.DefaultLauncherLowSpeed);
-    return new SetSpeedLauncherShoot(launcher, feeder, speed, FeederMode.LAUNCH_CAMERA);
+    return new SetSpeedLauncherShoot(launcher, feeder, speed, FeederMode.LAUNCH_CAMERA, Constants.DefaultLauncherTolerance);
   }
 
   @Override

@@ -13,7 +13,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -26,6 +28,8 @@ public class Launcher extends SubsystemBase {
   private TalonFX m_ControllerB;
 
   private PIDTuner m_pidTuner;
+
+  private double m_speedTolerance = Constants.DefaultLauncherTolerance;
 
   /** Creates a new Launcher. */
   public Launcher() {
@@ -45,15 +49,17 @@ public class Launcher extends SubsystemBase {
     m_ControllerB.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);
     m_ControllerA.configVelocityMeasurementWindow(1);
     m_ControllerB.configVelocityMeasurementWindow(1);
+    m_ControllerA.configVoltageCompSaturation(12.4);
+    m_ControllerB.configVoltageCompSaturation(12.4);
+
+    m_ControllerA.enableVoltageCompensation(true);
+    m_ControllerB.enableVoltageCompensation(true);
 
     double velocityP = 0.075;
     double velocityI = 0.0003;
     double velocityD = 0.0;
     double velocityF = 0.023; // k_f = (PERCENT_POWER X 1023) / OBSERVED_VELOCITY
     m_pidTuner = new PIDTuner("Launcher", Robot.EnablePIDTuning, velocityP, velocityI, velocityD, velocityF, this::updatePIDF);
-
-    m_ControllerA.enableVoltageCompensation(true);
-    m_ControllerB.enableVoltageCompensation(true);
 
     Robot.LogManager.addNumber("Launcher/Speed2", () -> m_ControllerA.getSelectedSensorVelocity());
   }
@@ -66,6 +72,16 @@ public class Launcher extends SubsystemBase {
   public void SetTargetRPM(double rpm) {
     m_ControllerA.set(TalonFXControlMode.Velocity, rpm);
     m_ControllerB.set(TalonFXControlMode.Velocity, rpm);
+  }
+
+  public void spinUpSpeed() {
+    if (DriverStation.isAutonomous()) {
+      m_ControllerA.set(TalonFXControlMode.Velocity, Constants.DefaultLauncherSpinUpAuto);
+      m_ControllerB.set(TalonFXControlMode.Velocity, Constants.DefaultLauncherSpinUpAuto);
+    } else {
+      m_ControllerA.set(TalonFXControlMode.Velocity, Constants.DefaultLauncherSpinUpTeleop);
+      m_ControllerB.set(TalonFXControlMode.Velocity, Constants.DefaultLauncherSpinUpTeleop);
+    }
   }
 
   public void coast() {
@@ -99,8 +115,12 @@ public class Launcher extends SubsystemBase {
     m_solenoid.set(Value.kReverse);
   }
 
+  public void setLauncherTolerance(double tolerance) {
+    m_speedTolerance = tolerance;
+  }
+
   public boolean isAtTargetSpeed(double targetRpm) {
     var currentRpm = m_ControllerA.getSelectedSensorVelocity();
-    return currentRpm > targetRpm * 0.95 && currentRpm < targetRpm * 1.05;
+    return currentRpm > targetRpm - m_speedTolerance && currentRpm < targetRpm + m_speedTolerance;
   }
 }

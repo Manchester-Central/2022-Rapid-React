@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import frc.robot.Constants;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.FlywheelTable;
@@ -25,6 +26,7 @@ public class CameraLauncherShoot extends BaseLauncherShoot {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    FeederDefault.DefaultCameraLaunchSpeed = Constants.DefaultFeederLaunchSpeed;
     m_camera.setPipeline(Camera.ComputerVision);
     var speed = m_flyWheelTable.getIdealTarget(-25).getSpeed();
     m_launcher.SetTargetRPM(speed);
@@ -42,6 +44,9 @@ public class CameraLauncherShoot extends BaseLauncherShoot {
       } else {
         m_launcher.MoveHoodDown();
       }
+
+      m_launcher.setLauncherTolerance(target.getLauncherTolerance());
+      FeederDefault.DefaultCameraLaunchSpeed = target.getFeederSpeed();
 
       return target.getSpeed();
     }

@@ -7,6 +7,7 @@ package frc.robot.commands;
 import com.chaos131.gamepads.Gamepad;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.Constants;
 import frc.robot.subsystems.AngleUtil;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Feeder;
@@ -34,8 +35,9 @@ public class DriverRelativeDriveAimAndLaunch extends BaseRelativeDrive {
   @Override
   public void initialize() {
     super.initialize();
+    FeederDefault.DefaultCameraLaunchSpeed = Constants.DefaultFeederLaunchSpeed;
     m_camera.setPipeline(Camera.ComputerVision);
-    m_drive.deleteDriveToPositionError();
+    m_drive.resetDriveToPosition();
     m_feeder.setFeederMode(FeederMode.DEFAULT);
     var speed = m_flywheelTable.getIdealTarget(-25).getSpeed();
     m_launcher.SetTargetRPM(speed);
@@ -68,15 +70,18 @@ public class DriverRelativeDriveAimAndLaunch extends BaseRelativeDrive {
       var target = m_flywheelTable.getIdealTarget(distance);
       var speed = target.getSpeed();
 
-      if (DriverStation.isAutonomous()) {
+      /* if (DriverStation.isAutonomous()) {
         speed += 150;
       }
-
+      */
       if (target.getHoodUp()) {
         m_launcher.MoveHoodUp();
       } else {
         m_launcher.MoveHoodDown();
       }
+
+      m_launcher.setLauncherTolerance(target.getLauncherTolerance());
+      FeederDefault.DefaultCameraLaunchSpeed = target.getFeederSpeed();
 
       return speed;
     }
@@ -86,7 +91,7 @@ public class DriverRelativeDriveAimAndLaunch extends BaseRelativeDrive {
   @Override
   public void end(boolean interrupted) {
     super.end(interrupted);
-    m_launcher.coast();
+    m_launcher.spinUpSpeed();
     m_feeder.setFeederMode(FeederMode.DEFAULT);
   }
 }
