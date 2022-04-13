@@ -349,8 +349,8 @@ public class SwerveDrive extends SubsystemBase {
   }
 
   public boolean isAtTargetPose() {
-    var isXTolerable = Math.abs(m_xTranslationPID.getPositionError()) <= m_driveToPositionTolerance;
-    var isYTolerable = Math.abs(m_yTranslationPID.getPositionError()) <= m_driveToPositionTolerance;
+    var isXTolerable = Math.abs(getPose().getX() - m_xTranslationPID.getSetpoint()) <= m_driveToPositionTolerance;
+    var isYTolerable = Math.abs(getPose().getY() - m_yTranslationPID.getSetpoint()) <= m_driveToPositionTolerance;
     return isXTolerable && isYTolerable && m_rotationAutoPID.atSetpoint();
   }
 
