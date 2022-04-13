@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
@@ -23,6 +24,10 @@ public class Intake extends SubsystemBase {
     m_IntakeController.setNeutralMode(NeutralMode.Coast);
     m_IntakeController.configOpenloopRamp(0.4);
     m_solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.IntakeSolenoidForward, Constants.IntakeSolenoidReverse);
+
+    // Lower CAN Utilization. We are only setting percent power to the motor, so we don't need the data
+    m_IntakeController.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, Constants.MaxCANStatusFramePeriod);
+    m_IntakeController.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, Constants.MaxCANStatusFramePeriod);
     
   }
   public void ManualIntake(double power) {

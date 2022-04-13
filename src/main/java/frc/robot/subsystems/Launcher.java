@@ -8,6 +8,7 @@ import com.chaos131.pid.PIDTuner;
 import com.chaos131.pid.PIDUpdate;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
@@ -54,6 +55,10 @@ public class Launcher extends SubsystemBase {
 
     m_ControllerA.enableVoltageCompensation(true);
     m_ControllerB.enableVoltageCompensation(true);
+
+    // Lower CAN Utilization. We are reading data off controllerA, so we can slow the rate of status updates from B
+    m_ControllerB.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, Constants.MaxCANStatusFramePeriod);
+    m_ControllerB.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, Constants.MaxCANStatusFramePeriod);
 
     double velocityP = 0.075;
     double velocityI = 0.0003;

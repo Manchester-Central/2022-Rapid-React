@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -49,6 +50,7 @@ public class SwerveDriveModule {
         m_name = name;
         m_absoluteEncoder = new CANCoder(absoluteEncoderPort);
         m_absoluteAngleOffset = absoluteAngleOffset;
+        m_absoluteEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, Constants.MaxCANStatusFramePeriod);
         var absoluteEncoderAngle = GetAbsoluteEncoderAngle();
         var angleTicksOffset = this.DegreesToFalconAngle(absoluteEncoderAngle);
         m_angleController.setSelectedSensorPosition(angleTicksOffset);
