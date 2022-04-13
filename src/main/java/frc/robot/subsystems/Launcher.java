@@ -10,7 +10,6 @@ import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -22,11 +21,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.util.TalonFxCHAOS;
 
 public class Launcher extends SubsystemBase {
   private DoubleSolenoid m_solenoid;
-  private TalonFX m_ControllerA;
-  private TalonFX m_ControllerB;
+  private TalonFxCHAOS m_ControllerA;
+  private TalonFxCHAOS m_ControllerB;
 
   private PIDTuner m_pidTuner;
 
@@ -36,8 +36,8 @@ public class Launcher extends SubsystemBase {
   public Launcher() {
     m_solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.LauncherSolenoidForward,
         Constants.LauncherSolenoidReverse);
-    m_ControllerA = new TalonFX(Constants.LauncherA);
-    m_ControllerB = new TalonFX(Constants.LauncherB);
+    m_ControllerA = new TalonFxCHAOS(Constants.LauncherA);
+    m_ControllerB = new TalonFxCHAOS(Constants.LauncherB);
     m_ControllerA.configOpenloopRamp(0.2);
     m_ControllerB.configOpenloopRamp(0.2);
     m_ControllerA.setNeutralMode(NeutralMode.Coast);

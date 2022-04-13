@@ -8,16 +8,16 @@ import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.util.TalonFxCHAOS;
 
 public class Feeder extends SubsystemBase {
-  private TalonFX m_upperFeeder;
-  private TalonFX m_lowerFeeder;
+  private TalonFxCHAOS m_upperFeeder;
+  private TalonFxCHAOS m_lowerFeeder;
   private DigitalInput m_beamSensorTop, m_beamSensorMiddle;
   private double k_intakeSpeed = 0.2;
 
@@ -29,8 +29,8 @@ public class Feeder extends SubsystemBase {
 
   /** Creates a new Feeder. */
   public Feeder() {
-    m_upperFeeder = new TalonFX(Constants.UpperFeeder);
-    m_lowerFeeder = new TalonFX(Constants.LowerFeeder);
+    m_upperFeeder = new TalonFxCHAOS(Constants.UpperFeeder);
+    m_lowerFeeder = new TalonFxCHAOS(Constants.LowerFeeder);
     m_upperFeeder.configOpenloopRamp(0.2);
     m_lowerFeeder.configOpenloopRamp(0.2);
     m_upperFeeder.setNeutralMode(NeutralMode.Brake);

@@ -8,7 +8,6 @@ import java.security.KeyStore.SecretKeyEntry;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -17,11 +16,12 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.util.TalonFxCHAOS;
 
 public class Climber extends SubsystemBase {
   private DigitalInput m_limitSwitch;
   private DigitalInput m_limitSwitch2;
-  private TalonFX m_extensionController;
+  private TalonFxCHAOS m_extensionController;
   private DoubleSolenoid m_solenoidLeft;
   private DoubleSolenoid m_solenoidRight;
   private double m_downPositionCounts;
@@ -29,7 +29,7 @@ public class Climber extends SubsystemBase {
 
   /** Creates a new Climber. */
   public Climber() {
-    m_extensionController = new TalonFX(Constants.ClimberExtension);
+    m_extensionController = new TalonFxCHAOS(Constants.ClimberExtension);
     m_extensionController.setNeutralMode(NeutralMode.Brake);
     m_solenoidLeft = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.ClimberSolenoidLeftForward, Constants.ClimberSolenoidLeftReverse);
     m_solenoidRight = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.ClimberSolenoidRightForward, Constants.ClimberSolenoidRightReverse);
