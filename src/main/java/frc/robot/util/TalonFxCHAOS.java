@@ -4,17 +4,29 @@
 
 package frc.robot.util;
 
+import java.util.ArrayList;
+
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 /** Add your docs here. */
 public class TalonFxCHAOS extends TalonFX {
 
+    private static ArrayList<TalonFxCHAOS> AllTalons = new ArrayList<TalonFxCHAOS>();
+    public static void ResetStickiness() {
+        for(var talon: AllTalons) {
+            talon.m_lastMode = TalonFXControlMode.Disabled;
+            talon.m_lastValue = Double.NaN;
+        }
+    }
+
+
     private TalonFXControlMode m_lastMode = TalonFXControlMode.Disabled;
-    private double m_lastValue = Double.NaN;;
+    private double m_lastValue = Double.NaN;
 
     public TalonFxCHAOS(int deviceNumber) {
         super(deviceNumber);
+        AllTalons.add(this);
     }
 
     @Override
