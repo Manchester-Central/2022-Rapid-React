@@ -93,4 +93,7 @@ public final class Constants {
     public final static double HeightOfGoal = 2.6416; // 104 Inches
     public final static double RadiusOfTopGoal = 0.6858;
 
+    // CAN Frame Periods
+    public final static int MaxCANStatusFramePeriod = 255;
+
 }

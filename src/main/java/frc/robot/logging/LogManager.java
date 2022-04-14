@@ -66,16 +66,21 @@ public class LogManager {
     }
 
     public void update() {
-        if (m_loggingThread.getState() == Thread.State.NEW) {
-            if (DriverStation.isDSAttached()) {
-                m_loggingThread.start();
+        try {
+            if (m_loggingThread.getState() == Thread.State.NEW) {
+                if (DriverStation.isDSAttached()) {
+                    m_loggingThread.start();
+                }
+            } else {
+                StringBuilder sb = new StringBuilder();
+                for (String header : m_headers) {
+                    sb.append(m_suppliers.get(header).get() + ",");
+                }
+                m_loggingThread.enqueue(sb.toString());
             }
-        } else {
-            StringBuilder sb = new StringBuilder();
-            for (String header : m_headers) {
-                sb.append(m_suppliers.get(header).get() + ",");
-            }
-            m_loggingThread.enqueue(sb.toString());
+        } catch (Exception ex) {
+            // If logging fails, print the stack trace, but don't rethrow it
+            ex.printStackTrace();
         }
     }
 }

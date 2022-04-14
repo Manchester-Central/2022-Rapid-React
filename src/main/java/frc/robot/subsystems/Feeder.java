@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
@@ -34,6 +35,13 @@ public class Feeder extends SubsystemBase {
     m_lowerFeeder.configOpenloopRamp(0.2);
     m_upperFeeder.setNeutralMode(NeutralMode.Brake);
     m_lowerFeeder.setNeutralMode(NeutralMode.Brake);
+
+    // Lower CAN Utilization. We are only setting percent power to the motors, so we don't need the data
+    m_upperFeeder.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, Constants.MaxCANStatusFramePeriod);
+    m_lowerFeeder.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, Constants.MaxCANStatusFramePeriod);
+    m_upperFeeder.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, Constants.MaxCANStatusFramePeriod);
+    m_lowerFeeder.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, Constants.MaxCANStatusFramePeriod);
+
     m_beamSensorTop = new DigitalInput(Constants.FeederBeamSensorTop);
     m_beamSensorMiddle = new DigitalInput(Constants.FeederBeamSensorMiddle);
   }

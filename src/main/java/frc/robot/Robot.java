@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.DriverRelativeDriveWithAimSimple;
@@ -25,9 +26,10 @@ import frc.robot.logging.LoggedDatapoints;
  * project.
  */
 public class Robot extends TimedRobot {
-  public static final LogManager LogManager = new LogManager(true);
+  public static final boolean IsDebuggingMode = false;
+  public static final LogManager LogManager = new LogManager(IsDebuggingMode);
   public static final LoggedDatapoints LoggedDatapoints = new LoggedDatapoints();
-  public static final boolean EnablePIDTuning = true;
+  public static final boolean EnablePIDTuning = IsDebuggingMode;
   private final Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
@@ -53,6 +55,9 @@ public class Robot extends TimedRobot {
     LogManager.addNumber("Robot/LoopTime", () -> m_lastLoop_ms);
 
     LogManager.writeHeaders();
+
+    // Reduces data sent to the dashboard and we're not using this
+    LiveWindow.disableAllTelemetry();
   }
 
   public static double robotMode()
