@@ -41,7 +41,8 @@ public class SetSpeedLauncherShoot extends BaseLauncherShoot {
   
   public static SetSpeedLauncherShoot CreateAutoCommand(ParsedCommand pc, Launcher launcher, Feeder feeder) {
     var speed = AutoUtil.parseDouble(pc.getArgument("speed"), Constants.DefaultLauncherLowSpeed);
-    return new SetSpeedLauncherShoot(launcher, feeder, speed, FeederMode.LAUNCH_CAMERA, Constants.DefaultLauncherTolerance);
+    var tolerance = AutoUtil.parseDouble(pc.getArgument("tolerance"), Constants.DefaultLauncherTolerance);
+    return new SetSpeedLauncherShoot(launcher, feeder, speed, FeederMode.LAUNCH_CAMERA, tolerance);
   }
 
   @Override
