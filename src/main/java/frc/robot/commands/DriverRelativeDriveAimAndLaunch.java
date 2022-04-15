@@ -74,6 +74,8 @@ public class DriverRelativeDriveAimAndLaunch extends BaseRelativeDrive {
         speed += 150;
       }
       */
+      speed += 50.0;
+      
       if (target.getHoodUp()) {
         m_launcher.MoveHoodUp();
       } else {
