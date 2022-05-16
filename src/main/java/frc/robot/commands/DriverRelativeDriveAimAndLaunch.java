@@ -70,10 +70,12 @@ public class DriverRelativeDriveAimAndLaunch extends BaseRelativeDrive {
       var target = m_flywheelTable.getIdealTarget(distance);
       var speed = target.getSpeed();
 
-      /* if (DriverStation.isAutonomous()) {
-        speed += 150;
-      }
-      */
+      /*
+       * if (DriverStation.isAutonomous()) {
+       * speed += 150;
+       * }
+       */
+
       if (target.getHoodUp()) {
         m_launcher.MoveHoodUp();
       } else {
