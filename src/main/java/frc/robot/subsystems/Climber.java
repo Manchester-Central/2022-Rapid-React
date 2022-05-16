@@ -29,7 +29,7 @@ public class Climber extends SubsystemBase {
 
   /** Creates a new Climber. */
   public Climber() {
-    m_extensionController = new TalonFxCHAOS(Constants.ClimberExtension);
+    m_extensionController = new TalonFxCHAOS(Constants.ClimberExtension, "Climber", "Extension");
     m_extensionController.setNeutralMode(NeutralMode.Brake);
     m_solenoidLeft = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.ClimberSolenoidLeftForward, Constants.ClimberSolenoidLeftReverse);
     m_solenoidRight = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.ClimberSolenoidRightForward, Constants.ClimberSolenoidRightReverse);

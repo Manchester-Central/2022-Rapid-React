@@ -36,8 +36,8 @@ public class Launcher extends SubsystemBase {
   public Launcher() {
     m_solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.LauncherSolenoidForward,
         Constants.LauncherSolenoidReverse);
-    m_ControllerA = new TalonFxCHAOS(Constants.LauncherA);
-    m_ControllerB = new TalonFxCHAOS(Constants.LauncherB);
+    m_ControllerA = new TalonFxCHAOS(Constants.LauncherA, "Launcher", "A");
+    m_ControllerB = new TalonFxCHAOS(Constants.LauncherB, "Launcher", "B");
     m_ControllerA.configOpenloopRamp(0.2);
     m_ControllerB.configOpenloopRamp(0.2);
     m_ControllerA.setNeutralMode(NeutralMode.Coast);

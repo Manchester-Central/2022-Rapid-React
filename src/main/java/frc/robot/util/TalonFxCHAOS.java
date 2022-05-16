@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import frc.robot.Robot;
+
 /** Add your docs here. */
 public class TalonFxCHAOS extends TalonFX {
     public static boolean EnableStickyMode = true;
@@ -23,11 +25,24 @@ public class TalonFxCHAOS extends TalonFX {
 
     private TalonFXControlMode m_lastMode = TalonFXControlMode.Disabled;
     private double m_lastValue = Double.NaN;
+    private String m_name;
+    private String m_subsystem;
 
-    public TalonFxCHAOS(int deviceNumber) {
+    public TalonFxCHAOS(int deviceNumber, String subsystem, String name) {
         super(deviceNumber);
+        m_subsystem = subsystem;
+        m_name = name;
         this.configFactoryDefault();
         AllTalons.add(this);
+        Robot.LogManager.addNumber(getLogColumn("rawVelocity"), () -> this.getSelectedSensorVelocity());
+        Robot.LogManager.addNumber(getLogColumn("rawPosition"), () -> this.getSelectedSensorVelocity());
+        Robot.LogManager.addNumber(getLogColumn("temp"), () -> this.getTemperature());
+        Robot.LogManager.addNumber(getLogColumn("supplyCurrent"), () -> this.getSupplyCurrent());
+        Robot.LogManager.addString(getLogColumn("state"), () -> this.getLastError().toString());
+    }
+
+    private String getLogColumn(String column) {
+        return m_subsystem + "-" + m_name + "-" + column;
     }
 
     @Override

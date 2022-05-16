@@ -41,8 +41,8 @@ public class SwerveDriveModule {
         if (RobotBase.isSimulation()) {
             SmartDashboard.putData(name, m_field);
         }
-        m_velocityController = new TalonFxCHAOS(velocityControllerPort);
-        m_angleController = new TalonFxCHAOS(angleControllerPort);
+        m_velocityController = new TalonFxCHAOS(velocityControllerPort, name, "speed");
+        m_angleController = new TalonFxCHAOS(angleControllerPort, name, "steering");
         m_angleController.configAllowableClosedloopError(0, DegreesToFalconAngle(0.5)); //TODO Reduce after tuning PID
         m_velocityController.setNeutralMode(NeutralMode.Coast);
         m_angleController.setNeutralMode(NeutralMode.Brake);

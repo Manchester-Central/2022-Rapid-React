@@ -20,7 +20,7 @@ public class Intake extends SubsystemBase {
   private DoubleSolenoid m_solenoid;
   /** Creates a new Intake. */
   public Intake() {
-    m_IntakeController = new TalonFxCHAOS(Constants.Intake);
+    m_IntakeController = new TalonFxCHAOS(Constants.Intake, "Intake", "Main");
     m_IntakeController.setNeutralMode(NeutralMode.Coast);
     m_IntakeController.configOpenloopRamp(0.4);
     m_solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.IntakeSolenoidForward, Constants.IntakeSolenoidReverse);

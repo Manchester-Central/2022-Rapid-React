@@ -29,8 +29,8 @@ public class Feeder extends SubsystemBase {
 
   /** Creates a new Feeder. */
   public Feeder() {
-    m_upperFeeder = new TalonFxCHAOS(Constants.UpperFeeder);
-    m_lowerFeeder = new TalonFxCHAOS(Constants.LowerFeeder);
+    m_upperFeeder = new TalonFxCHAOS(Constants.UpperFeeder, "Feeder", "Upper");
+    m_lowerFeeder = new TalonFxCHAOS(Constants.LowerFeeder, "Feeder", "Lower");
     m_upperFeeder.configOpenloopRamp(0.2);
     m_lowerFeeder.configOpenloopRamp(0.2);
     m_upperFeeder.setNeutralMode(NeutralMode.Brake);
