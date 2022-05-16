@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 /** Add your docs here. */
 public class TalonFxCHAOS extends TalonFX {
+    public static boolean EnableStickyMode = true;
 
     private static ArrayList<TalonFxCHAOS> AllTalons = new ArrayList<TalonFxCHAOS>();
     public static void ResetStickiness() {
@@ -31,6 +32,10 @@ public class TalonFxCHAOS extends TalonFX {
 
     @Override
     public void set(TalonFXControlMode mode, double value) {
+        if(!EnableStickyMode) {
+            super.set(mode, value);
+            return;
+        }
         if(mode != m_lastMode || value != m_lastValue) {
             super.set(mode, value);
         }
