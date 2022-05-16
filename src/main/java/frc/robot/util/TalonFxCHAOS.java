@@ -20,12 +20,12 @@ public class TalonFxCHAOS extends TalonFX {
         }
     }
 
-
     private TalonFXControlMode m_lastMode = TalonFXControlMode.Disabled;
     private double m_lastValue = Double.NaN;
 
     public TalonFxCHAOS(int deviceNumber) {
         super(deviceNumber);
+        this.configFactoryDefault();
         AllTalons.add(this);
     }
 
