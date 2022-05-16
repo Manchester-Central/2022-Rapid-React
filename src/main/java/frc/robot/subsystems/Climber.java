@@ -44,7 +44,7 @@ public class Climber extends SubsystemBase {
   }
 
   public boolean isCLimberAtBottom() {
-    return !m_limitSwitch.get() || !m_limitSwitch2.get();
+    return !m_limitSwitch.get() || !m_limitSwitch2.get() || (hasSeenBottom() && getExtensionPosition() < m_downPositionCounts);
   }
 
   public void ManualExtend(double power) {
@@ -85,16 +85,20 @@ public class Climber extends SubsystemBase {
     }
   }
 
+  public double getExtensionPosition() {
+    return m_extensionController.getSelectedSensorPosition();
+  }
+
   @Override
   public void periodic() {
     if (!m_seenBottom) {
       if (isCLimberAtBottom()) {
-        m_downPositionCounts = m_extensionController.getSelectedSensorPosition();
+        m_downPositionCounts = getExtensionPosition();
         m_seenBottom = true;
       }
     }
     SmartDashboard.putBoolean("Climber/At Bottom", isCLimberAtBottom());
-    SmartDashboard.putNumber("Climber/Position", m_extensionController.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Climber/Position", getExtensionPosition());
     
   }
 }
