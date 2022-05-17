@@ -38,7 +38,7 @@ public class TalonFxCHAOS extends TalonFX {
         Robot.LogManager.addNumber(getLogColumn("rawPosition"), () -> this.getSelectedSensorVelocity());
         Robot.LogManager.addNumber(getLogColumn("temp"), () -> this.getTemperature());
         Robot.LogManager.addNumber(getLogColumn("supplyCurrent"), () -> this.getSupplyCurrent());
-        Robot.LogManager.addString(getLogColumn("state"), () -> this.getLastError().toString());
+        Robot.LogManager.addString(getLogColumn("lastError"), () -> this.getLastError().toString());
     }
 
     private String getLogColumn(String column) {
