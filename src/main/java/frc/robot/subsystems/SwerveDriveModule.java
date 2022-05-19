@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import com.chaos131.pid.PIDUpdate;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 
@@ -22,6 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.util.TalonFxCHAOS;
 
 /** Add your docs here. */
 public class SwerveDriveModule {
@@ -29,8 +29,8 @@ public class SwerveDriveModule {
     private Field2d m_field = new Field2d();
     private double m_targetVelocity = 0;
     private double m_targetAngle = 0;
-    private TalonFX m_velocityController;
-    private TalonFX m_angleController;
+    private TalonFxCHAOS m_velocityController;
+    private TalonFxCHAOS m_angleController;
     private String m_name;
     private CANCoder m_absoluteEncoder;
     private double m_absoluteAngleOffset;
@@ -41,8 +41,8 @@ public class SwerveDriveModule {
         if (RobotBase.isSimulation()) {
             SmartDashboard.putData(name, m_field);
         }
-        m_velocityController = new TalonFX(velocityControllerPort);
-        m_angleController = new TalonFX(angleControllerPort);
+        m_velocityController = new TalonFxCHAOS(velocityControllerPort, name, "speed");
+        m_angleController = new TalonFxCHAOS(angleControllerPort, name, "steering");
         m_angleController.configAllowableClosedloopError(0, DegreesToFalconAngle(0.5)); //TODO Reduce after tuning PID
         m_velocityController.setNeutralMode(NeutralMode.Coast);
         m_angleController.setNeutralMode(NeutralMode.Brake);
