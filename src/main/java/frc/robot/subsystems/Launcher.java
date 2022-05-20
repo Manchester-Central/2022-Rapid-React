@@ -60,11 +60,13 @@ public class Launcher extends SubsystemBase {
     m_ControllerB.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, Constants.MaxCANStatusFramePeriod);
     m_ControllerB.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, Constants.MaxCANStatusFramePeriod);
 
-    double velocityP = 0.075;
-    double velocityI = 0.0003;
+    double velocityP = 0.1;
+    double velocityI = 0.0005;
     double velocityD = 0.0;
-    double velocityF = 0.023; // k_f = (PERCENT_POWER X 1023) / OBSERVED_VELOCITY
+    double velocityF = 0.038; // k_f = (PERCENT_POWER X 1023) / OBSERVED_VELOCITY
     m_pidTuner = new PIDTuner("Launcher", Robot.EnablePIDTuning, velocityP, velocityI, velocityD, velocityF, this::updatePIDF);
+    m_ControllerA.config_IntegralZone(0, 2500);
+    m_ControllerB.config_IntegralZone(0, 2500);
 
     Robot.LogManager.addNumber("Launcher/Speed2", () -> m_ControllerA.getSelectedSensorVelocity());
   }
@@ -80,6 +82,7 @@ public class Launcher extends SubsystemBase {
   }
 
   public void spinUpSpeed() {
+    resetIntergral();
     if (DriverStation.isAutonomous()) {
       m_ControllerA.set(TalonFXControlMode.Velocity, Constants.DefaultLauncherSpinUpAuto);
       m_ControllerB.set(TalonFXControlMode.Velocity, Constants.DefaultLauncherSpinUpAuto);
@@ -127,5 +130,10 @@ public class Launcher extends SubsystemBase {
   public boolean isAtTargetSpeed(double targetRpm) {
     var currentRpm = m_ControllerA.getSelectedSensorVelocity();
     return currentRpm > targetRpm - m_speedTolerance && currentRpm < targetRpm + m_speedTolerance;
+  }
+
+  public void resetIntergral() {
+    m_ControllerA.setIntegralAccumulator(0);
+    m_ControllerB.setIntegralAccumulator(0);
   }
 }

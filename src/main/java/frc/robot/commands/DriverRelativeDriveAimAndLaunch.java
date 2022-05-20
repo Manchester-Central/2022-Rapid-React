@@ -40,6 +40,7 @@ public class DriverRelativeDriveAimAndLaunch extends BaseRelativeDrive {
     m_drive.resetDriveToPosition();
     m_feeder.setFeederMode(FeederMode.DEFAULT);
     var speed = m_flywheelTable.getIdealTarget(-25).getSpeed();
+    m_launcher.resetIntergral();
     m_launcher.SetTargetRPM(speed);
   }
 

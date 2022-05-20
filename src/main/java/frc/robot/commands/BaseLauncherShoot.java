@@ -28,6 +28,7 @@ public abstract class BaseLauncherShoot extends CommandBase {
   @Override
   public void initialize() {
     m_feeder.setFeederMode(FeederMode.DEFAULT);
+    m_launcher.resetIntergral();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

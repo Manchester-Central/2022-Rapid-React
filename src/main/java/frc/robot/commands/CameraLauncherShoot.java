@@ -29,6 +29,7 @@ public class CameraLauncherShoot extends BaseLauncherShoot {
     FeederDefault.DefaultCameraLaunchSpeed = Constants.DefaultFeederLaunchSpeed;
     m_camera.setPipeline(Camera.ComputerVision);
     var speed = m_flyWheelTable.getIdealTarget(-25).getSpeed();
+    m_launcher.resetIntergral();
     m_launcher.SetTargetRPM(speed);
     m_feeder.setFeederMode(FeederMode.DEFAULT);
   }
