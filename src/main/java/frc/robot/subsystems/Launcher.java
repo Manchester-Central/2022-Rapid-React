@@ -97,7 +97,6 @@ public class Launcher extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Launcher/Speed", m_ControllerA.getSelectedSensorVelocity(0));
-    SmartDashboard.putNumber("Launcher/TargetSpeed", m_ControllerA.getClosedLoopTarget(0));
     m_pidTuner.tune();
   }
 
@@ -125,6 +124,7 @@ public class Launcher extends SubsystemBase {
   }
 
   public boolean isAtTargetSpeed(double targetRpm) {
+    SmartDashboard.putNumber("Launcher/TargetSpeed", targetRpm);
     var currentRpm = m_ControllerA.getSelectedSensorVelocity();
     return currentRpm > targetRpm - m_speedTolerance && currentRpm < targetRpm + m_speedTolerance;
   }

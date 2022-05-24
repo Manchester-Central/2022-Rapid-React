@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.Robot;
 
 /** Add your docs here. */
@@ -34,11 +35,13 @@ public class TalonFxCHAOS extends TalonFX {
         m_name = name;
         this.configFactoryDefault();
         AllTalons.add(this);
-        Robot.LogManager.addNumber(getLogColumn("rawVelocity"), () -> this.getSelectedSensorVelocity());
-        Robot.LogManager.addNumber(getLogColumn("rawPosition"), () -> this.getSelectedSensorVelocity());
-        Robot.LogManager.addNumber(getLogColumn("temp"), () -> this.getTemperature());
-        Robot.LogManager.addNumber(getLogColumn("supplyCurrent"), () -> this.getSupplyCurrent());
-        Robot.LogManager.addString(getLogColumn("lastError"), () -> this.getLastError().toString());
+        if (RobotBase.isReal()) {
+            Robot.LogManager.addNumber(getLogColumn("rawVelocity"), () -> this.getSelectedSensorVelocity());
+            Robot.LogManager.addNumber(getLogColumn("rawPosition"), () -> this.getSelectedSensorPosition());
+            Robot.LogManager.addNumber(getLogColumn("temp"), () -> this.getTemperature());
+            Robot.LogManager.addNumber(getLogColumn("supplyCurrent"), () -> this.getSupplyCurrent());
+            Robot.LogManager.addString(getLogColumn("lastError"), () -> this.getLastError().toString());
+        }
     }
 
     private String getLogColumn(String column) {
