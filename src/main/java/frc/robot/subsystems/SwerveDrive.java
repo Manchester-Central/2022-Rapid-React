@@ -94,8 +94,9 @@ public class SwerveDrive extends SubsystemBase {
         m_moduleBL.getLocation());
     m_gyro = new AHRS(SPI.Port.kMXP);
     m_odometry = new SwerveDriveOdometry(m_kinematics, getRotation());
-    Robot.LogManager.addNumber("Swerve/X", () -> m_odometry.getPoseMeters().getX());
-    Robot.LogManager.addNumber("Swerve/Y", () -> m_odometry.getPoseMeters().getY());
+    Robot.LogManager.addNumber("Odometry/X_m", () -> m_odometry.getPoseMeters().getX());
+    Robot.LogManager.addNumber("Odometry/Y_m", () -> m_odometry.getPoseMeters().getY());
+    Robot.LogManager.addNumber("Odometry/Angle_deg", () -> m_odometry.getPoseMeters().getRotation().getDegrees());
 
     double velocityP = 0.1;
     double velocityI = 0;
