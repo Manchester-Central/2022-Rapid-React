@@ -27,7 +27,7 @@ import frc.robot.util.TalonFxCHAOS;
  * project.
  */
 public class Robot extends TimedRobot {
-  public static final boolean IsDebuggingMode = false;
+  public static final boolean IsDebuggingMode = true;
   public static final LogManager LogManager = new LogManager(IsDebuggingMode);
   public static final LoggedDatapoints LoggedDatapoints = new LoggedDatapoints();
   public static final boolean EnablePIDTuning = IsDebuggingMode;
