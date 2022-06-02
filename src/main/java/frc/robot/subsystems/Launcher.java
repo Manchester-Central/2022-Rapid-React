@@ -61,9 +61,9 @@ public class Launcher extends SubsystemBase {
     m_ControllerB.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, Constants.MaxCANStatusFramePeriod);
 
     double velocityP = 0.075;
-    double velocityI = 0.0003;
+    double velocityI = 0.000;
     double velocityD = 0.0;
-    double velocityF = 0.023; // k_f = (PERCENT_POWER X 1023) / OBSERVED_VELOCITY
+    double velocityF = 0.055; // k_f = (PERCENT_POWER X 1023) / OBSERVED_VELOCITY 0.023
     m_pidTuner = new PIDTuner("Launcher", Robot.EnablePIDTuning, velocityP, velocityI, velocityD, velocityF, this::updatePIDF);
 
     Robot.LogManager.addNumber("Launcher/Speed2", () -> m_ControllerA.getSelectedSensorVelocity());
