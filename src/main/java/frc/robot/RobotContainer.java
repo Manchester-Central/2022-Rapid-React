@@ -45,6 +45,7 @@ import frc.robot.commands.ZeroNavX;
 import frc.robot.commands.auto.AutoDriverRelativeDrive;
 import frc.robot.commands.auto.AutoOutput;
 import frc.robot.commands.auto.AutoRobotRelativeDrive;
+import frc.robot.commands.auto.LoadBalls;
 import frc.robot.commands.auto.StartingPosition;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Climber;
@@ -104,6 +105,7 @@ public class RobotContainer {
     m_autoBuilder.registerCommand("aimToGoal", (ParsedCommand pc) -> new AimToGoal(m_swerveDrive, m_camera));
     m_autoBuilder.registerCommand("aimLaunch", (ParsedCommand pc) -> new AutoAimLaunch(m_swerveDrive, m_driver, m_camera, m_launcher, m_flywheelTable, m_feeder));
     m_autoBuilder.registerCommand("spit", (ParsedCommand pc) -> new AutoOutput(m_feeder, m_intake));
+    m_autoBuilder.registerCommand("loadBalls", (ParsedCommand pc) -> new LoadBalls(pc, m_feeder));
   }
 
   /**
