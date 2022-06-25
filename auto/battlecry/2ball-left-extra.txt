@@ -1,0 +1,5 @@
+startingPosition?x=6.316&y=5.314&angle=-32.25
+driveToPosition?x=5.309&y=5.949&angle=-32.25&timems=3000
+aimLaunch?timems=3000
+driveToPosition?x=4.920&y=6.213&angle=-32.25&timems=2000
+aimLaunch?timems=3000
