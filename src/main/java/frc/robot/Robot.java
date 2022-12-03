@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.DriverRelativeDriveWithAimSimple;
@@ -111,6 +112,11 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     LogManager.update();
     DriverRelativeDriveWithAimSimple.pidTuner.tune();
+    SmartDashboard.putNumber("Left Angle", m_robotContainer.m_driver.getLeftAngle());
+    SmartDashboard.putNumber("Right Angle", m_robotContainer.m_driver.getRightAngle());
+
+    SmartDashboard.putNumber("Left Magnitude,", m_robotContainer.m_driver.getLeftMagnitude());
+    SmartDashboard.putNumber("Right Magnitude,", m_robotContainer.m_driver.getRightMagnitude());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -152,7 +158,7 @@ public class Robot extends TimedRobot {
     // this line or comment it out.
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
-    }
+    }  
     m_robotContainer.m_swerveDrive.teleopInit();
   }
 

@@ -69,7 +69,7 @@ import frc.robot.subsystems.SwerveDrive.SwerveModulePosition;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  private Gamepad m_driver = new Gamepad(0, "Driver", false);
+  public Gamepad m_driver = new Gamepad(0, "Driver", false);
   private Gamepad m_operator = new Gamepad(1, "Operator", false);
   // private final ExampleCommand m_autoCommand = new
   // ExampleCommand(m_exampleSubsystem);

@@ -75,7 +75,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     // implementation 'com.github.Manchester-Central:CHAOS-Shared-Code:1.4.0'
-    implementation files('libs/CHAOS-Shared-Code-1.8.0.jar')
+    implementation files('libs/CHAOS-Shared-Code-1.9.0.jar')
 }
 
 // Simulation configuration (e.g. environment variables).
