@@ -78,6 +78,14 @@ dependencies {
     implementation files('libs/CHAOS-Shared-Code-1.8.0.jar')
 }
 
+// sourceSets {
+//     main {
+//         java {
+//             srcDirs 'CHAOS-Shared-Code/src'
+//         }
+//     }
+// }
+
 // Simulation configuration (e.g. environment variables).
 wpi.sim.addGui().defaultEnabled = true
 wpi.sim.addDriverstation()
