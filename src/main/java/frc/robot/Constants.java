@@ -50,7 +50,7 @@ public final class Constants {
     public final static double TalonCountsPerRevolution = 2048;
     
     // Absolute max meters per second = 3.8
-    public static final double MaxMPS = 3.8;
+    public static final double MaxMPS = 1.5;
     // Absolute max omega radians per second = 8.75
     public static final double MaxORPS = 6.75;//was 8.75 for auto
 
@@ -72,7 +72,7 @@ public final class Constants {
     
     // Launcher Settings
     public final static double DefaultLauncherLowSpeed = 2300.0;
-    public final static double DefaultLauncherHighSpeed = 7000.0;
+    public final static double DefaultLauncherHighSpeed = 3000.0;
     public final static double DefaultLauncherTolerance = 300.0;
     public final static double DefaultLauncherToleranceLowBumper = 600.0;
     public final static double DefaultFeederLaunchSpeed = 0.25;

@@ -174,7 +174,9 @@ public class RobotContainer {
     m_operator.getButtonX().whileHeld(new SetFeederMode(m_feeder, FeederMode.LAUNCH_CAMERA));
     m_operator.getButtonY().whileHeld(new Output(m_feeder, m_intake));
 
-    m_operator.getButtonRB().whileHeld(new CameraLauncherShoot(m_launcher, m_camera, m_feeder, m_flywheelTable));
+    m_operator.getButtonRB().whileHeld(
+      new SetSpeedLauncherShoot(m_launcher, m_feeder, 
+    Constants.DefaultLauncherHighSpeed + 3300, FeederMode.LAUNCH_HIGH_BUMPER, Constants.DefaultLauncherToleranceLowBumper));
     m_operator.getButtonRT()
         .whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, Constants.DefaultLauncherLowSpeed, FeederMode.LAUNCH_LOW_BUMPER, Constants.DefaultLauncherToleranceLowBumper));
 
