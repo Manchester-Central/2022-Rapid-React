@@ -198,6 +198,18 @@ public class SwerveDrive extends SubsystemBase {
     move(speeds);
   }
 
+  public void moveDriverRelativeRotation(double sidewaysSpeed, double forwardSpeed, double rightAngle, double rightMagnitude) {
+    double omega = 0;
+    if (rightMagnitude > 0.05 || rightMagnitude < -0.05) {
+      Rotation2d targetAngle = new Rotation2d(rightAngle);
+      targetAngle = targetAngle.minus(Rotation2d.fromDegrees(90));
+      setTargetAngle(targetAngle);
+      omega = getTargetOmega();
+    }
+    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(forwardSpeed, sidewaysSpeed, omega, getRotation().times(-1));
+    move(speeds);
+  }
+
   public void moveRobotRelative(double sidewaysSpeed, double forwardSpeed, double theta) {
     ChassisSpeeds speeds = new ChassisSpeeds(forwardSpeed, sidewaysSpeed, theta);
     move(speeds);

@@ -24,6 +24,7 @@ import frc.robot.commands.DashboardSpeedLauncherShoot;
 import frc.robot.commands.DriveOverDistance;
 import frc.robot.commands.DriveOverTime;
 import frc.robot.commands.DriveToPosition;
+import frc.robot.commands.DriverRelativeAngleDrive;
 import frc.robot.commands.DriverRelativeDrive;
 import frc.robot.commands.DriverRelativeDriveAimAndLaunch;
 import frc.robot.commands.DriverRelativeDriveWithAim;
@@ -118,9 +119,10 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     Command driverRelativeDrive = new DriverRelativeDrive(m_swerveDrive, m_driver);
+    Command driverRelativeRotation = new DriverRelativeAngleDrive(m_swerveDrive, m_driver);
 
     // Default Commands
-    m_swerveDrive.setDefaultCommand(driverRelativeDrive);
+    m_swerveDrive.setDefaultCommand(driverRelativeRotation);
     m_climber.setDefaultCommand(new ClimberDefault(m_climber, m_operator));
     m_intake.setDefaultCommand(new IntakeDefault(m_intake));
     m_launcher.setDefaultCommand(new LauncherDefault(m_launcher));

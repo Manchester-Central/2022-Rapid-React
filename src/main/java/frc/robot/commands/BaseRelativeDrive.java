@@ -14,7 +14,7 @@ public abstract class BaseRelativeDrive extends CommandBase {
   public static boolean IsSlowMode = false;
 
   protected SwerveDrive m_drive;
-  private Gamepad m_controller;
+  protected Gamepad m_controller;
   private boolean m_alwaysMove;
 
   /** Creates a new BaseRelativeDrive. */
