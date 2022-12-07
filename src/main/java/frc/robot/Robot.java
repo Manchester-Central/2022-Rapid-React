@@ -13,9 +13,9 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.DriverRelativeDriveWithAimSimple;
-import frc.robot.logging.LogManager;
-import frc.robot.logging.LoggedDatapoints;
+import com.chaos131.logging.LoggedDatapoints;
 import frc.robot.util.TalonFxCHAOS;
+import com.chaos131.logging.LogManager;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -28,7 +28,7 @@ import frc.robot.util.TalonFxCHAOS;
  */
 public class Robot extends TimedRobot {
   public static final boolean IsDebuggingMode = false;
-  public static final LogManager LogManager = new LogManager(IsDebuggingMode);
+  public static final LogManager LogManager = new LogManager(IsDebuggingMode, () -> getCurrentTimeMs());
   public static final LoggedDatapoints LoggedDatapoints = new LoggedDatapoints();
   public static final boolean EnablePIDTuning = IsDebuggingMode;
   private final Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
