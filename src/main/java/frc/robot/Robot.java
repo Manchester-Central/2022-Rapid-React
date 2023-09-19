@@ -131,7 +131,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     TalonFxCHAOS.ResetStickiness();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    m_robotContainer.m_swerveDrive.autoInit();
+    // m_robotContainer.m_swerveDrive.autoInit();
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -153,7 +153,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    m_robotContainer.m_swerveDrive.teleopInit();
+    // m_robotContainer.m_swerveDrive.teleopInit();
   }
 
   /** This function is called periodically during operator control. */

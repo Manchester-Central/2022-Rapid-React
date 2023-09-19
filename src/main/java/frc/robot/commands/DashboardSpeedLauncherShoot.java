@@ -17,7 +17,7 @@ public class DashboardSpeedLauncherShoot extends BaseLauncherShoot {
   /** Creates a new LauncherShoot. */
   public DashboardSpeedLauncherShoot(Launcher launcher, Feeder feeder) {
     super(launcher, feeder, FeederMode.LAUNCH_CAMERA);
-    SmartDashboard.putNumber("DashboardLauncherSpeed", Constants.DefaultLauncherLowSpeed);
+    SmartDashboard.putNumber("DashboardLauncherSpeed", 9500);
     SmartDashboard.putNumber("DashboardLauncherTolerance", Constants.DefaultLauncherTolerance);
     SmartDashboard.putNumber("DashboardFeederSpeed", Constants.DefaultFeederLaunchSpeed);
   }
