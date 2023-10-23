@@ -14,17 +14,20 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.CameraDefault;
 import frc.robot.commands.DashboardSpeedLauncherShoot;
+import frc.robot.commands.DriverRelativeDrive;
 import frc.robot.commands.FeederDefault;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.IntakeDefault;
 import frc.robot.commands.IntakeWithOnlyFeeder;
 import frc.robot.commands.LauncherDefault;
 import frc.robot.commands.SetSpeedLauncherShoot;
+import frc.robot.commands.ZeroNavX;
 import frc.robot.subsystems.Camera;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Feeder.FeederMode;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Launcher;
+import frc.robot.subsystems.SwerveDrive;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -44,6 +47,7 @@ public class RobotContainer {
   private Launcher m_launcher = new Launcher();
   private Feeder m_feeder = new Feeder();
   private Intake m_intake = new Intake();
+  private SwerveDrive m_swerveDrive = new SwerveDrive();
 
   public PowerDistribution m_pdp = new PowerDistribution();
 
@@ -68,6 +72,7 @@ public class RobotContainer {
     m_launcher.setDefaultCommand(new LauncherDefault(m_launcher));
     m_feeder.setDefaultCommand(new FeederDefault(m_feeder));
     m_camera.setDefaultCommand(new CameraDefault(m_camera));
+    m_swerveDrive.setDefaultCommand(new DriverRelativeDrive(m_swerveDrive, m_demoController));
 
     configureMatchCommands();
 
@@ -97,8 +102,11 @@ public class RobotContainer {
     m_demoController.getButtonRT().whileHeld(new DashboardSpeedLauncherShoot(m_launcher, m_feeder));
         
     // Hood controls
-    m_demoController.getPOVNorth().whileHeld(new RunCommand(() -> m_launcher.MoveHoodUp(), m_launcher));
-    m_demoController.getPOVSouth().whileHeld(new RunCommand(() -> m_launcher.MoveHoodDown(), m_launcher));
+    m_demoController.getButtonStart().whileHeld(new RunCommand(() -> m_launcher.MoveHoodUp(), m_launcher));
+    m_demoController.getButtonSelect().whileHeld(new RunCommand(() -> m_launcher.MoveHoodDown(), m_launcher));
+
+    // Gyro controls
+    m_demoController.getPOVNorth().whileActiveOnce(new ZeroNavX(0, m_swerveDrive));
   }
 
   /**
