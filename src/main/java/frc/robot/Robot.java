@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,6 +23,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
   private Command m_autonomousCommand;
+  private WPI_TalonFX m_feederUpper;
+  private WPI_TalonFX m_feederLower;
   /**
    * This function is run when the robot is first started up and should be used
    * for any
@@ -33,9 +37,14 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
+    m_feederLower = new WPI_TalonFX(12);
+
+    m_feederUpper = new WPI_TalonFX(15);
+
     // Reduces data sent to the dashboard and we're not using this
     LiveWindow.disableAllTelemetry();
   }
+
 
   /**
    * This function is called every robot packet, no matter the mode. Use this for
@@ -63,6 +72,8 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
+    m_feederLower.set(0);
+    m_feederUpper.set(0);
   }
 
   @Override
@@ -101,6 +112,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    m_feederLower.set(0.5);
+    m_feederUpper.set(0.5);
   }
 
   @Override
