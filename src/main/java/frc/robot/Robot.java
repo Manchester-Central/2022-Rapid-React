@@ -4,18 +4,10 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.DriverRelativeDriveWithAimSimple;
-import frc.robot.logging.LogManager;
-import frc.robot.logging.LoggedDatapoints;
-import frc.robot.util.TalonFxCHAOS;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -27,15 +19,8 @@ import frc.robot.util.TalonFxCHAOS;
  * project.
  */
 public class Robot extends TimedRobot {
-  public static final boolean IsDebuggingMode = false;
-  public static final LogManager LogManager = new LogManager(IsDebuggingMode);
-  public static final LoggedDatapoints LoggedDatapoints = new LoggedDatapoints();
-  public static final boolean EnablePIDTuning = IsDebuggingMode;
-  private final Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
-  private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
-  private double m_lastLoop_ms = 0;
-
+  private Command m_autonomousCommand;
   /**
    * This function is run when the robot is first started up and should be used
    * for any
@@ -46,46 +31,10 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
     // autonomous chooser on the dashboard.
-    compressor.enableAnalog(110.0, 115.0);
     m_robotContainer = new RobotContainer();
-
-    LogManager.addNumber("GameState", Robot::robotMode);
-    LogManager.addNumber("PDP/Temperature", m_robotContainer.m_pdp::getTemperature);
-    LogManager.addNumber("PDP/Current", m_robotContainer.m_pdp::getTotalCurrent);
-    LogManager.addNumber("PDP/Voltage", m_robotContainer.m_pdp::getVoltage);
-    LogManager.addNumber("Robot/LoopTime", () -> m_lastLoop_ms);
-
-    LogManager.writeHeaders();
 
     // Reduces data sent to the dashboard and we're not using this
     LiveWindow.disableAllTelemetry();
-  }
-
-  public static double robotMode()
-  {
-    if (DriverStation.isDisabled()) {
-      return 1.0;
-    }
-    if (DriverStation.isAutonomous()) {
-      return 2.0;
-    }
-    if (DriverStation.isTeleop()) {
-      return 3.0;
-    }
-    if (DriverStation.isTest()) {
-      return 4.0;
-    }
-    return 0.0;
-  }
-
-  protected void loopFunc() {
-    long loopStart = getCurrentTimeMs();
-    super.loopFunc();
-    m_lastLoop_ms = (getCurrentTimeMs() - loopStart);
-  }
-
-  public static long getCurrentTimeMs() {
-    return RobotController.getFPGATime() / 1000;
   }
 
   /**
@@ -109,14 +58,11 @@ public class Robot extends TimedRobot {
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    LogManager.update();
-    DriverRelativeDriveWithAimSimple.pidTuner.tune();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    TalonFxCHAOS.ResetStickiness();
   }
 
   @Override
@@ -129,9 +75,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    TalonFxCHAOS.ResetStickiness();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    m_robotContainer.m_swerveDrive.autoInit();
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -145,7 +89,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    TalonFxCHAOS.ResetStickiness();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -153,7 +96,6 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    m_robotContainer.m_swerveDrive.teleopInit();
   }
 
   /** This function is called periodically during operator control. */
@@ -163,7 +105,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
-    TalonFxCHAOS.ResetStickiness();
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
   }

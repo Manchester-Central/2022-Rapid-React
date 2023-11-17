@@ -1,9 +1,0 @@
-startingPosition?x=6.316&y=5.314&angle=-32.25
-driveToPosition?x=5.309&y=5.949&angle=-32.25&timems=3000
-aimLaunch?timems=3000
-driveToPosition?x=4.920&y=6.213&angle=-32.25&timems=2000
-driveToPosition?x=4.851&y=7.017&angle=-166.373&timems=2000
-driveToPosition?x=5.405&y=7.151&angle=-166.373&timems=1500
-wait?timems=500
-launchNoCamera?timems=5000&speed=2000&tolerance=1000
-
