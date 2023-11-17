@@ -50,7 +50,7 @@ public final class Constants {
     public final static double TalonCountsPerRevolution = 2048;
     
     // Absolute max meters per second = 3.8
-    public static final double MaxMPS = 1.5/2;
+    public static final double MaxMPS = 3;
     // Absolute max omega radians per second = 8.75
     public static final double MaxORPS = 6.75/4;//was 8.75 for auto
 

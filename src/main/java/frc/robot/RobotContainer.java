@@ -89,13 +89,13 @@ public class RobotContainer {
         .whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, 2300, FeederMode.LAUNCH_LOW_BUMPER,
             Constants.DefaultLauncherTolerance));
     m_demoController.getButtonB() // Medium
-        .whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, 5000, FeederMode.LAUNCH_LOW_BUMPER,
+        .whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, 2300, FeederMode.LAUNCH_LOW_BUMPER,
             Constants.DefaultLauncherTolerance));
     m_demoController.getButtonX() // Medium
-        .whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, 5000, FeederMode.LAUNCH_LOW_BUMPER,
+        .whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, 2300, FeederMode.LAUNCH_LOW_BUMPER,
             Constants.DefaultLauncherTolerance));
     m_demoController.getButtonY() // High
-        .whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, 9500, FeederMode.LAUNCH_LOW_BUMPER,
+        .whileHeld(new SetSpeedLauncherShoot(m_launcher, m_feeder, 2300, FeederMode.LAUNCH_LOW_BUMPER,
             Constants.DefaultLauncherTolerance));
     
     // Dashboard launch
