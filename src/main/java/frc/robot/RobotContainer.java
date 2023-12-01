@@ -4,10 +4,14 @@
 
 package frc.robot;
 
+import com.chaos131.gamepads.Gamepad;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import frc.robot.subsystems.Feeder;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -20,11 +24,16 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-
+   private final Feeder m_feeder;
+   private final Gamepad m_driver;
+   private final Gamepad m_operator;
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    m_driver = new Gamepad(Constants.ControlerConstants.DriverPortNum,"Driver", false);
+    m_operator = new Gamepad(Constants.ControlerConstants.OperatorPortNum,"Operator", false);
+    m_feeder = new Feeder();
     // Configure the button bindings
     configureButtonBindings();
     
@@ -39,6 +48,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    m_operator.getButtonA().whenHeld(new StartEndCommand(()-> {m_feeder.setSpeed(0.5);},
+                                                         ()-> {m_feeder.stop();}, 
+                                                               m_feeder));
   }
 
   /**

@@ -10,4 +10,8 @@ public class Constants {
         public static final int FeederLowerCanID = 12;
         public static final int FeederUpperCanID = 15;
     }
+    public static class ControlerConstants{
+        public static final int DriverPortNum = 0;
+        public static final int OperatorPortNum = 1;
+    }
 }
