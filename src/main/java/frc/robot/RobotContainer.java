@@ -48,9 +48,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    m_operator.getButtonA().whenHeld(new StartEndCommand(()-> {m_feeder.setSpeed(0.5);},
-                                                         ()-> {m_feeder.stop();}, 
-                                                               m_feeder));
+    m_operator.getButtonA().whenPressed(()-> {m_feeder.setSpeed(.25);});
   }
 
   /**
